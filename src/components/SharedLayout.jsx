@@ -1,12 +1,14 @@
 import { Outlet } from "react-router-dom";
+import NavBar from "./NavBar";
 
 // For any styling that will apply to everything besides the nav bar and footer
-function Main() {
+function SharedLayout() {
   return (
     <main>
+      <NavBar />
       <Outlet />
     </main>
   );
 }
 
-export default Main;
+export default SharedLayout;
