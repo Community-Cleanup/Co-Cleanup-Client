@@ -1,0 +1,48 @@
+.signup-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    margin: 100px auto;
+    height: auto;
+    min-height: 600px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px 15px;
+    border-radius: 4px;
+}
+
+.signup-main form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.signup-main fieldset {
+    margin: .4rem 0;
+    padding: 0;
+    border: none;
+  }
+
+.signup-main label {
+    display: inline-block;
+    font-size: 1rem;
+}
+
+.signup-main input {
+    width: 100%;
+    padding: 15px 10px;
+    border: 1px solid #3d3935;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #3d3935;
+    outline: 0;
+}
+
+.signup-main input::placeholder {
+    color: #867d6c;
+    font-size: 1rem;
+  }
