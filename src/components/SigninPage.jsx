@@ -5,7 +5,9 @@ function SigninPage() {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleFormSubmit() {}
+  function handleFormSubmit(e) {
+    e.preventDefault();
+  }
 
   return (
     <main className="signup-main">
