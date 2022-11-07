@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Main from "./components/Main";
 import NavBar from "./components/NavBar";
 import LandingPage from "./components/LandingPage";
 import SignupPage from "./components/SignupPage";
 import SigninPage from "./components/SigninPage";
-import PageNotFound from "./components/PageNotFound";
 
 function App() {
   // 'State' for whether or not to show the Nav Bar components, as the sign-up and sign-in pages will not show a nav bar
@@ -20,7 +19,7 @@ function App() {
           <Route index element={<LandingPage />} />
           <Route path="sign-up" element={<SignupPage />} />
           <Route path="sign-in" element={<SigninPage />} />
-          <Route path="*" element={<PageNotFound />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
     </div>
