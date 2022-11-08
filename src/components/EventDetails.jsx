@@ -3,23 +3,23 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function EventDetails() {
-  const { eventParam } = useParams();
-  const [event, setEvent] = useState({});
+  const { event } = useParams();
+  const [eventDetails, setEventDetails] = useState({});
 
   useEffect(() => {
     getData()
   }, [])
 
   useEffect(() => {
-    console.log(event);
-  }, [event])
+    console.log(eventDetails);
+  }, [eventDetails])
 
   async function getData() {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/api/events/${eventParam}`
+        `${process.env.REACT_APP_SERVER_URL}/api/events/${event}`
       );
-      setEvent(res.data);
+      setEventDetails(res.data);
     } catch (e) {
       console.log(e);
     }
@@ -28,7 +28,7 @@ function EventDetails() {
   return(
     <div>
         <h1>Event Details</h1>
-        <h2>{event.title}</h2>
+        <h2>{eventDetails.title}</h2>
     </div>
   );
 }
