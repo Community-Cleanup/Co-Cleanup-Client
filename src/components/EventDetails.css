@@ -1,0 +1,11 @@
+.event-details-main {
+    margin: 100px 150px;
+}
+.event-details-main h4 {
+    margin-top: 1rem;
+}
+.event-title-register-div {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+}

@@ -1,11 +1,12 @@
 import axios from "axios";
-import React from "react";
-import { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 //CSS Stylsheet
 import "./EventForm.css";
 
 function EventForm() {
+  const navigate = useNavigate();
+
   const initialEventData = {
     title: "",
     date: Date.now(),
@@ -16,6 +17,24 @@ function EventForm() {
   };
 
   const [eventData, setEventData] = useState(initialEventData);
+  const { event } = useParams();
+
+  useEffect(() => {
+    if (event) {
+      getEventDetails();
+    }
+  }, []);
+
+  async function getEventDetails() {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/api/events/${event}`
+      );
+      setEventData(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   function handleChange(event) {
     setEventData((prev) => {
@@ -30,7 +49,7 @@ function EventForm() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://localhost:55000/api/events/create-event`,
+        `${process.env.REACT_APP_SERVER_URL}/api/events/create-event`,
         {
           title: eventData.title,
           date: eventData.date,
@@ -39,7 +58,27 @@ function EventForm() {
         }
       );
       console.log("Data Saved", res.status, res.data);
-      //   navigate("/recipes");
+      navigate("/events");
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function updateEvent(e) {
+    e.preventDefault();
+    try {
+      const res = await axios.put(
+        `${process.env.REACT_APP_SERVER_URL}/api/events/${event}`,
+        {
+          title: eventData.title,
+          date: eventData.date,
+          address: eventData.address,
+          description: eventData.description,
+        }
+      );
+      console.log("Data Saved", res.status, res.data);
+      setEventData(initialEventData);
+      navigate(`/${event}`);
     } catch (e) {
       console.log(e);
     }
@@ -83,8 +122,11 @@ function EventForm() {
           value={eventData.description}
           onChange={(event) => handleChange(event)}
         ></textarea>
-        <button onClick={createEvent}>Save Event</button>
-        {/* <button onClick={updateEvent}>Update Event</button> */}
+        {event ? (
+          <button onClick={updateEvent}>Update Event</button>
+        ) : (
+          <button onClick={createEvent}>Save Event</button>
+        )}
       </form>
     </div>
   );
