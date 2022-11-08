@@ -30,7 +30,7 @@ function EventForm() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://localhost:55000/api/events/create-event`,
+        `${process.env.REACT_APP_SERVER_URL}/api/events/create-event`,
         {
           title: eventData.title,
           date: eventData.date,
