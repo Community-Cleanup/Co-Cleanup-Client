@@ -1,5 +1,9 @@
 import "./SignupAndSignInPage.css";
 import { useState } from "react";
+import {
+  firebaseAuth,
+  createUserWithEmailAndPassword,
+} from "../firebase/firebaseApp";
 
 function SignupPage() {
   const [username, setUsername] = useState("");
@@ -7,8 +11,22 @@ function SignupPage() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  function handleFormSubmit(e) {
+  async function handleFormSubmit(e) {
     e.preventDefault();
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        firebaseAuth,
+        emailAddress,
+        password
+      );
+      const user = userCredential.user;
+      console.log("USER CREATED IS: ", user);
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("ERROR caught creating user: ", errorCode, errorMessage);
+    }
   }
 
   return (

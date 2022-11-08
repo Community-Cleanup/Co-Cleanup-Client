@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import SharedLayout from "./components/SharedLayout";
 import LandingPage from "./components/LandingPage";
