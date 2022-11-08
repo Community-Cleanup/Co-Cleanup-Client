@@ -33,6 +33,7 @@ function Events() {
               onClick={() => navigate(`/${event._id}`)}
             >
               <h3>{event.title}</h3>
+              <h4>Date: </h4>
               <h4>{event.address}</h4>
               <p>{event.description}</p>
             </div>
