@@ -14,6 +14,8 @@ function SignupPage() {
   async function handleFormSubmit(e) {
     e.preventDefault();
 
+    // Use Firebase client SDK to try and create a new user on Firebase with email and password
+    // and if successful, return the ID token of the user
     try {
       const userCredential = await createUserWithEmailAndPassword(
         firebaseAuth,
@@ -21,7 +23,7 @@ function SignupPage() {
         password
       );
       const user = userCredential.user;
-      console.log("USER CREATED IS: ", user);
+      console.log("USER ID TOKEN IS: ", await user.getIdToken());
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
