@@ -24,4 +24,4 @@ const firebaseApp = (function initializeFirebaseApp() {
 const googleAnalytics = getAnalytics(firebaseApp);
 const firebaseAuth = getAuth(firebaseApp);
 
-export { googleAnalytics, firebaseAuth, createUserWithEmailAndPassword };
+export { createUserWithEmailAndPassword, googleAnalytics, firebaseAuth };
