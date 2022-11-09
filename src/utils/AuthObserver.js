@@ -1,13 +1,13 @@
 // This component will wrap App.js so that we can keep track of user's auth state
 
-import React, { useEffect, createContext, useContext } from "react";
+import React, { useEffect } from "react";
 import { firebaseAuth } from "../firebase/firebaseApp";
 import axios from "axios";
 
 import { useGlobalAuthState } from "./AuthContext";
 
 const AuthObserver = ({ children }) => {
-  const { authState, setAuthState } = useGlobalAuthState();
+  const { authState } = useGlobalAuthState();
 
   useEffect(() => {
     // Firebase function 'onIdTokenChanged' adds an observer for changes to the signed-in user's ID token,
