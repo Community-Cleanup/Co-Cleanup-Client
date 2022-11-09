@@ -18,7 +18,7 @@ const AuthObserver = ({ children }) => {
         // Handle logout here, including clearing user state from React global state
       } else {
         console.log(
-          "AuthProvider detected successful Sign Up, Sign In, or token refresh event"
+          "AuthObserver component detected successful Sign Up, Sign In, or token refresh event"
         );
 
         // If we decide to store the token in a cookie, could use that here

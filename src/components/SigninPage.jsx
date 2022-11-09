@@ -5,34 +5,49 @@ import {
 } from "../firebase/firebaseApp";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGlobalAuthState } from "../utils/AuthContext";
 
 function SigninPage() {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
 
+  const { setAuthState } = useGlobalAuthState();
+
   const navigate = useNavigate();
+
+  const signIn = async function () {
+    try {
+      const signInResult = await signInWithEmailAndPassword(
+        firebaseAuth,
+        emailAddress,
+        password
+      );
+      return signInResult;
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("ERROR caught signing in user: ", errorCode, errorMessage);
+    }
+  };
 
   async function handleFormSubmit(e) {
     e.preventDefault();
 
-    const signIn = async function () {
-      try {
-        const signInResult = await signInWithEmailAndPassword(
-          firebaseAuth,
-          emailAddress,
-          password
-        );
-        return signInResult;
-      } catch (error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("ERROR caught signing in user: ", errorCode, errorMessage);
-      }
-    };
+    setAuthState((prev) => {
+      return {
+        ...prev,
+        isLoading: true,
+      };
+    });
 
     const userCredential = await signIn();
     if (userCredential) {
-      console.log(userCredential);
+      setAuthState((prev) => {
+        return {
+          ...prev,
+          isLoading: false,
+        };
+      });
       navigate("/");
     }
   }

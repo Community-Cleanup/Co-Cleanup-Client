@@ -1,5 +1,5 @@
 import "./SignupAndSignInPage.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   firebaseAuth,
   createUserWithEmailAndPassword,
@@ -7,7 +7,6 @@ import {
 } from "../firebase/firebaseApp";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 import { useGlobalAuthState } from "../utils/AuthContext";
 
 function SignupPage() {
@@ -16,7 +15,7 @@ function SignupPage() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const { authState, setAuthState } = useGlobalAuthState();
+  const { setAuthState } = useGlobalAuthState();
 
   const navigate = useNavigate();
 
@@ -74,10 +73,6 @@ function SignupPage() {
       console.log("ERROR caught signing in user: ", errorCode, errorMessage);
     }
   };
-
-  useEffect(() => {
-    console.log("Processing Submit: ", authState.isLoading);
-  }, [authState]);
 
   async function handleOnSubmit(e) {
     e.preventDefault();
