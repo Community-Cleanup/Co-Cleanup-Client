@@ -1,21 +1,68 @@
 import "./SignupAndSignInPage.css";
 import { useState } from "react";
+import SignUp from "../firebase/SignUp";
+import SignIn from "../firebase/SignIn";
+import { useNavigate } from "react-router-dom";
+import { useGlobalAuthState } from "../utils/AuthContext";
 
 function SignupPage() {
-  const [username, setUsername] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [signUpFormState, setSignUpFormState] = useState({
+    username: "",
+    emailAddress: "",
+    password: "",
+    passwordConfirm: "",
+  });
 
-  function handleFormSubmit(e) {
+  const { setAuthState } = useGlobalAuthState();
+
+  const navigate = useNavigate();
+
+  function handleChange(event) {
+    setSignUpFormState((prev) => {
+      return {
+        ...prev,
+        [event.target.name]: event.target.value,
+      };
+    });
+  }
+
+  async function handleOnSubmit(e) {
     e.preventDefault();
+
+    setAuthState((prev) => {
+      return {
+        ...prev,
+        isLoading: true,
+      };
+    });
+
+    const signUpResponse = await SignUp(
+      signUpFormState.username,
+      signUpFormState.emailAddress,
+      signUpFormState.password
+    );
+    if (signUpResponse.status === 200) {
+      const userCredential = await SignIn(
+        signUpFormState.emailAddress,
+        signUpFormState.password
+      );
+      if (userCredential) {
+        setAuthState((prev) => {
+          return {
+            ...prev,
+            isLoading: false,
+          };
+        });
+        navigate("/");
+      }
+    }
   }
 
   return (
     <main className="signup-main">
       <h1>Co Cleanup</h1>
       <h1>Sign Up</h1>
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleOnSubmit}>
         <fieldset>
           <label htmlFor="username">Username</label>
           <input
@@ -23,8 +70,8 @@ function SignupPage() {
             placeholder="Username"
             name="username"
             id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={signUpFormState.username}
+            onChange={(e) => handleChange(e)}
           />
         </fieldset>
         <fieldset>
@@ -34,8 +81,8 @@ function SignupPage() {
             placeholder="Email address"
             name="emailAddress"
             id="emailAddress"
-            value={emailAddress}
-            onChange={(e) => setEmailAddress(e.target.value)}
+            value={signUpFormState.emailAddress}
+            onChange={(e) => handleChange(e)}
           />
         </fieldset>
         <fieldset>
@@ -44,8 +91,8 @@ function SignupPage() {
             type="password"
             name="password"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={signUpFormState.password}
+            onChange={(e) => handleChange(e)}
           />
         </fieldset>
         <fieldset>
@@ -54,8 +101,8 @@ function SignupPage() {
             type="password"
             name="passwordConfirm"
             id="passwordConfirm"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
+            value={signUpFormState.passwordConfirm}
+            onChange={(e) => handleChange(e)}
           />
         </fieldset>
         <input type="submit" value="Submit" id="submit" />

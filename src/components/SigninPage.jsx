@@ -1,12 +1,51 @@
 import "./SignupAndSignInPage.css";
+import SignIn from "../firebase/SignIn";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useGlobalAuthState } from "../utils/AuthContext";
 
 function SigninPage() {
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
+  const [signInFormState, setSignInFormState] = useState({
+    emailAddress: "",
+    password: "",
+  });
 
-  function handleFormSubmit(e) {
+  const { setAuthState } = useGlobalAuthState();
+
+  const navigate = useNavigate();
+
+  async function handleFormSubmit(e) {
     e.preventDefault();
+
+    setAuthState((prev) => {
+      return {
+        ...prev,
+        isLoading: true,
+      };
+    });
+
+    const userCredential = await SignIn(
+      signInFormState.emailAddress,
+      signInFormState.password
+    );
+    if (userCredential) {
+      setAuthState((prev) => {
+        return {
+          ...prev,
+          isLoading: false,
+        };
+      });
+      navigate("/");
+    }
+  }
+
+  function handleChange(event) {
+    setSignInFormState((prev) => {
+      return {
+        ...prev,
+        [event.target.name]: event.target.value,
+      };
+    });
   }
 
   return (
@@ -21,8 +60,8 @@ function SigninPage() {
             placeholder="Email address"
             name="emailAddress"
             id="emailAddress"
-            value={emailAddress}
-            onChange={(e) => setEmailAddress(e.target.value)}
+            value={signInFormState.emailAddress}
+            onChange={(e) => handleChange(e)}
           />
         </fieldset>
         <fieldset>
@@ -31,8 +70,8 @@ function SigninPage() {
             type="password"
             name="password"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={signInFormState.password}
+            onChange={(e) => handleChange(e)}
           />
         </fieldset>
         <input type="submit" value="Submit" id="submit" />
