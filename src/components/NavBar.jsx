@@ -48,6 +48,9 @@ function NavBar() {
         <li>
           <Link to="/create-event">Create Event</Link>
         </li>
+        <li>
+          <Link to="/events">View Events</Link>
+        </li>
       </ul>
       <hr />
     </nav>
