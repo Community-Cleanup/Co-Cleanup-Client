@@ -7,7 +7,7 @@ import axios from "axios";
 import { useGlobalAuthState } from "./AuthContext";
 
 const AuthObserver = ({ children }) => {
-  const { authState } = useGlobalAuthState();
+  const { authState, setAuthState } = useGlobalAuthState();
 
   useEffect(() => {
     // Firebase function 'onIdTokenChanged' adds an observer for changes to the signed-in user's ID token,
@@ -41,8 +41,13 @@ const AuthObserver = ({ children }) => {
 
             if (res.status === 200) {
               console.log(res);
-              // To Do:
               // Save user from DB res to React global state
+              setAuthState((prev) => {
+                return {
+                  ...prev,
+                  data: res.data,
+                };
+              });
             }
           }
         } catch (error) {
