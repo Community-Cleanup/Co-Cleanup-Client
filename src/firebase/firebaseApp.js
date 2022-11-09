@@ -3,7 +3,7 @@ import { initializeApp, getApps } from "firebase/app";
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  updateProfile,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { firebaseConfig } from "./firebaseConfig.js";
@@ -30,7 +30,7 @@ const firebaseAuth = getAuth(firebaseApp);
 
 export {
   createUserWithEmailAndPassword,
-  updateProfile,
+  signInWithEmailAndPassword,
   googleAnalytics,
   firebaseAuth,
 };

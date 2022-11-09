@@ -1,11 +1,14 @@
 import "./SignupAndSignInPage.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   firebaseAuth,
   createUserWithEmailAndPassword,
-  updateProfile,
+  signInWithEmailAndPassword,
 } from "../firebase/firebaseApp";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+import { useGlobalAuthState } from "../utils/AuthContext";
 
 function SignupPage() {
   const [username, setUsername] = useState("");
@@ -13,11 +16,11 @@ function SignupPage() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  // const [formSubmitSuccessful, setFormSubmitSuccessful] = useState(false);
+  const { authState, setAuthState } = useGlobalAuthState();
 
-  async function handleOnSubmit(e) {
-    e.preventDefault();
+  const navigate = useNavigate();
 
+  const signUp = async function () {
     // Use Firebase client SDK to try and create a new user on Firebase with email and password
     // and if successful, return the ID token of the user and add their username to their profile
     let token = "";
@@ -29,19 +32,10 @@ function SignupPage() {
       );
       const user = userCredential.user;
       token = await user.getIdToken();
-      // To Do:
-      // Store this token in a cookie
-      console.log("USER ID TOKEN IS: ", token);
-
-      // To Do:
-      // set token to cookie
-      // send this token to backend
-      // backend will check if the token is valid (using firebase admin tool)
-      // if it is verified, we'll use the backend to save the user to the Mongo database, if the user doesn't exist there already
 
       try {
         const res = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}/api/users/current-user`,
+          `${process.env.REACT_APP_SERVER_URL}/api/users/create-current-user`,
           {
             username: username,
           },
@@ -51,12 +45,11 @@ function SignupPage() {
             },
           }
         );
-        // To Do:
-        // Save user from DB to state
-        console.log("Data Saved", res.status, res.data);
+
+        return res;
       } catch (error) {
         console.log(
-          `Error in POST to ${process.env.REACT_APP_SERVER_URL}/api/users/current-user with error data:`,
+          `Error in POST to ${process.env.REACT_APP_SERVER_URL}/api/users/create-current-user with error data:`,
           error
         );
       }
@@ -64,6 +57,50 @@ function SignupPage() {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log("ERROR caught creating user: ", errorCode, errorMessage);
+    }
+  };
+
+  const signIn = async function () {
+    try {
+      const signInResult = await signInWithEmailAndPassword(
+        firebaseAuth,
+        emailAddress,
+        password
+      );
+      return signInResult;
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("ERROR caught signing in user: ", errorCode, errorMessage);
+    }
+  };
+
+  useEffect(() => {
+    console.log("Processing Submit: ", authState.isLoading);
+  }, [authState]);
+
+  async function handleOnSubmit(e) {
+    e.preventDefault();
+
+    setAuthState((prev) => {
+      return {
+        ...prev,
+        isLoading: true,
+      };
+    });
+
+    const signUpResponse = await signUp();
+    if (signUpResponse.status === 200) {
+      const userCredential = await signIn();
+      if (userCredential) {
+        setAuthState((prev) => {
+          return {
+            ...prev,
+            isLoading: false,
+          };
+        });
+        navigate("/");
+      }
     }
   }
 
