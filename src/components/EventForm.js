@@ -1,12 +1,15 @@
+// Libraries
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 //CSS Stylsheet
 import "./EventForm.css";
 
+// Form component used to create and edit an event
 function EventForm() {
   const navigate = useNavigate();
 
+  //Initial properties used to set state for the form
   const initialEventData = {
     title: "",
     date: Date.now(),
@@ -16,6 +19,7 @@ function EventForm() {
     user: "testuserId1234",
   };
 
+  
   const [eventData, setEventData] = useState(initialEventData);
   const { event } = useParams();
 
