@@ -1,30 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
-import { firebaseAuth } from "../firebase/firebaseApp";
-import { useGlobalAuthState } from "../utils/AuthContext";
+import { Link } from "react-router-dom";
 
 function NavBar() {
-  const navigate = useNavigate();
-
-  const { setAuthState } = useGlobalAuthState();
-
-  async function handleLogout() {
-    console.log("Logging out");
-    setAuthState((prev) => {
-      return {
-        ...prev,
-        isLoading: true,
-      };
-    });
-    await firebaseAuth.signOut();
-    setAuthState((prev) => {
-      return {
-        ...prev,
-        isLoading: false,
-      };
-    });
-    navigate("/");
-  }
-
   return (
     <nav>
       <ul>
@@ -38,7 +14,7 @@ function NavBar() {
           <Link to="/sign-in">Sign In</Link>
         </li>
         <li>
-          <Link onClick={handleLogout}>Logout</Link>
+          <Link to="/logout">Logout</Link>
         </li>
         <li>
           <Link to="/create-event">Create Event</Link>

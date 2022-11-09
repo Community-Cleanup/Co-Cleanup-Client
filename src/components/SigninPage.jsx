@@ -1,34 +1,18 @@
 import "./SignupAndSignInPage.css";
-import {
-  firebaseAuth,
-  signInWithEmailAndPassword,
-} from "../firebase/firebaseApp";
+import SignIn from "../firebase/SignIn";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 
 function SigninPage() {
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
+  const [signInFormState, setSignInFormState] = useState({
+    emailAddress: "",
+    password: "",
+  });
 
   const { setAuthState } = useGlobalAuthState();
 
   const navigate = useNavigate();
-
-  const signIn = async function () {
-    try {
-      const signInResult = await signInWithEmailAndPassword(
-        firebaseAuth,
-        emailAddress,
-        password
-      );
-      return signInResult;
-    } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log("ERROR caught signing in user: ", errorCode, errorMessage);
-    }
-  };
 
   async function handleFormSubmit(e) {
     e.preventDefault();
@@ -40,7 +24,10 @@ function SigninPage() {
       };
     });
 
-    const userCredential = await signIn();
+    const userCredential = await SignIn(
+      signInFormState.emailAddress,
+      signInFormState.password
+    );
     if (userCredential) {
       setAuthState((prev) => {
         return {
@@ -50,6 +37,15 @@ function SigninPage() {
       });
       navigate("/");
     }
+  }
+
+  function handleChange(event) {
+    setSignInFormState((prev) => {
+      return {
+        ...prev,
+        [event.target.name]: event.target.value,
+      };
+    });
   }
 
   return (
@@ -64,8 +60,8 @@ function SigninPage() {
             placeholder="Email address"
             name="emailAddress"
             id="emailAddress"
-            value={emailAddress}
-            onChange={(e) => setEmailAddress(e.target.value)}
+            value={signInFormState.emailAddress}
+            onChange={(e) => handleChange(e)}
           />
         </fieldset>
         <fieldset>
@@ -74,8 +70,8 @@ function SigninPage() {
             type="password"
             name="password"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={signInFormState.password}
+            onChange={(e) => handleChange(e)}
           />
         </fieldset>
         <input type="submit" value="Submit" id="submit" />

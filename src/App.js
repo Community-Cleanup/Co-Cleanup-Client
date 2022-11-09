@@ -5,6 +5,7 @@ import LandingPage from "./components/LandingPage";
 import SignupPage from "./components/SignupPage";
 import SigninPage from "./components/SigninPage";
 import EventForm from "./components/EventForm";
+import LogoutButton from "./components/LogoutButton";
 
 import { AuthContext } from "./utils/AuthContext";
 import AuthObserver from "./utils/AuthObserver";
@@ -25,6 +26,7 @@ function App() {
               <Route path="create-event" element={<EventForm />} />
               <Route path=":event/update-event" element={<EventForm />} />
             </Route>
+            <Route path="logout" element={<LogoutButton />} />
             <Route path="sign-up" element={<SignupPage />} />
             <Route path="sign-in" element={<SigninPage />} />
           </Routes>
