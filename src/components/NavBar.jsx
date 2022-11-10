@@ -19,8 +19,11 @@ function NavBar() {
       };
     });
     Logout();
+    // Note that on logout, we don't need to set the below state for 'token' to null,
+    // as this will be handled by the 'utils/AuthObserver.js'
     setAuthState((prev) => {
       return {
+        ...prev,
         isLoading: false,
         data: null,
       };

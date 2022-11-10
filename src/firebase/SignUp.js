@@ -22,7 +22,7 @@ async function SignUp(username, emailAddress, password) {
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
