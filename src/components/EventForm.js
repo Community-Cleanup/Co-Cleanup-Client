@@ -14,7 +14,7 @@ function EventForm() {
     title: "",
     date: Date.now(),
     address: "",
-    coordinates: [0, 0],
+    coordinates: [-27.517786, 152.98536],
     description: "",
     user: "testuserId1234",
   };
@@ -67,6 +67,7 @@ function EventForm() {
           title: eventData.title,
           date: eventData.date,
           address: eventData.address,
+          coordinates: eventData.coordinates,
           desciption: eventData.description,
         }
       );
@@ -121,7 +122,7 @@ function EventForm() {
           value={eventData.date}
           onChange={(event) => handleChange(event)}
         />
-        <label>Location</label>
+        <label>Address</label>
         <input
           type="text"
           placeholder="Address"

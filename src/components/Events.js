@@ -7,10 +7,36 @@ import "./Events.css";
 function Events() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
+  const [geoJSON, setGeoJSON] = useState({});
 
   useEffect(() => {
     getEvents();
   }, []);
+
+  useEffect(() => {
+    console.log(events);
+    let eventsGeoJSON = {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: events.map((item) => {
+          return {
+            type: "Feature",
+            properties: {
+              title: item.title,
+              description: item.description,
+            },
+            geometry: {
+              type: "Point",
+              coordinates: item.coordinates,
+            },
+          };
+        }),
+      },
+    };
+    console.log(eventsGeoJSON);
+    setGeoJSON(eventsGeoJSON);
+  }, [events]);
 
   async function getEvents() {
     try {
