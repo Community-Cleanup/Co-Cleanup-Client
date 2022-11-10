@@ -12,12 +12,15 @@ const AuthObserver = ({ children }) => {
   useEffect(() => {
     // Firebase function 'onIdTokenChanged' adds an observer for changes to the signed-in user's ID token,
     // which includes sign-in, sign-out, and token refresh events.
+    // On initial webpage load, this method below will get called twice! The first time to 'register' the observer,
+    // and the second time immediately after to check change to the 'User' object in the callback below
     return firebaseAuth.onIdTokenChanged(async (user) => {
       if (!user) {
         if (!authState.isLoading) {
           console.log(
             "AuthObserver component detected the current Firebase user isn't signed in"
           );
+
           // It was automatically detected that the Firebase user isn't signed in anymore, so clear state
           setAuthState((prev) => {
             return {
@@ -59,11 +62,11 @@ const AuthObserver = ({ children }) => {
               setAuthState((prev) => {
                 return {
                   ...prev,
-                  data: { ...res.data, token: token },
+                  data: res.data,
                 };
               });
               console.log(
-                `Added current user's data from Mongo and Firebase token to React state.`
+                `Added current user's data from Mongo to React state.`
               );
             }
           }
@@ -75,6 +78,7 @@ const AuthObserver = ({ children }) => {
         }
       }
     });
+    // eslint-disable-next-line
   }, []);
 
   return <>{children}</>;

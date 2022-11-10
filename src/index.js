@@ -7,11 +7,14 @@ import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+  // Had to comment out 'StrictMode' whilst working in development environment,
+  // as this causes some React components to re-render twice, even when in a useEffect
+  // See this user's post: https://github.com/axios/axios/issues/2825#issuecomment-784264784
+  // <React.StrictMode>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+  //</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

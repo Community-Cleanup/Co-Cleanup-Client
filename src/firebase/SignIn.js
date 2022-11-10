@@ -1,7 +1,4 @@
-import { useGlobalAuthState } from "../utils/AuthContext";
 import { firebaseAuth, signInWithEmailAndPassword } from "./firebaseApp";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 // Note that unlike in SignUp.js, we don't need to explicity use Axios to send a POST request to
 // `${process.env.REACT_APP_SERVER_URL}/api/users/find-current-user`, to send our token up in a header,

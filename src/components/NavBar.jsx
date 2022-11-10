@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Logout from "../firebase/Logout";
 import { Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
@@ -7,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 function NavBar() {
   const navigate = useNavigate();
   const { authState, setAuthState } = useGlobalAuthState();
-
-  useEffect(() => {}, [authState.data]);
 
   function handleLogout(e) {
     console.log("Logging out");

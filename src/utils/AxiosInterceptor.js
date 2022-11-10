@@ -1,0 +1,45 @@
+// Using guide from here: https://dev.to/arianhamdi/react-hooks-in-axios-interceptors-3e1h
+
+import axios from "axios";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { firebaseAuth } from "../firebase/firebaseApp";
+
+import { useGlobalAuthState } from "./AuthContext";
+
+const axiosInstance = axios.create();
+
+const AxiosInterceptor = ({ children }) => {
+  const { authState, setAuthState } = useGlobalAuthState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const interceptor = axiosInstance.interceptors.request.use(
+      async (config) => {
+        let user = firebaseAuth.currentUser;
+        let token = "";
+        if (user) {
+          token = `Bearer ${await user.getIdToken()}`;
+        }
+        config.headers.authorization = token;
+        console.log("SENT:", config.headers.authorization);
+        return config;
+      },
+      (error) => {
+        if (error.response.status === 401) {
+          alert("You must be signed in to access this content");
+          navigate("/");
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
+    return () => axiosInstance.interceptors.response.eject(interceptor);
+  }, [navigate]);
+
+  return <>{children}</>;
+};
+
+export default axiosInstance;
+export { AxiosInterceptor };
