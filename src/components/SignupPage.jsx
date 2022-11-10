@@ -1,5 +1,5 @@
 import "./SignupAndSignInPage.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SignUp from "../firebase/SignUp";
 import SignIn from "../firebase/SignIn";
 import { useNavigate } from "react-router-dom";
@@ -29,12 +29,12 @@ function SignupPage() {
   async function handleOnSubmit(e) {
     e.preventDefault();
 
-    setAuthState((prev) => {
-      return {
-        ...prev,
-        isLoading: true,
-      };
-    });
+    // setAuthState((prev) => {
+    //   return {
+    //     ...prev,
+    //     formProcessing: true,
+    //   };
+    // });
 
     const signUpResponse = await SignUp(
       signUpFormState.username,
@@ -47,12 +47,12 @@ function SignupPage() {
         signUpFormState.password
       );
       if (userCredential) {
-        setAuthState((prev) => {
-          return {
-            ...prev,
-            isLoading: false,
-          };
-        });
+        // setAuthState((prev) => {
+        //   return {
+        //     ...prev,
+        //     formProcessing: false,
+        //   };
+        // });
         navigate("/");
       }
     }

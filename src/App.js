@@ -14,29 +14,36 @@ import { AxiosInterceptor } from "./utils/AxiosInterceptor";
 
 function App() {
   const [authState, setAuthState] = useState({
-    isLoading: false,
+    authObserverRegistered: false,
     data: null,
   });
 
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
       <AuthObserver>
-        <AxiosInterceptor>
+        {authState.authObserverRegistered ? (
+          <AxiosInterceptor>
+            <div>
+              <Routes>
+                <Route path="/" element={<SharedLayout />}>
+                  <Route index element={<LandingPage />} />
+                  <Route path="*" element={<Navigate to="/" />} />
+                  <Route path="events" element={<Events />} />
+                  <Route path="create-event" element={<EventForm />} />
+                  <Route path=":event" element={<EventDetails />} />
+                  <Route path=":event/update-event" element={<EventForm />} />
+                </Route>
+                <Route path="sign-up" element={<SignupPage />} />
+                <Route path="sign-in" element={<SigninPage />} />
+              </Routes>
+            </div>
+          </AxiosInterceptor>
+        ) : (
           <div>
-            <Routes>
-              <Route path="/" element={<SharedLayout />}>
-                <Route index element={<LandingPage />} />
-                <Route path="*" element={<Navigate to="/" />} />
-                <Route path="events" element={<Events />} />
-                <Route path="create-event" element={<EventForm />} />
-                <Route path=":event" element={<EventDetails />} />
-                <Route path=":event/update-event" element={<EventForm />} />
-              </Route>
-              <Route path="sign-up" element={<SignupPage />} />
-              <Route path="sign-in" element={<SigninPage />} />
-            </Routes>
+            <h1>Please wait</h1>
+            <p>If this hangs, it's probably because the server isn't running</p>
           </div>
-        </AxiosInterceptor>
+        )}
       </AuthObserver>
     </AuthContext.Provider>
   );

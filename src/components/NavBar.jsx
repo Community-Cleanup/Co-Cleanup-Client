@@ -12,7 +12,7 @@ function NavBar() {
     setAuthState((prev) => {
       return {
         ...prev,
-        isLoading: true,
+        signInProcessing: true,
       };
     });
     Logout();
@@ -21,7 +21,7 @@ function NavBar() {
     setAuthState((prev) => {
       return {
         ...prev,
-        isLoading: false,
+        signInProcessing: false,
         data: null,
       };
     });

@@ -17,24 +17,24 @@ function SigninPage() {
   async function handleFormSubmit(e) {
     e.preventDefault();
 
-    setAuthState((prev) => {
-      return {
-        ...prev,
-        isLoading: true,
-      };
-    });
+    // setAuthState((prev) => {
+    //   return {
+    //     ...prev,
+    //     formProcessing: true,
+    //   };
+    // });
 
     const userCredential = await SignIn(
       signInFormState.emailAddress,
       signInFormState.password
     );
     if (userCredential) {
-      setAuthState((prev) => {
-        return {
-          ...prev,
-          isLoading: false,
-        };
-      });
+      // setAuthState((prev) => {
+      //   return {
+      //     ...prev,
+      //     formProcessing: false,
+      //   };
+      // });
       navigate("/");
     }
   }
