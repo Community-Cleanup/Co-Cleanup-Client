@@ -5,12 +5,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebaseApp";
 
-import { useGlobalAuthState } from "./AuthContext";
-
 const axiosInstance = axios.create();
 
 const AxiosInterceptor = ({ children }) => {
-  const { authState, setAuthState } = useGlobalAuthState();
   const navigate = useNavigate();
 
   useEffect(() => {
