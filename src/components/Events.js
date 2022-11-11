@@ -7,35 +7,15 @@ import "./Events.css";
 function Events() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
-  const [geoJSON, setGeoJSON] = useState({});
+  const [searchBar, setSearchBar] = useState("");
+  const [searchedEvents, setSearchedEvents] = useState(events);
 
   useEffect(() => {
     getEvents();
   }, []);
 
   useEffect(() => {
-    console.log(events);
-    let eventsGeoJSON = {
-      type: "geojson",
-      data: {
-        type: "FeatureCollection",
-        features: events.map((item) => {
-          return {
-            type: "Feature",
-            properties: {
-              title: item.title,
-              description: item.description,
-            },
-            geometry: {
-              type: "Point",
-              coordinates: item.coordinates,
-            },
-          };
-        }),
-      },
-    };
-    console.log(eventsGeoJSON);
-    setGeoJSON(eventsGeoJSON);
+    console.log("Initial", events);
   }, [events]);
 
   async function getEvents() {
@@ -49,16 +29,38 @@ function Events() {
     }
   }
 
+  const filterEvents = () => {
+    return events.filter((event) => {
+      return event.title.toLowerCase().includes(searchBar.toLowerCase());
+    });
+  };
+
+  useEffect(() => {
+    setSearchedEvents(filterEvents());
+  }, [events]);
+
+  useEffect(() => {
+    setSearchedEvents(filterEvents());
+  }, [searchBar]);
+
   return (
     <div className="events-main">
       <div className="events-items-div">
         <h1>Events</h1>
+        <input
+          type="text"
+          placeholder="Search Events"
+          name="searchBar"
+          value={searchBar}
+          onChange={(e) => setSearchBar(e.target.value)}
+        />
         <div>
-          {events.map((event) => {
+          {searchedEvents.map((event) => {
             return (
               <div
                 className="event-individual"
                 onClick={() => navigate(`/${event._id}`)}
+                key={event._id}
               >
                 <h3>{event.title}</h3>
                 <h4>Date: </h4>
@@ -69,7 +71,7 @@ function Events() {
           })}
         </div>
       </div>
-      <MapboxMap />
+      <MapboxMap searchedEvents={searchedEvents} />
     </div>
   );
 }
