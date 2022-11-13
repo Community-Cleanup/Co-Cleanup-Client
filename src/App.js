@@ -7,6 +7,7 @@ import SigninPage from "./components/SigninPage";
 import Events from "./components/Events";
 import EventDetails from "./components/EventDetails";
 import EventForm from "./components/EventForm";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 import { AuthContext } from "./utils/AuthContext";
 import AuthObserver from "./utils/AuthObserver";
@@ -41,7 +42,7 @@ function App() {
         ) : (
           <div>
             <h1>Please wait</h1>
-            <p>If this hangs, it's probably because the server isn't running</p>
+            <LoadingSpinner />
           </div>
         )}
       </AuthObserver>
