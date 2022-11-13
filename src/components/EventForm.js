@@ -1,12 +1,17 @@
+// Libraries
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+//Components
+import Geocoder from "./Geocoder";
 //CSS Stylsheet
 import "./EventForm.css";
 
+// Form component used to create and edit an event
 function EventForm() {
   const navigate = useNavigate();
 
+  //Initial properties used to set state for the form
   const initialEventData = {
     title: "",
     date: Date.now(),
@@ -16,15 +21,22 @@ function EventForm() {
     user: "testuserId1234",
   };
 
+  // State for data entered into form fields
   const [eventData, setEventData] = useState(initialEventData);
+  // event variable is saved if a params exists
+  // this event variable will be saved only when updating an event, not when creating an event
   const { event } = useParams();
 
+  // When the form is used to update an event the 'event' variable will not be undefined
+  // when the 'event' variable is not undefined it will run the getEventDetails() function when the page loads
   useEffect(() => {
     if (event) {
       getEventDetails();
     }
   }, []);
 
+  // This function makes a request to the server to retrieve the event data
+  // This event data is then used to update the state using setEventData
   async function getEventDetails() {
     try {
       const res = await axios.get(
@@ -36,6 +48,7 @@ function EventForm() {
     }
   }
 
+  // This function sets state for the controlled form components
   function handleChange(event) {
     setEventData((prev) => {
       return {
@@ -45,6 +58,8 @@ function EventForm() {
     });
   }
 
+  // createEvent() function makes a request to the server to create a new event in the database
+  // After the event is created, the user is navigated to the home page
   async function createEvent(e) {
     e.preventDefault();
     try {
@@ -54,6 +69,7 @@ function EventForm() {
           title: eventData.title,
           date: eventData.date,
           address: eventData.address,
+          coordinates: eventData.coordinates,
           desciption: eventData.description,
         }
       );
@@ -64,6 +80,8 @@ function EventForm() {
     }
   }
 
+  // updateEvent() function makes a request to the server to update an event in the database
+  // After the event is created, the user is navigated to the home page
   async function updateEvent(e) {
     e.preventDefault();
     try {
@@ -84,6 +102,8 @@ function EventForm() {
     }
   }
 
+  // Create/Update event form jsx
+  // Controlled components with onChange setting state
   return (
     <div className="event-form-main">
       <h1>Event Form</h1>
@@ -99,19 +119,14 @@ function EventForm() {
         <label>Date</label>
         <input
           type="text"
-          //   placeholder="Event Title"
           name="date"
           value={eventData.date}
           onChange={(event) => handleChange(event)}
         />
-        <label>Location</label>
-        <input
-          type="text"
-          placeholder="Address"
-          name="address"
-          value={eventData.address}
-          onChange={(event) => handleChange(event)}
-        />
+        <label>Address</label>
+        <p>{eventData.address}</p>
+        {/* Geocoder component  */}
+        <Geocoder setEventData={setEventData} />
         <label>Description</label>
         <textarea
           placeholder="Desciption"
@@ -122,6 +137,7 @@ function EventForm() {
           value={eventData.description}
           onChange={(event) => handleChange(event)}
         ></textarea>
+        {/* Ternary based on if an event is defined. This form is used to both update and save an event*/}
         {event ? (
           <button onClick={updateEvent}>Update Event</button>
         ) : (

@@ -1,0 +1,19 @@
+.map-listings-main {
+    display: flex;
+    justify-content: space-around;
+}
+
+.map-div {
+    height: 500px;
+    width: 70%;
+    position: relative;
+}
+
+.map-container {
+    height: 100%;
+    position: absolute;
+    left: 25%;
+    top: 0;
+    bottom: 0;
+    width: 75%;
+}
