@@ -93,7 +93,7 @@ function SignupPage() {
     // eslint-disable-next-line
   }, [authState.data]);
 
-  async function handleOnSubmit(e) {
+  async function handleFormSubmit(e) {
     e.preventDefault();
 
     const {
@@ -168,7 +168,7 @@ function SignupPage() {
     <main className="signup-main">
       <h1>Co Cleanup</h1>
       <h1>Sign Up</h1>
-      <form onSubmit={handleOnSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <fieldset>
           <label htmlFor="username">Username</label>
           <input

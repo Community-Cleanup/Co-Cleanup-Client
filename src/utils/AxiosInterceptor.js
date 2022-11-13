@@ -20,7 +20,9 @@ const AxiosInterceptor = ({ children }) => {
       },
       (error) => {
         if (error.response.status === 401) {
-          alert("You must be signed in or authorised to access this content");
+          alert(
+            "Error: You must be signed in or authorised to access this content"
+          );
         }
 
         return Promise.reject(error);

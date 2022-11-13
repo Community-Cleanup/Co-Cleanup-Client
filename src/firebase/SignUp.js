@@ -39,7 +39,7 @@ async function SignUp(username, emailAddress, password) {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log(
-      "ERROR caught creating user on Firebase: ",
+      "Error caught creating user on Firebase: ",
       errorCode,
       errorMessage
     );

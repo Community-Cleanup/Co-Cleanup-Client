@@ -17,7 +17,7 @@ async function SignIn(emailAddress, password) {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log(
-      "ERROR caught signing in user on Firebase: ",
+      "Error caught signing in user on Firebase: ",
       errorCode,
       errorMessage
     );
