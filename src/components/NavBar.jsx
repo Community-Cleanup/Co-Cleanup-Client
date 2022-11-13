@@ -26,6 +26,7 @@ function NavBar() {
 
   return (
     <nav>
+      {authState.data && <h3> Welcome, {authState.data.username}!</h3>}
       <ul>
         <li>
           <Link to="/">Home</Link>
