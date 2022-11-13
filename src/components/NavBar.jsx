@@ -1,31 +1,27 @@
 import Logout from "../firebase/Logout";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function NavBar() {
   const navigate = useNavigate();
-  const { authState, setAuthState } = useGlobalAuthState();
+  const { authState } = useGlobalAuthState();
 
-  function handleLogout(e) {
-    console.log("Logging out");
-    setAuthState((prev) => {
-      return {
-        ...prev,
-        signInProcessing: true,
-      };
-    });
+  useEffect(() => {
+    if (!authState.data) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [authState.data]);
+
+  async function handleLogout(e) {
+    e.preventDefault();
+    console.log("Logout button clicked, logging out");
+
     Logout();
-    // Note that on logout, we don't need to set the below state for 'token' to null,
-    // as this will be handled by the 'utils/AuthObserver.js'
-    setAuthState((prev) => {
-      return {
-        ...prev,
-        signInProcessing: false,
-        data: null,
-      };
-    });
-    navigate("/");
+    // Note that on logout, we don't need to set our React global auth state for 'authState.data' to null,
+    // as this will be automatically detected and handled by our auth observer in 'utils/AuthObserver.js'
   }
 
   return (
@@ -34,12 +30,16 @@ function NavBar() {
         <li>
           <Link to="/">Home</Link>
         </li>
-        <li>
-          <Link to="/sign-up">Sign Up</Link>
-        </li>
-        <li>
-          <Link to="/sign-in">Sign In</Link>
-        </li>
+        {!authState.data && (
+          <li>
+            <Link to="/sign-up">Sign Up</Link>
+          </li>
+        )}
+        {!authState.data && (
+          <li>
+            <Link to="/sign-in">Sign In</Link>
+          </li>
+        )}
         {authState.data && (
           <li>
             <button onClick={handleLogout}>Logout</button>

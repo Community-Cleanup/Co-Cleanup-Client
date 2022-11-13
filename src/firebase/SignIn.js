@@ -1,8 +1,8 @@
 import { firebaseAuth, signInWithEmailAndPassword } from "./firebaseApp";
 
-// Note that unlike in SignUp.js, we don't need to explicity use Axios to send a POST request to
-// `${process.env.REACT_APP_SERVER_URL}/api/users/find-current-user`, to send our token up in a header,
-// as the Firebase token change observer setup in `utils/AuthObserver.js` will detect the token
+// Note that unlike in `./SignUp.js`, we don't need to explicity use Axios here to send a POST request,
+// to send our token up in a header to our server API endpoints,
+// as our Firebase auth observer setup in `../utils/AuthObserver.js` will automatically detect the new token from Firebase,
 // which will then send it up to the server API.
 
 async function SignIn(emailAddress, password) {
@@ -17,6 +17,7 @@ async function SignIn(emailAddress, password) {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log("ERROR caught signing in user: ", errorCode, errorMessage);
+    return error;
   }
 }
 

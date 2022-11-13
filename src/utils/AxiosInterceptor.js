@@ -19,13 +19,11 @@ const AxiosInterceptor = ({ children }) => {
           token = `Bearer ${await user.getIdToken()}`;
         }
         config.headers.authorization = token;
-        console.log("SENT:", config.headers.authorization);
         return config;
       },
       (error) => {
         if (error.response.status === 401) {
           alert("You must be signed in to access this content");
-          navigate("/");
         }
 
         return Promise.reject(error);
@@ -33,7 +31,7 @@ const AxiosInterceptor = ({ children }) => {
     );
 
     return () => axiosInstance.interceptors.response.eject(interceptor);
-  }, [navigate]);
+  }, []);
 
   return <>{children}</>;
 };

@@ -6,14 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 
 function SignupPage() {
+  const { authState } = useGlobalAuthState();
+
   const [signUpFormState, setSignUpFormState] = useState({
     username: "",
     emailAddress: "",
     password: "",
     passwordConfirm: "",
   });
-
-  const { setAuthState } = useGlobalAuthState();
 
   const navigate = useNavigate();
 
@@ -26,34 +26,34 @@ function SignupPage() {
     });
   }
 
+  useEffect(() => {
+    if (authState.data) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [authState.data]);
+
   async function handleOnSubmit(e) {
     e.preventDefault();
 
-    // setAuthState((prev) => {
-    //   return {
-    //     ...prev,
-    //     formProcessing: true,
-    //   };
-    // });
-
-    const signUpResponse = await SignUp(
-      signUpFormState.username,
-      signUpFormState.emailAddress,
-      signUpFormState.password
-    );
-    if (signUpResponse.status === 200) {
-      const userCredential = await SignIn(
+    let signUpResponse;
+    try {
+      signUpResponse = await SignUp(
+        signUpFormState.username,
         signUpFormState.emailAddress,
         signUpFormState.password
       );
-      if (userCredential) {
-        // setAuthState((prev) => {
-        //   return {
-        //     ...prev,
-        //     formProcessing: false,
-        //   };
-        // });
-        navigate("/");
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+
+    if (signUpResponse.status === 200) {
+      try {
+        await SignIn(signUpFormState.emailAddress, signUpFormState.password);
+      } catch (error) {
+        console.log(error);
+        return error;
       }
     }
   }

@@ -1,41 +1,35 @@
 import "./SignupAndSignInPage.css";
 import SignIn from "../firebase/SignIn";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { useGlobalAuthState } from "../utils/AuthContext";
 
 function SigninPage() {
+  const { authState } = useGlobalAuthState();
+
   const [signInFormState, setSignInFormState] = useState({
     emailAddress: "",
     password: "",
   });
 
-  const { setAuthState } = useGlobalAuthState();
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authState.data) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [authState.data]);
 
   async function handleFormSubmit(e) {
     e.preventDefault();
 
-    // setAuthState((prev) => {
-    //   return {
-    //     ...prev,
-    //     formProcessing: true,
-    //   };
-    // });
-
-    const userCredential = await SignIn(
-      signInFormState.emailAddress,
-      signInFormState.password
-    );
-    if (userCredential) {
-      // setAuthState((prev) => {
-      //   return {
-      //     ...prev,
-      //     formProcessing: false,
-      //   };
-      // });
-      navigate("/");
+    try {
+      await SignIn(signInFormState.emailAddress, signInFormState.password);
+    } catch (error) {
+      console.log(error);
+      return error;
     }
   }
 
