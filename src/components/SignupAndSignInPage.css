@@ -21,6 +21,12 @@
     width: 100%;
 }
 
+.signup-main form svg {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
 .signup-main fieldset {
     margin: .4rem 0;
     padding: 0;
@@ -35,14 +41,21 @@
 .signup-main input {
     width: 100%;
     padding: 15px 10px;
-    border: 1px solid #3d3935;
+    border: 1px solid var(--tw-stone-6);
     border-radius: 4px;
-    background-color: #fff;
-    color: #3d3935;
+    background-color: var(--tw-neutral-0);
     outline: 0;
 }
 
+.signup-main p {
+    color: var(--tw-red-6);
+  }
+
 .signup-main input::placeholder {
-    color: #867d6c;
+    color: var(--tw-stone-4);
     font-size: 1rem;
+  }
+
+  .signup-main input:focus {
+    border: 1px solid var(--tw-sky-3);
   }

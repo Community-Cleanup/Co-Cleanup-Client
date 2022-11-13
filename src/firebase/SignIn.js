@@ -16,8 +16,12 @@ async function SignIn(emailAddress, password) {
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
-    console.log("ERROR caught signing in user: ", errorCode, errorMessage);
-    return error;
+    console.log(
+      "ERROR caught signing in user on Firebase: ",
+      errorCode,
+      errorMessage
+    );
+    throw new Error(errorCode, errorMessage);
   }
 }
 
