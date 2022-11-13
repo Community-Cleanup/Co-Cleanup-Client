@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import mapboxgl from "mapbox-gl";
-import "./MapboxMap.css";
 import "./EventsMap.css";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 

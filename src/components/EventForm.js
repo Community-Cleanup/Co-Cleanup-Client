@@ -2,6 +2,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+//Components
+import Geocoder from "./Geocoder";
 //CSS Stylsheet
 import "./EventForm.css";
 
@@ -14,7 +16,7 @@ function EventForm() {
     title: "",
     date: Date.now(),
     address: "",
-    coordinates: [-27.517786, 152.98536],
+    coordinates: [0, 0],
     description: "",
     user: "testuserId1234",
   };
@@ -117,19 +119,14 @@ function EventForm() {
         <label>Date</label>
         <input
           type="text"
-          //   placeholder="Event Title"
           name="date"
           value={eventData.date}
           onChange={(event) => handleChange(event)}
         />
         <label>Address</label>
-        <input
-          type="text"
-          placeholder="Address"
-          name="address"
-          value={eventData.address}
-          onChange={(event) => handleChange(event)}
-        />
+        <p>{eventData.address}</p>
+        {/* Geocoder component  */}
+        <Geocoder setEventData={setEventData} />
         <label>Description</label>
         <textarea
           placeholder="Desciption"
