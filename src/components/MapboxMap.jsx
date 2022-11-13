@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "./MapboxMap.css";
 // import markerImage from "../images/marker.png";
@@ -15,6 +16,8 @@ function MapboxMap({ searchedEvents }) {
   const [lat, setLat] = useState(-25.978749);
   const [zoom, setZoom] = useState(3);
   const [eventMarkers, setEventMarkers] = useState({});
+  // Holds visible airport features for filtering
+  const [events, setEvents] = useState([]);
 
   // The map is initialised within useEffect
   // The properties container, style, center & zoom are all settings that the Mapbox GL JS library uses when the map initialy loads.
@@ -29,9 +32,9 @@ function MapboxMap({ searchedEvents }) {
     });
     map.current.addControl(new mapboxgl.FullscreenControl());
     map.current.addControl(new mapboxgl.NavigationControl());
-    new mapboxgl.Marker()
-      .setLngLat([148.055033, -25.978749])
-      .addTo(map.current);
+    // new mapboxgl.Marker()
+    //   .setLngLat([148.055033, -25.978749])
+    //   .addTo(map.current);
   });
 
   // This useEffect resets the values of lng, lat, and zoom when the map is moved by the user.
@@ -78,83 +81,112 @@ function MapboxMap({ searchedEvents }) {
     }
   }, [searchedEvents]);
 
-  //   useEffect(() => {
-  //     if (Object.keys(eventMarkers).length > 0) {
-  //       map.current.on("load", () => {
-  //         map.current.addSource("points", eventMarkers);
+  // Create a popup, but don't add it to the map yet.
+  // Close button is set to false, as this pop up will only be a hover effect
+  const popup = new mapboxgl.Popup({
+    closeButton: false,
+  });
 
-  //         map.current.addLayer({
-  //           id: "points",
-  //           type: "circle",
-  //           source: "points",
-  //           paint: {
-  //             "circle-radius": 4,
-  //             "circle-stroke-width": 2,
-  //             "circle-color": "red",
-  //             "circle-stroke-color": "white",
-  //           }
-  //         });
-  //       });
-  //     }
-  //     console.log("marker update", eventMarkers);
-  //   }, [eventMarkers]);
+  const filterEl = document.getElementById("feature-filter");
+  const listingEl = document.getElementById("feature-listing");
+
+  function renderListings(features) {
+    const empty = document.createElement("p");
+    // Clear any existing listings
+    listingEl.innerHTML = "";
+    if (features.length) {
+      for (const feature of features) {
+        const itemLink = document.createElement("a");
+        const label = `${feature.properties.title}`;
+        itemLink.href = feature.properties.title;
+        itemLink.target = "_blank";
+        itemLink.textContent = label;
+        itemLink.addEventListener("mouseover", () => {
+          // Highlight corresponding feature on the map
+          popup
+            .setLngLat(feature.geometry.coordinates)
+            .setText(label)
+            .addTo(map.current);
+        });
+        listingEl.appendChild(itemLink);
+      }
+
+      // Show the filter input
+      filterEl.parentNode.style.display = "block";
+    } else if (features.length === 0 && filterEl.value !== "") {
+      empty.textContent = "No results found";
+      listingEl.appendChild(empty);
+    } else {
+      empty.textContent = "Drag the map to populate results";
+      listingEl.appendChild(empty);
+
+      // Hide the filter input
+      filterEl.parentNode.style.display = "none";
+
+      // remove features filter
+      map.current.setFilter("points", ["has", "title"]);
+    }
+  }
+
+  function Notice(props) {
+    return <p>{props.message}</p>;
+  }
+
+  function Listings(props) {
+    const listingLink = useRef(null);
+
+    function handlePopUp(event) {
+      listingLink.current.addEventListener("mouseover", () => {
+        // Highlight corresponding feature on the map
+        popup
+          .setLngLat(event.geometry.coordinates)
+          .setText(event.properties.title)
+          .addTo(map.current);
+      });
+      return () => {
+        listingLink.current.removeEventListener("mouseover", () => {
+          // Highlight corresponding feature on the map
+          popup
+            .setLngLat(event.geometry.coordinates)
+            .setText(event.properties.title)
+            .addTo(map.current);
+        });
+      };
+    }
+
+    useEffect(() => {
+      handlePopUp();
+    }, []);
+
+    return (
+      <div id="feature-listing" className="listing">
+        {props.events.features.map((event) => {
+          return (
+            <Link
+              ref={listingLink}
+              className="listing-link"
+              onMouseOver={() => handlePopUp(event)}
+            >
+              {props.title}
+            </Link>
+          );
+        })}
+      </div>
+    );
+  }
+
+  function normalize(string) {
+    return string.trim().toLowerCase();
+  }
+
+  useEffect(() => {
+    console.log("Filtered Events:", events);
+  }, [events]);
 
   //Filtering
   useEffect(() => {
     if (Object.keys(eventMarkers).length > 0) {
       console.log("Event Markers:", eventMarkers);
-      // Holds visible airport features for filtering
-      let events = [];
-
-      // Create a popup, but don't add it to the map yet.
-      const popup = new mapboxgl.Popup({
-        closeButton: false,
-      });
-
-      const filterEl = document.getElementById("feature-filter");
-      const listingEl = document.getElementById("feature-listing");
-
-      function renderListings(features) {
-        const empty = document.createElement("p");
-        // Clear any existing listings
-        listingEl.innerHTML = "";
-        if (features.length) {
-          for (const feature of features) {
-            const itemLink = document.createElement("a");
-            const label = `${feature.properties.title}`;
-            itemLink.href = feature.properties.title;
-            itemLink.target = "_blank";
-            itemLink.textContent = label;
-            itemLink.addEventListener("mouseover", () => {
-              // Highlight corresponding feature on the map
-              popup
-                .setLngLat(feature.geometry.coordinates)
-                .setText(label)
-                .addTo(map.current);
-            });
-            listingEl.appendChild(itemLink);
-          }
-
-          // Show the filter input
-          filterEl.parentNode.style.display = "block";
-        } else if (features.length === 0 && filterEl.value !== "") {
-          empty.textContent = "No results found";
-          listingEl.appendChild(empty);
-        } else {
-          empty.textContent = "Drag the map to populate results";
-          listingEl.appendChild(empty);
-
-          // Hide the filter input
-          filterEl.parentNode.style.display = "none";
-
-          // remove features filter
-          map.current.setFilter("points", ["has", "title"]);
-        }
-      }
-
-      function normalize(string) {
-        return string.trim().toLowerCase();
-      }
 
       // Because features come from tiled vector data,
       // feature geometries may be split
@@ -208,7 +240,7 @@ function MapboxMap({ searchedEvents }) {
 
             // Store the current features in sn `airports` variable to
             // later use for filtering on `keyup`.
-            events = uniqueFeatures;
+            setEvents(uniqueFeatures);
           }
         });
 
@@ -262,7 +294,7 @@ function MapboxMap({ searchedEvents }) {
 
         // Call this function on initialization
         // passing an empty array to render an empty state
-        renderListings([]);
+        renderListings(events);
       });
     }
   });
@@ -277,7 +309,7 @@ function MapboxMap({ searchedEvents }) {
             placeholder="Filter results by name"
           />
         </fieldset>
-        <div id="feature-listing" class="listing"></div>
+        {/* <Listings events={events} /> */}
       </div>
       <div ref={mapContainer} className="map-container" />
     </div>

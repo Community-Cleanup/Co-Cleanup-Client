@@ -4,7 +4,7 @@ import SharedLayout from "./components/SharedLayout";
 import LandingPage from "./components/LandingPage";
 import SignupPage from "./components/SignupPage";
 import SigninPage from "./components/SigninPage";
-import Events from "./components/Events";
+import EventsMap from "./components/EventsMap";
 import EventDetails from "./components/EventDetails";
 import EventForm from "./components/EventForm";
 
@@ -25,7 +25,7 @@ function App() {
             <Route path="/" element={<SharedLayout />}>
               <Route index element={<LandingPage />} />
               <Route path="*" element={<Navigate to="/" />} />
-              <Route path="events" element={<Events />} />
+              <Route path="events" element={<EventsMap />} />
               <Route path="create-event" element={<EventForm />} />
               <Route path=":event" element={<EventDetails />} />
               <Route path=":event/update-event" element={<EventForm />} />
