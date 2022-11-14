@@ -7,33 +7,44 @@ import SigninPage from "./components/SigninPage";
 import EventsMap from "./components/EventsMap";
 import EventDetails from "./components/EventDetails";
 import EventForm from "./components/EventForm";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 import { AuthContext } from "./utils/AuthContext";
 import AuthObserver from "./utils/AuthObserver";
+import { AxiosInterceptor } from "./utils/AxiosInterceptor";
 
 function App() {
   const [authState, setAuthState] = useState({
-    isLoading: false,
+    authObserverRegistered: false,
     data: null,
   });
 
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
       <AuthObserver>
-        <div>
-          <Routes>
-            <Route path="/" element={<SharedLayout />}>
-              <Route index element={<LandingPage />} />
-              <Route path="*" element={<Navigate to="/" />} />
-              <Route path="events" element={<EventsMap />} />
-              <Route path="create-event" element={<EventForm />} />
-              <Route path=":event" element={<EventDetails />} />
-              <Route path=":event/update-event" element={<EventForm />} />
-            </Route>
-            <Route path="sign-up" element={<SignupPage />} />
-            <Route path="sign-in" element={<SigninPage />} />
-          </Routes>
-        </div>
+        {authState.authObserverRegistered ? (
+          <AxiosInterceptor>
+            <div>
+              <Routes>
+                <Route path="/" element={<SharedLayout />}>
+                  <Route index element={<LandingPage />} />
+                  <Route path="*" element={<Navigate to="/" />} />
+                  <Route path="events" element={<EventsMap />} />
+                  <Route path="create-event" element={<EventForm />} />
+                  <Route path=":event" element={<EventDetails />} />
+                  <Route path=":event/update-event" element={<EventForm />} />
+                </Route>
+                <Route path="sign-up" element={<SignupPage />} />
+                <Route path="sign-in" element={<SigninPage />} />
+              </Routes>
+            </div>
+          </AxiosInterceptor>
+        ) : (
+          <div>
+            <h1>Please wait</h1>
+            <LoadingSpinner />
+          </div>
+        )}
       </AuthObserver>
     </AuthContext.Provider>
   );

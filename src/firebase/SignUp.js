@@ -22,7 +22,7 @@ async function SignUp(username, emailAddress, password) {
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -33,11 +33,17 @@ async function SignUp(username, emailAddress, password) {
         `Error in POST to ${process.env.REACT_APP_SERVER_URL}/api/users/create-current-user with error data:`,
         error
       );
+      throw new Error(error);
     }
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
-    console.log("ERROR caught creating user: ", errorCode, errorMessage);
+    console.log(
+      "Error caught creating user on Firebase: ",
+      errorCode,
+      errorMessage
+    );
+    throw new Error(errorCode, errorMessage);
   }
 }
 

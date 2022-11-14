@@ -1,7 +1,9 @@
-import { useGlobalAuthState } from "../utils/AuthContext";
 import { firebaseAuth, signInWithEmailAndPassword } from "./firebaseApp";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
+// Note that unlike in `./SignUp.js`, we don't need to explicity use Axios here to send a POST request,
+// to send our token up in a header to our server API endpoints,
+// as our Firebase auth observer setup in `../utils/AuthObserver.js` will automatically detect the new token from Firebase,
+// which will then send it up to the server API.
 
 async function SignIn(emailAddress, password) {
   try {
@@ -14,7 +16,12 @@ async function SignIn(emailAddress, password) {
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
-    console.log("ERROR caught signing in user: ", errorCode, errorMessage);
+    console.log(
+      "Error caught signing in user on Firebase: ",
+      errorCode,
+      errorMessage
+    );
+    throw new Error(errorCode, errorMessage);
   }
 }
 

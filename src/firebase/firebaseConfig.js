@@ -1,12 +1,12 @@
 // Firebase client-side API configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD5IPJxv0EMB7ZNm0qShwmqndVeDSpdzZU",
-  authDomain: "co-cleanup.firebaseapp.com",
-  projectId: "co-cleanup",
-  storageBucket: "co-cleanup.appspot.com",
-  messagingSenderId: "742262156806",
-  appId: "1:742262156806:web:75e0cea87bf53320aa9d87",
-  measurementId: "G-0DVVKVVZQJ",
+  apiKey: "AIzaSyBU78uaSZ5qicO-jkXR-YqRyHhFbtzp4go",
+  authDomain: "co-cleanup-practice.firebaseapp.com",
+  projectId: "co-cleanup-practice",
+  storageBucket: "co-cleanup-practice.appspot.com",
+  messagingSenderId: "48909750230",
+  appId: "1:48909750230:web:18ada0e4a8aa7d9b141e77",
+  measurementId: "G-TSNGM89HK7",
 };
 
 module.exports = { firebaseConfig };
