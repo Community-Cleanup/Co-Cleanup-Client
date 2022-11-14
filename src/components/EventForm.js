@@ -3,6 +3,7 @@
 import axios from "../utils/AxiosInterceptor";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useGlobalAuthState } from "../utils/AuthContext";
 //Components
 import Geocoder from "./Geocoder";
 //CSS Stylsheet
@@ -11,7 +12,8 @@ import "./EventForm.css";
 // Form component used to create and edit an event
 function EventForm() {
   const navigate = useNavigate();
-
+  const { authState } = useGlobalAuthState();
+  console.log("authstate", authState);
   //Initial properties used to set state for the form
   const initialEventData = {
     title: "",
@@ -19,7 +21,9 @@ function EventForm() {
     address: "",
     coordinates: [0, 0],
     description: "",
-    user: "testuserId1234",
+    username: authState.data.username,
+    userId: authState.data._id,
+    attendees: [authState.data._id]
   };
 
   // State for data entered into form fields
@@ -71,7 +75,10 @@ function EventForm() {
           date: eventData.date,
           address: eventData.address,
           coordinates: eventData.coordinates,
-          desciption: eventData.description,
+          description: eventData.description,
+          username: eventData.username,
+          userId: eventData.userId,
+          attendees: eventData.attendees
         }
       );
       console.log("Data Saved", res.status, res.data);

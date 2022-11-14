@@ -113,6 +113,8 @@ function EventsMap() {
               },
               properties: {
                 title: event.title,
+                date: event.date,
+                address: event.address,
                 id: event._id,
               },
             };
@@ -258,7 +260,7 @@ function EventsMap() {
         {sidebarListings.length ? (
           sidebarListings.map((event) => {
             return (
-              <div>
+              <div className="event-listing-div">
                 <Link
                   onMouseEnter={() => showPopup(event)}
                   onMouseOut={removePopup}
@@ -266,6 +268,8 @@ function EventsMap() {
                 >
                   {event.properties.title}
                 </Link>
+                <p>{event.properties.date}</p>
+                <p>{event.properties.address}</p>
               </div>
             );
           })
