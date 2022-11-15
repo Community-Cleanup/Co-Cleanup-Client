@@ -122,6 +122,7 @@ function EventDetails() {
       username: authState.data.username,
       userId: authState.data._id,
       comment: commentInput,
+      time: Date.now(),
     });
     handleSetEventDetails(comments);
     updateEvent({ comments: comments });
@@ -134,6 +135,22 @@ function EventDetails() {
     handleSetEventDetails(comments);
     updateEvent({ comments: comments });
   }
+
+  // const intervals = [
+  //   { label: "year", seconds: 31536000 },
+  //   { label: "month", seconds: 2592000 },
+  //   { label: "day", seconds: 86400 },
+  //   { label: "hour", seconds: 3600 },
+  //   { label: "minute", seconds: 60 },
+  //   { label: "second", seconds: 1 },
+  // ];
+
+  // function timeSince(date) {
+  //   const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  //   const interval = intervals.find((i) => i.seconds < seconds);
+  //   const count = Math.floor(seconds / interval.seconds);
+  //   return `${count} ${interval.label}${count !== 1 ? "s" : ""} ago`;
+  // }
 
   return (
     <div className="event-details-main">
@@ -175,6 +192,7 @@ function EventDetails() {
           return (
             <div>
               <h4>{item.username}</h4>
+              {/* <span>{timeSince(new Date(`${item.time}`))}</span> */}
               <p>{item.comment}</p>
               {item.userId === authState.data._id && (
                 <button onClick={() => handleCommentDelete(index)}>
