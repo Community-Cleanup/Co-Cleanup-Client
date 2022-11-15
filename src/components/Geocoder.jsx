@@ -108,10 +108,10 @@ function Geocoder({ setEventData }) {
             </ul>
           </div>
         )}
-        <div class="mapboxgl-ctrl-geocoder--pin-right">
+        <div className="mapboxgl-ctrl-geocoder--pin-right">
           <button
             aria-label="Clear"
-            class="mapboxgl-ctrl-geocoder--button"
+            className="mapboxgl-ctrl-geocoder--button"
             ref={clearButton}
             onClick={() => {
               setInput("");
@@ -119,7 +119,7 @@ function Geocoder({ setEventData }) {
             }}
           >
             <svg
-              class="mapboxgl-ctrl-geocoder--icon mapboxgl-ctrl-geocoder--icon-close"
+              className="mapboxgl-ctrl-geocoder--icon mapboxgl-ctrl-geocoder--icon-close"
               viewBox="0 0 18 18"
               width="18"
               height="18"
@@ -128,7 +128,7 @@ function Geocoder({ setEventData }) {
             </svg>
           </button>
           <svg
-            class="mapboxgl-ctrl-geocoder--icon mapboxgl-ctrl-geocoder--icon-loading"
+            className="mapboxgl-ctrl-geocoder--icon mapboxgl-ctrl-geocoder--icon-loading"
             viewBox="0 0 18 18"
             width="18"
             height="18"

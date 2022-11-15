@@ -20,6 +20,7 @@ function NavBar() {
     console.log("Logout button clicked, logging out");
 
     Logout();
+    navigate("/");
     // Note that on logout, we don't need to set our React global auth state for 'authState.data' to null,
     // as this will be automatically detected and handled by our auth observer in 'utils/AuthObserver.js'
   }
