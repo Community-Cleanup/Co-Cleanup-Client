@@ -23,7 +23,8 @@ function EventForm() {
     description: "",
     username: authState.data.username,
     userId: authState.data._id,
-    attendees: [authState.data._id]
+    attendees: [authState.data._id],
+    comments: [],
   };
 
   // State for data entered into form fields
@@ -78,11 +79,12 @@ function EventForm() {
           description: eventData.description,
           username: eventData.username,
           userId: eventData.userId,
-          attendees: eventData.attendees
+          attendees: eventData.attendees,
+          comments: eventData.comments
         }
       );
       console.log("Data Saved", res.status, res.data);
-      navigate("/events");
+      navigate("/" + res.data._id);
     } catch (e) {
       console.log(e);
     }
