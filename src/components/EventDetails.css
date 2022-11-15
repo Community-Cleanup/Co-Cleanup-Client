@@ -1,11 +1,24 @@
 .event-details-main {
     margin: 100px 150px;
 }
+
 .event-details-main h4 {
     margin-top: 1rem;
 }
+
 .event-title-register-div {
     display: flex;
     justify-content: space-between;
     margin-top: 3rem;
+}
+
+.map-detailed-div {
+    margin-top: 2rem;
+    height: 200px;
+    width: 300px;
+}
+
+.map-detailed-container {
+    height: 100%;
+    width: 100%;
 }
