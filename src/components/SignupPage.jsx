@@ -1,7 +1,8 @@
 import "./SignupAndSignInPage.css";
 import { useState, useEffect } from "react";
-import SignUp from "../firebase/SignUp";
-import SignIn from "../firebase/SignIn";
+import { Logout } from "../firebase/Logout";
+import { SignUp } from "../firebase/SignUp";
+import { SignIn } from "../firebase/SignIn";
 import { useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 import LoadingSpinner from "./LoadingSpinner";
@@ -93,6 +94,20 @@ function SignupPage() {
     // eslint-disable-next-line
   }, [authState.data]);
 
+  useEffect(() => {
+    if (authState.authObserverError) {
+      Logout();
+      setSignUpFormState((prev) => {
+        return {
+          ...prev,
+          showLoadingSpinner: false,
+          submitError: authState.authObserverError.errorMessage,
+        };
+      });
+    }
+    // eslint-disable-next-line
+  }, [authState.authObserverError]);
+
   async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -144,6 +159,7 @@ function SignupPage() {
         return {
           ...prev,
           showLoadingSpinner: false,
+          submitError: error.message,
         };
       });
       return error;
@@ -157,6 +173,7 @@ function SignupPage() {
           return {
             ...prev,
             showLoadingSpinner: false,
+            submitError: error.message,
           };
         });
         return error;

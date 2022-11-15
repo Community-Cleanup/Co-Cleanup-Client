@@ -37,14 +37,15 @@ async function SignUp(username, emailAddress, password) {
     }
   } catch (error) {
     const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(
-      "Error caught creating user on Firebase: ",
-      errorCode,
-      errorMessage
-    );
-    throw new Error(errorCode, errorMessage);
+    console.log(`Error caught creating new user on Firebase: ${error}`);
+    if (errorCode === "auth/email-already-in-use") {
+      throw new Error(
+        "Error: An account with that email address already exists"
+      );
+    } else {
+      throw new Error(error);
+    }
   }
 }
 
-export default SignUp;
+export { SignUp };

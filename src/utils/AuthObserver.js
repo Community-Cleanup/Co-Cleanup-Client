@@ -59,8 +59,14 @@ const AuthObserver = ({ children }) => {
               console.log(
                 "Ignore initial 404 error to find user from DB whilst auth observer is still registering."
               );
-            } else {
-              throw new Error(error);
+            } else if (error.response.status === 401) {
+              console.log("Unauthorization error:", error);
+              setAuthState((prev) => {
+                return {
+                  ...prev,
+                  authObserverError: error.response.data,
+                };
+              });
             }
           });
 
@@ -78,8 +84,6 @@ const AuthObserver = ({ children }) => {
           });
           console.log(`Added current user's data from Mongo to React state.`);
         }
-      } else {
-        console.log("AuthObserver listener registered");
       }
       setAuthState((prev) => {
         return {

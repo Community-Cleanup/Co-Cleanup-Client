@@ -1,5 +1,6 @@
 import "./SignupAndSignInPage.css";
-import SignIn from "../firebase/SignIn";
+import { SignIn } from "../firebase/SignIn";
+import { Logout } from "../firebase/Logout";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -26,6 +27,20 @@ function SigninPage() {
     }
     // eslint-disable-next-line
   }, [authState.data]);
+
+  useEffect(() => {
+    if (authState.authObserverError) {
+      Logout();
+      setSignInFormState((prev) => {
+        return {
+          ...prev,
+          showLoadingSpinner: false,
+          submitError: authState.authObserverError.errorMessage,
+        };
+      });
+    }
+    // eslint-disable-next-line
+  }, [authState.authObserverError]);
 
   function validate(event) {
     if (!event.target.value) {
@@ -94,6 +109,7 @@ function SigninPage() {
         return {
           ...prev,
           showLoadingSpinner: false,
+          submitError: error.message,
         };
       });
       return error;
