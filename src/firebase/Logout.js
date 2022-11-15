@@ -4,4 +4,4 @@ async function Logout() {
   await firebaseAuth.signOut();
 }
 
-export default Logout;
+export { Logout };

@@ -16,6 +16,7 @@ import { AxiosInterceptor } from "./utils/AxiosInterceptor";
 function App() {
   const [authState, setAuthState] = useState({
     authObserverRegistered: false,
+    authObserverError: null,
     data: null,
   });
 
