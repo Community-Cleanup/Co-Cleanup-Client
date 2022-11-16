@@ -3,10 +3,13 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { firebaseAuth } from "../firebase/firebaseApp";
+import { useGlobalAuthState } from "./AuthContext";
 
 const axiosInstance = axios.create();
 
 const AxiosInterceptor = ({ children }) => {
+  const { setAuthState } = useGlobalAuthState();
+
   useEffect(() => {
     const interceptor = axiosInstance.interceptors.request.use(
       async (config) => {
@@ -16,6 +19,7 @@ const AxiosInterceptor = ({ children }) => {
           token = `Bearer ${await user.getIdToken()}`;
         }
         config.headers.authorization = token;
+
         return config;
       },
       (error) => {
@@ -28,8 +32,17 @@ const AxiosInterceptor = ({ children }) => {
         return Promise.reject(error);
       }
     );
+    setAuthState((prev) => {
+      return {
+        ...prev,
+        axiosInterceptorRegistered: true,
+      };
+    });
+
+    console.log("Axios interceptor component mounted");
 
     return () => axiosInstance.interceptors.response.eject(interceptor);
+    // eslint-disable-next-line
   }, []);
 
   return <>{children}</>;

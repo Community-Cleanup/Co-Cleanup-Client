@@ -47,12 +47,19 @@ function NavBar() {
             <button onClick={handleLogout}>Logout</button>
           </li>
         )}
-        <li>
-          <Link to="/create-event">Create Event</Link>
-        </li>
+        {authState.data && (
+          <li>
+            <Link to="/create-event">Create Event</Link>
+          </li>
+        )}
         <li>
           <Link to="/events">View Events</Link>
         </li>
+        {authState.data && authState.data.isAdmin && (
+          <li>
+            <Link to="/admin">Admin Portal</Link>
+          </li>
+        )}
       </ul>
       <hr />
     </nav>

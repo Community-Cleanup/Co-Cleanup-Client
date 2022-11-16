@@ -8,6 +8,7 @@ import EventsMap from "./components/EventsMap";
 import EventDetails from "./components/EventDetails";
 import EventForm from "./components/EventForm";
 import LoadingSpinner from "./components/LoadingSpinner";
+import AdminPage from "./components/AdminPage";
 
 import { AuthContext } from "./utils/AuthContext";
 import AuthObserver from "./utils/AuthObserver";
@@ -17,6 +18,7 @@ function App() {
   const [authState, setAuthState] = useState({
     authObserverRegistered: false,
     authObserverError: null,
+    axiosInterceptorRegistered: false,
     data: null,
   });
 
@@ -25,20 +27,23 @@ function App() {
       <AuthObserver>
         {authState.authObserverRegistered ? (
           <AxiosInterceptor>
-            <div>
-              <Routes>
-                <Route path="/" element={<SharedLayout />}>
-                  <Route index element={<LandingPage />} />
-                  <Route path="*" element={<Navigate to="/" />} />
-                  <Route path="events" element={<EventsMap />} />
-                  <Route path="create-event" element={<EventForm />} />
-                  <Route path=":event" element={<EventDetails />} />
-                  <Route path=":event/update-event" element={<EventForm />} />
-                </Route>
-                <Route path="sign-up" element={<SignupPage />} />
-                <Route path="sign-in" element={<SigninPage />} />
-              </Routes>
-            </div>
+            {authState.axiosInterceptorRegistered && (
+              <div>
+                <Routes>
+                  <Route path="/" element={<SharedLayout />}>
+                    <Route index element={<LandingPage />} />
+                    <Route path="*" element={<Navigate to="/" />} />
+                    <Route path="events" element={<EventsMap />} />
+                    <Route path="create-event" element={<EventForm />} />
+                    <Route path=":event" element={<EventDetails />} />
+                    <Route path=":event/update-event" element={<EventForm />} />
+                    <Route path="admin" element={<AdminPage />} />
+                  </Route>
+                  <Route path="sign-up" element={<SignupPage />} />
+                  <Route path="sign-in" element={<SigninPage />} />
+                </Routes>
+              </div>
+            )}
           </AxiosInterceptor>
         ) : (
           <div>
