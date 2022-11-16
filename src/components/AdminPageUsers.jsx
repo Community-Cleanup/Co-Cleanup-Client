@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "../utils/AxiosInterceptor";
 
 import LoadingSpinner from "./LoadingSpinner";
+import AdminDisableUserForm from "./AdminDisableUserForm";
 
 function AdminPageUsers() {
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
@@ -34,6 +35,7 @@ function AdminPageUsers() {
     });
 
     setShowLoadingSpinner(false);
+    console.log(foundUsers);
   }
 
   return (
@@ -64,6 +66,11 @@ function AdminPageUsers() {
                 Username: {foundUser.username}
                 <br />
                 Email: {foundUser.email}
+                <br />
+                <AdminDisableUserForm
+                  foundUserUID={foundUser._id}
+                  foundUserIsDisabled={foundUser.isDisabled}
+                />
                 <hr />
               </li>
             );
