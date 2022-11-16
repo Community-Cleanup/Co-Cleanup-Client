@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 //import axios from "axios";
 import axios from "../utils/AxiosInterceptor";
 
+import AdminPageUsers from "./AdminPageUsers";
+import AdminPageEvents from "./AdminPageEvents";
+
 function AdminPage() {
   const navigate = useNavigate();
 
-  const [showUsers, setShowUsers] = useState(false);
-  const [showEvents, setShowEvents] = useState(false);
+  const [showUsersComponents, setShowUsersComponents] = useState(false);
+  const [showEventsComponents, setShowEventsComponents] = useState(false);
 
   useEffect(() => {
     confirmAdminUser();
@@ -27,13 +30,25 @@ function AdminPage() {
     <div>
       <h1>Admin Dashboard</h1>
       <div>
-        <button id="users" name="users">
+        <button
+          onClick={(e) => {
+            setShowUsersComponents(true);
+            setShowEventsComponents(false);
+          }}
+        >
           Users
         </button>
-        <button id="events" name="events">
+        <button
+          onClick={(e) => {
+            setShowUsersComponents(false);
+            setShowEventsComponents(true);
+          }}
+        >
           Events
         </button>
       </div>
+      {showUsersComponents && <AdminPageUsers />}
+      {showEventsComponents && <AdminPageEvents />}
     </div>
   );
 }
