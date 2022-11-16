@@ -47,6 +47,7 @@ function NavBar() {
             <button onClick={handleLogout}>Logout</button>
           </li>
         )}
+        {authState.data && <Link to={`/account/${authState.data._id}`}>My Account</Link>}
         <li>
           <Link to="/create-event">Create Event</Link>
         </li>

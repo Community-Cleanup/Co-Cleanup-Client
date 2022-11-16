@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import mapboxgl from "mapbox-gl";
+import { formatDate } from "../utils/formatDate";
 import "./EventsMap.css";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
@@ -268,7 +269,7 @@ function EventsMap() {
                 >
                   {event.properties.title}
                 </Link>
-                <p>{event.properties.date}</p>
+                <p>{formatDate(event.properties.date)}</p>
                 <p>{event.properties.address}</p>
               </div>
             );

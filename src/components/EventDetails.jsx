@@ -3,6 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import { useGlobalAuthState } from "../utils/AuthContext";
+import { formatDate } from "../utils/formatDate";
+import { timeAgo } from "../utils/timeAgo";
 import "./EventDetails.css";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
@@ -13,15 +15,7 @@ function EventDetails() {
   const [eventDetails, setEventDetails] = useState({});
   const [commentInput, setCommentInput] = useState("");
 
-  const d = new Date(eventDetails.date);
-  const dateString = d.toLocaleString("en-AU", {
-    weekday: "short",
-    // year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  });
+  const dateString = formatDate(eventDetails.date);
 
   //The mapContainer useRef specifies that App should be drawn to the HTML page in the <div> with the attribute ref={mapContainer}.
   const mapContainer = useRef(null);
@@ -136,36 +130,28 @@ function EventDetails() {
     updateEvent({ comments: comments });
   }
 
-  // const intervals = [
-  //   { label: "year", seconds: 31536000 },
-  //   { label: "month", seconds: 2592000 },
-  //   { label: "day", seconds: 86400 },
-  //   { label: "hour", seconds: 3600 },
-  //   { label: "minute", seconds: 60 },
-  //   { label: "second", seconds: 1 },
-  // ];
-
-  // function timeSince(date) {
-  //   const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-  //   const interval = intervals.find((i) => i.seconds < seconds);
-  //   const count = Math.floor(seconds / interval.seconds);
-  //   return `${count} ${interval.label}${count !== 1 ? "s" : ""} ago`;
-  // }
-
   return (
     <div className="event-details-main">
-      <Link to={`/${event}/update-event`}>Edit Event</Link>
       <div className="event-title-register-div">
         <h2>{eventDetails.title}</h2>
-        {eventDetails.attendees &&
+        {authState ? (
+          eventDetails.attendees &&
           (!eventDetails.attendees.includes(authState.data._id) ? (
             <button onClick={handleRegistration}>Register</button>
+          ) : eventDetails.userId === authState.data._id ? (
+            <div>
+              You are the organiser{" "}
+              <Link to={`/${event}/update-event`}>Edit Event</Link>
+            </div>
           ) : (
             <div>
               You are attending{" "}
               <button onClick={handleDeregister}>Deregister</button>
             </div>
-          ))}
+          ))
+        ) : (
+          <div>Sign in to register</div>
+        )}
       </div>
       <h4>{dateString}</h4>
       <h4>{eventDetails.address}</h4>
@@ -192,7 +178,7 @@ function EventDetails() {
           return (
             <div>
               <h4>{item.username}</h4>
-              {/* <span>{timeSince(new Date(`${item.time}`))}</span> */}
+              <span>{item.time && timeAgo(item.time)}</span>
               <p>{item.comment}</p>
               {item.userId === authState.data._id && (
                 <button onClick={() => handleCommentDelete(index)}>
