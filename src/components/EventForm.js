@@ -13,7 +13,7 @@ import "./EventForm.css";
 function EventForm() {
   const navigate = useNavigate();
   const { authState } = useGlobalAuthState();
-  console.log("authstate", authState);
+
   //Initial properties used to set state for the form
   const initialEventData = {
     title: "",
