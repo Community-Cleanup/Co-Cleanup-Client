@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "../utils/AxiosInterceptor";
 
 import LoadingSpinner from "./LoadingSpinner";
+import AdminDeleteEventForm from "./AdminDeleteEventForm";
+import { formatDate } from "../utils/formatDate";
+import { Link } from "react-router-dom";
 
 function AdminPageEvents() {
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
@@ -64,12 +67,18 @@ function AdminPageEvents() {
           <ul>
             {foundEvents.map((foundEvent, index) => {
               return (
-                <div key={index}>
-                  <h3>{foundEvent.title}</h3>
-                  <h4>Date: </h4>
-                  <h4>{foundEvent.address}</h4>
-                  <p>{foundEvent.description}</p>
-                </div>
+                <>
+                  <div key={index}>
+                    <p>
+                      Title:{" "}
+                      <Link to={`/${foundEvent._id}`}>{foundEvent.title}</Link>
+                    </p>
+                    <p>Date of Event: {formatDate(foundEvent.date)}</p>
+                    <p>Address: {foundEvent.address}</p>
+                    <AdminDeleteEventForm foundEventUID={foundEvent._id} />
+                  </div>
+                  <br />
+                </>
               );
             })}
           </ul>
