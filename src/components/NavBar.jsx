@@ -48,6 +48,9 @@ function NavBar() {
           </li>
         )}
         {authState.data && (
+          <Link to={`/account/${authState.data._id}`}>My Account</Link>
+        )}
+        {authState.data && (
           <li>
             <Link to="/create-event">Create Event</Link>
           </li>

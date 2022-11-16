@@ -8,6 +8,7 @@ import EventsMap from "./components/EventsMap";
 import EventDetails from "./components/EventDetails";
 import EventForm from "./components/EventForm";
 import LoadingSpinner from "./components/LoadingSpinner";
+import UserAccount from "./components/UserAccount";
 import AdminPage from "./components/AdminPage";
 
 import { AuthContext } from "./utils/AuthContext";
@@ -38,6 +39,7 @@ function App() {
                     <Route path=":event" element={<EventDetails />} />
                     <Route path=":event/update-event" element={<EventForm />} />
                     <Route path="admin" element={<AdminPage />} />
+                    <Route path="account/:user" element={<UserAccount />} />
                   </Route>
                   <Route path="sign-up" element={<SignupPage />} />
                   <Route path="sign-in" element={<SigninPage />} />

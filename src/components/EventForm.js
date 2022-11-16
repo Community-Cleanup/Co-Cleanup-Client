@@ -15,11 +15,11 @@ import "./EventForm.css";
 function EventForm() {
   const navigate = useNavigate();
   const { authState } = useGlobalAuthState();
-  console.log("authstate", authState);
+
   //Initial properties used to set state for the form
   const initialEventData = {
     title: "",
-    date: Date.now(),
+    date: "",
     address: "",
     coordinates: [0, 0],
     description: "",
@@ -31,6 +31,7 @@ function EventForm() {
 
   // State for data entered into form fields
   const [eventData, setEventData] = useState(initialEventData);
+
   // event variable is saved if a params exists
   // this event variable will be saved only when updating an event, not when creating an event
   const { event } = useParams();
@@ -131,7 +132,7 @@ function EventForm() {
         />
         <label>Date</label>
         <input
-          type="text"
+          type="datetime-local"
           name="date"
           value={eventData.date}
           onChange={(event) => handleChange(event)}
