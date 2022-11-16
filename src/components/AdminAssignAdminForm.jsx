@@ -5,22 +5,21 @@ import LoadingSpinner from "./LoadingSpinner";
 
 import { useGlobalAuthState } from "../utils/AuthContext";
 
-function AdminDisableUserForm({ foundUserUID, foundUserIsDisabled }) {
+function AdminAssignAdminForm({ foundUserUID, foundUserIsAdmin }) {
   const { authState } = useGlobalAuthState();
 
   const loggedInUserUID = authState.data._id;
 
-  const [userIsDisabledState, setUserIsDisabledState] =
-    useState(foundUserIsDisabled);
+  const [userIsAdminState, setUserIsAdminState] = useState(foundUserIsAdmin);
 
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
 
   useEffect(() => {
-    setUserIsDisabledState(foundUserIsDisabled);
-  }, [foundUserIsDisabled]);
+    setUserIsAdminState(foundUserIsAdmin);
+  }, [foundUserIsAdmin]);
 
   function preventChange() {
-    // We don't want the current signed-in user to be able to change the isDisabled state of their own account,
+    // We don't want the current signed-in user to be able to change the isAdmin state of their own account,
     // so check the current signed-in user's uid with the user uid in this particular component instance
     return loggedInUserUID === foundUserUID ? true : false;
   }
@@ -30,29 +29,29 @@ function AdminDisableUserForm({ foundUserUID, foundUserIsDisabled }) {
 
     setShowLoadingSpinner(true);
 
-    updateDisabledStatus();
+    updateAdminStatus();
   }
 
-  async function updateDisabledStatus() {
+  async function updateAdminStatus() {
     try {
-      // If the selected user is currently disabled, reverse that on button submit by setting isDisabled to false
-      if (userIsDisabledState) {
+      // If the selected user is currently an admin, revert that on button submit by setting isAdmin to false
+      if (userIsAdminState) {
         await axios.put(
           `${process.env.REACT_APP_SERVER_URL}/api/admin/users/${foundUserUID}`,
           {
-            isDisabled: false,
+            isAdmin: false,
           }
         );
-        setUserIsDisabledState(false);
-        // Else if the selected user is currently enabled, reverse that on button submit by setting isDisabled to true
-      } else if (!userIsDisabledState) {
+        setUserIsAdminState(false);
+        // Else if the selected user is currently enabled, revert that on button submit by setting isAdmin to true
+      } else if (!userIsAdminState) {
         await axios.put(
           `${process.env.REACT_APP_SERVER_URL}/api/admin/users/${foundUserUID}`,
           {
-            isDisabled: true,
+            isAdmin: true,
           }
         );
-        setUserIsDisabledState(true);
+        setUserIsAdminState(true);
       }
       setShowLoadingSpinner(false);
     } catch (e) {
@@ -63,32 +62,34 @@ function AdminDisableUserForm({ foundUserUID, foundUserIsDisabled }) {
 
   return (
     <>
+      {/* <p>loggedInUserUID is {loggedInUserUID}</p>
+      <p>foundUserUID is {foundUserUID}</p> */}
       <form onSubmit={handleFormSubmit}>
         <fieldset>
           {preventChange() ? (
-            <h3>You can't disable your own user account!</h3>
+            <h3>You can't revoke admin role from your own account!</h3>
           ) : (
             <>
-              {userIsDisabledState ? (
+              {userIsAdminState ? (
                 <>
-                  <p style={{ color: "red" }}>
-                    This user's account is currently DISABLED
+                  <p style={{ color: "green" }}>
+                    This user is currently AN ADMIN
                   </p>
                   {showLoadingSpinner ? (
                     <LoadingSpinner />
                   ) : (
-                    <button type="submit">Enable User</button>
+                    <button type="submit">Revoke Admin Role</button>
                   )}
                 </>
               ) : (
                 <>
-                  <p style={{ color: "green" }}>
-                    This user's account is currently ENABLED
+                  <p style={{ color: "blue" }}>
+                    This user is currently NOT AN ADMIN
                   </p>
                   {showLoadingSpinner ? (
                     <LoadingSpinner />
                   ) : (
-                    <button type="submit">Disable User</button>
+                    <button type="submit">Give Admin Role</button>
                   )}
                 </>
               )}
@@ -100,4 +101,4 @@ function AdminDisableUserForm({ foundUserUID, foundUserIsDisabled }) {
   );
 }
 
-export default AdminDisableUserForm;
+export default AdminAssignAdminForm;

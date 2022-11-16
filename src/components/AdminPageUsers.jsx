@@ -3,6 +3,7 @@ import axios from "../utils/AxiosInterceptor";
 
 import LoadingSpinner from "./LoadingSpinner";
 import AdminDisableUserForm from "./AdminDisableUserForm";
+import AdminAssignAdminForm from "./AdminAssignAdminForm";
 
 function AdminPageUsers() {
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
@@ -21,10 +22,11 @@ function AdminPageUsers() {
       callback(res);
     } catch (e) {
       console.log(e);
+      setShowLoadingSpinner(false);
     }
   }
 
-  async function handleUserSearchSubmit(e) {
+  function handleUserSearchSubmit(e) {
     e.preventDefault();
 
     setShowLoadingSpinner(true);
@@ -32,16 +34,19 @@ function AdminPageUsers() {
     getUsers((res) => {
       setFoundUsers(res.data);
       setShowFoundUserResults(true);
+      setShowLoadingSpinner(false);
     });
 
-    setShowLoadingSpinner(false);
+    //setShowLoadingSpinner(false);
     console.log(foundUsers);
   }
 
   return (
     <>
       <form onSubmit={handleUserSearchSubmit}>
-        <h3>Search for users by their username or email address:</h3>
+        <h3>
+          Search for any registered user(s) by their username or email address:
+        </h3>
         <h3>(leave blank to see all users)</h3>
         <fieldset>
           <input
@@ -58,25 +63,34 @@ function AdminPageUsers() {
           )}
         </fieldset>
       </form>
-      {showFoundUserResults && (
-        <ul>
-          {foundUsers.map((foundUser, index) => {
-            return (
-              <li key={index}>
-                Username: {foundUser.username}
-                <br />
-                Email: {foundUser.email}
-                <br />
-                <AdminDisableUserForm
-                  foundUserUID={foundUser._id}
-                  foundUserIsDisabled={foundUser.isDisabled}
-                />
-                <hr />
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      {showFoundUserResults &&
+        (!foundUsers.length ? (
+          <p>No results found</p>
+        ) : (
+          <ul>
+            {foundUsers.map((foundUser, index) => {
+              return (
+                <div key={index}>
+                  <br />
+                  <li>
+                    Username: {foundUser.username}
+                    <br />
+                    Email: {foundUser.email}
+                    <br />
+                    <AdminDisableUserForm
+                      foundUserUID={foundUser._id}
+                      foundUserIsDisabled={foundUser.isDisabled}
+                    />
+                    <AdminAssignAdminForm
+                      foundUserUID={foundUser._id}
+                      foundUserIsAdmin={foundUser.isAdmin}
+                    />
+                  </li>
+                </div>
+              );
+            })}
+          </ul>
+        ))}
     </>
   );
 }
