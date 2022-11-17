@@ -2,12 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import mapboxgl from "mapbox-gl";
+import { useGlobalSearchContext } from "../utils/SearchContext";
 import { formatDate } from "../utils/formatDate";
 import "./EventsMap.css";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
 function EventsMap() {
   const navigate = useNavigate();
+  const { searchBar, setSearchBar } = useGlobalSearchContext();
   //The mapContainer useRef specifies that App should be drawn to the HTML page in the <div> with the attribute ref={mapContainer}.
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -20,7 +22,6 @@ function EventsMap() {
   const [eventsGeoJSON, setEventsGeoJSON] = useState([]);
   const [mapFilteredEvents, setMapFilteredEvents] = useState([]);
   const [sidebarListings, setSidebarListings] = useState([]);
-  const [searchBar, setSearchBar] = useState("");
 
   const popup = new mapboxgl.Popup({
     closeButton: false,
@@ -251,13 +252,6 @@ function EventsMap() {
   return (
     <div className="map-listings-main">
       <div>
-        <input
-          type="text"
-          placeholder="Search Events"
-          name="searchBar"
-          value={searchBar}
-          onChange={(e) => setSearchBar(e.target.value)}
-        />
         {sidebarListings.length ? (
           sidebarListings.map((event) => {
             return (
