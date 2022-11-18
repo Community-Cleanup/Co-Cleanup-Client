@@ -9,7 +9,7 @@ import "./UserAccount.css";
 
 function UserAccount() {
   const navigate = useNavigate();
-  const { authState } = useGlobalAuthState();
+  const { authState, setAuthState } = useGlobalAuthState();
   const [attendingEvents, setAttendingEvents] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [usernameInputBar, setUsernameInputBar] = useState("");
@@ -57,6 +57,12 @@ function UserAccount() {
         }
       );
       setUsernameUpdateModalOpen(false);
+      setAuthState((prev) => {
+        return {
+          ...prev,
+          data: { ...authState.data, username: usernameInput },
+        };
+      });
       setUsernameUpdateMessage("Success! Your username has been updated");
     } catch (error) {
       setUsernameUpdateModalOpen(false);
