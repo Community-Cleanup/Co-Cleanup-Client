@@ -16,13 +16,6 @@ function NavBar() {
   const { searchBar, setSearchBar } = useGlobalSearchContext();
   const { authState } = useGlobalAuthState();
 
-  useEffect(() => {
-    if (!authState.data) {
-      navigate("/");
-    }
-    // eslint-disable-next-line
-  }, [authState.data]);
-
   async function handleLogout(e) {
     e.preventDefault();
     console.log("Logout button clicked, logging out");

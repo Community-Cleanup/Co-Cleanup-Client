@@ -4,6 +4,7 @@ import axios from "axios";
 import mapboxgl from "mapbox-gl";
 import { useGlobalSearchContext } from "../utils/SearchContext";
 import { formatDate } from "../utils/formatDate";
+import NavBar from "./NavBar";
 import "./EventsMap.css";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
@@ -250,32 +251,35 @@ function EventsMap() {
   }
 
   return (
-    <div className="map-listings-main">
-      <div>
-        {sidebarListings.length ? (
-          sidebarListings.map((event) => {
-            return (
-              <div className="event-listing-div">
-                <Link
-                  onMouseEnter={() => showPopup(event)}
-                  onMouseOut={removePopup}
-                  to={`/${event.properties.id}`}
-                >
-                  {event.properties.title}
-                </Link>
-                <p>{formatDate(event.properties.date)}</p>
-                <p>{event.properties.address}</p>
-              </div>
-            );
-          })
-        ) : (
-          <div>Pan map to search for events...</div>
-        )}
+    <>
+      <NavBar />
+      <div className="map-listings-main">
+        <div>
+          {sidebarListings.length ? (
+            sidebarListings.map((event) => {
+              return (
+                <div className="event-listing-div">
+                  <Link
+                    onMouseEnter={() => showPopup(event)}
+                    onMouseOut={removePopup}
+                    to={`/${event.properties.id}`}
+                  >
+                    {event.properties.title}
+                  </Link>
+                  <p>{formatDate(event.properties.date)}</p>
+                  <p>{event.properties.address}</p>
+                </div>
+              );
+            })
+          ) : (
+            <div>Pan map to search for events...</div>
+          )}
+        </div>
+        <div className="map-div">
+          <div ref={mapContainer} className="map-container" />
+        </div>
       </div>
-      <div className="map-div">
-        <div ref={mapContainer} className="map-container" />
-      </div>
-    </div>
+    </>
   );
 }
 

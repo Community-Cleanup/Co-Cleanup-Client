@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 //Components
+import NavBar from "./NavBar";
 import Geocoder from "./Geocoder";
 //CSS Stylsheet
 import "./EventForm.css";
@@ -116,46 +117,49 @@ function EventForm() {
   // Create/Update event form jsx
   // Controlled components with onChange setting state
   return (
-    <div className="event-form-main">
-      <h1>Event Form</h1>
-      <form>
-        <label>Title</label>
-        <input
-          type="text"
-          placeholder="Event Title"
-          name="title"
-          value={eventData.title}
-          onChange={(event) => handleChange(event)}
-        />
-        <label>Date</label>
-        <input
-          type="datetime-local"
-          name="date"
-          value={eventData.date}
-          onChange={(event) => handleChange(event)}
-        />
-        <label>Address</label>
-        <p>{eventData.address}</p>
-        {/* Geocoder component  */}
-        <Geocoder setEventData={setEventData} />
-        <label>Description</label>
-        <textarea
-          placeholder="Desciption"
-          id="description"
-          cols="30"
-          rows="10"
-          name="description"
-          value={eventData.description}
-          onChange={(event) => handleChange(event)}
-        ></textarea>
-        {/* Ternary based on if an event is defined. This form is used to both update and save an event*/}
-        {event ? (
-          <button onClick={updateEvent}>Update Event</button>
-        ) : (
-          <button onClick={createEvent}>Save Event</button>
-        )}
-      </form>
-    </div>
+    <>
+      <NavBar />
+      <div className="event-form-main">
+        <h1>Event Form</h1>
+        <form>
+          <label>Title</label>
+          <input
+            type="text"
+            placeholder="Event Title"
+            name="title"
+            value={eventData.title}
+            onChange={(event) => handleChange(event)}
+          />
+          <label>Date</label>
+          <input
+            type="datetime-local"
+            name="date"
+            value={eventData.date}
+            onChange={(event) => handleChange(event)}
+          />
+          <label>Address</label>
+          <p>{eventData.address}</p>
+          {/* Geocoder component  */}
+          <Geocoder setEventData={setEventData} />
+          <label>Description</label>
+          <textarea
+            placeholder="Desciption"
+            id="description"
+            cols="30"
+            rows="10"
+            name="description"
+            value={eventData.description}
+            onChange={(event) => handleChange(event)}
+          ></textarea>
+          {/* Ternary based on if an event is defined. This form is used to both update and save an event*/}
+          {event ? (
+            <button onClick={updateEvent}>Update Event</button>
+          ) : (
+            <button onClick={createEvent}>Save Event</button>
+          )}
+        </form>
+      </div>
+    </>
   );
 }
 

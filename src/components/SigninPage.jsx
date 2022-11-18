@@ -156,7 +156,6 @@ function SigninPage() {
           <Input
             onBlur={(e) => validate(e)}
             type="email"
-            // placeholder="Email address"
             name="emailAddress"
             id="emailAddress"
             value={signInFormState.emailAddress}
