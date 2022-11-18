@@ -2,7 +2,7 @@ import { Palette } from "./Palette";
 
 export const theme = {
   colors: {
-    bannerOne: Palette.color.blueOC0,
+    bannerOne: Palette.color.greenOC0,
     buttonOne: Palette.color.emeraldTW6,
     buttonTwo: Palette.color.orangeTW5,
     formMessage: Palette.color.redOC9,

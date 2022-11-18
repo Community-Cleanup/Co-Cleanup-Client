@@ -36,18 +36,13 @@ function App() {
               <AxiosInterceptor>
                 <div>
                   <Routes>
-                    <Route path="/" element={<SharedLayout />}>
-                      <Route index element={<LandingPage />} />
-                      <Route path="*" element={<Navigate to="/" />} />
-                      <Route path="events" element={<EventsMap />} />
-                      <Route path="create-event" element={<EventForm />} />
-                      <Route path=":event" element={<EventDetails />} />
-                      <Route
-                        path=":event/update-event"
-                        element={<EventForm />}
-                      />
-                      <Route path="account/:user" element={<UserAccount />} />
-                    </Route>
+                    <Route index element={<LandingPage />} />
+                    <Route path="*" element={<Navigate to="/" />} />
+                    <Route path="events" element={<EventsMap />} />
+                    <Route path="create-event" element={<EventForm />} />
+                    <Route path=":event" element={<EventDetails />} />
+                    <Route path=":event/update-event" element={<EventForm />} />
+                    <Route path="account/:user" element={<UserAccount />} />
                     <Route path="sign-up" element={<SignupPage />} />
                     <Route path="sign-in" element={<SigninPage />} />
                   </Routes>

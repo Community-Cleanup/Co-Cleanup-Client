@@ -5,6 +5,7 @@ import mapboxgl from "mapbox-gl";
 import { useGlobalAuthState } from "../utils/AuthContext";
 import { formatDate } from "../utils/formatDate";
 import { timeAgo } from "../utils/timeAgo";
+import NavBar from "./NavBar";
 import "./EventDetails.css";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
@@ -131,67 +132,72 @@ function EventDetails() {
   }
 
   return (
-    <div className="event-details-main">
-      <div className="event-title-register-div">
-        <h2>{eventDetails.title}</h2>
-        {!authState.data === null ? (
-          eventDetails.attendees &&
-          (!eventDetails.attendees.includes(authState.data._id) ? (
-            <button onClick={handleRegistration}>Register</button>
-          ) : eventDetails.userId === authState.data._id ? (
-            <div>
-              You are the organiser{" "}
-              <Link to={`/${event}/update-event`}>Edit Event</Link>
-            </div>
+    <>
+      <NavBar />
+      <div className="event-details-main">
+        <div className="event-title-register-div">
+          <h2>{eventDetails.title}</h2>
+          {!authState.data === null ? (
+            eventDetails.attendees &&
+            (!eventDetails.attendees.includes(authState.data._id) ? (
+              <button onClick={handleRegistration}>Register</button>
+            ) : eventDetails.userId === authState.data._id ? (
+              <div>
+                You are the organiser{" "}
+                <Link to={`/${event}/update-event`}>Edit Event</Link>
+              </div>
+            ) : (
+              <div>
+                You are attending{" "}
+                <button onClick={handleDeregister}>Deregister</button>
+              </div>
+            ))
           ) : (
             <div>
-              You are attending{" "}
-              <button onClick={handleDeregister}>Deregister</button>
+              <Link to={`/sign-in`}>Sign in</Link> to register
             </div>
-          ))
-        ) : (
-          <div>
-            <Link to={`/sign-in`}>Sign in</Link> to register
-          </div>
-        )}
+          )}
+        </div>
+        <h4>{dateString}</h4>
+        <h4>{eventDetails.address}</h4>
+        <h4>Event Organiser</h4>
+        <p>{eventDetails.username}</p>
+        <h4>
+          {eventDetails.attendees && eventDetails.attendees.length} Attending
+        </h4>
+        <h4>Description</h4>
+        <p>{eventDetails.description}</p>
+        <div className="map-detailed-div">
+          <div ref={mapContainer} className="map-detailed-container" />
+        </div>
+        <h4>
+          {eventDetails.comments && eventDetails.comments.length} Comments
+        </h4>
+        <input
+          type="text"
+          value={commentInput}
+          name="commentInput"
+          onChange={(e) => setCommentInput(e.target.value)}
+        />
+        <button onClick={handleCommentSubmit}>Submit</button>
+        {eventDetails.comments &&
+          eventDetails.comments.map((item, index) => {
+            return (
+              <div>
+                <h4>{item.username}</h4>
+                <span>{item.time && timeAgo(item.time)}</span>
+                <p>{item.comment}</p>
+                {!authState.data === null &&
+                  item.userId === authState.data._id && (
+                    <button onClick={() => handleCommentDelete(index)}>
+                      Delete
+                    </button>
+                  )}
+              </div>
+            );
+          })}
       </div>
-      <h4>{dateString}</h4>
-      <h4>{eventDetails.address}</h4>
-      <h4>Event Organiser</h4>
-      <p>{eventDetails.username}</p>
-      <h4>
-        {eventDetails.attendees && eventDetails.attendees.length} Attending
-      </h4>
-      <h4>Description</h4>
-      <p>{eventDetails.description}</p>
-      <div className="map-detailed-div">
-        <div ref={mapContainer} className="map-detailed-container" />
-      </div>
-      <h4>{eventDetails.comments && eventDetails.comments.length} Comments</h4>
-      <input
-        type="text"
-        value={commentInput}
-        name="commentInput"
-        onChange={(e) => setCommentInput(e.target.value)}
-      />
-      <button onClick={handleCommentSubmit}>Submit</button>
-      {eventDetails.comments &&
-        eventDetails.comments.map((item, index) => {
-          return (
-            <div>
-              <h4>{item.username}</h4>
-              <span>{item.time && timeAgo(item.time)}</span>
-              <p>{item.comment}</p>
-              {!authState.data === null &&
-                item.userId === authState.data._id && (
-                  <button onClick={() => handleCommentDelete(index)}>
-                    Delete
-                  </button>
-                )}
-            </div>
-          );
-        })}
-    </div>
+    </>
   );
 }
 
