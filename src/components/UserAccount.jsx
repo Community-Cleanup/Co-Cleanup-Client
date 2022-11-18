@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+//import axios from "axios";
+import axios from "../utils/AxiosInterceptor";
 import { useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 import { formatDate } from "../utils/formatDate";
@@ -11,9 +12,13 @@ function UserAccount() {
   const { authState } = useGlobalAuthState();
   const [attendingEvents, setAttendingEvents] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [usernameInputBar, setUsernameInputBar] = useState("");
+  const [usernameUpdateModalOpen, setUsernameUpdateModalOpen] = useState(false);
+  const [usernameUpdateMessage, setUsernameUpdateMessage] = useState("");
 
   useEffect(() => {
     getEvents("attendees", setAttendingEvents);
+    // eslint-disable-next-line
   }, []);
 
   async function getEvents(key, callback) {
@@ -43,6 +48,22 @@ function UserAccount() {
     }
   }
 
+  async function updateUsername(usernameInput) {
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_SERVER_URL}/api/users/update-username`,
+        {
+          username: usernameInput,
+        }
+      );
+      setUsernameUpdateModalOpen(false);
+      setUsernameUpdateMessage("Success! Your username has been updated");
+    } catch (error) {
+      setUsernameUpdateModalOpen(false);
+      setUsernameUpdateMessage(error.response.data.errorMessage);
+    }
+  }
+
   return (
     <>
       <NavBar />
@@ -50,7 +71,40 @@ function UserAccount() {
         <div className="account-user-details">
           <h2>User Details</h2>
           <h4>Username: {authState.data.username}</h4>
-          <button>Update</button>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setUsernameUpdateModalOpen(true);
+            }}
+          >
+            <fieldset>
+              <input
+                type="text"
+                placeholder="Enter a new username"
+                name="usernameInputBar"
+                value={usernameInputBar}
+                onChange={(e) => setUsernameInputBar(e.target.value)}
+              />
+              <input type="submit" value="Change Username" id="submit" />
+              {usernameUpdateModalOpen && (
+                <div className="account-update-modal">
+                  <div className="modal-div">
+                    <h3>
+                      You are about to change your username to{" "}
+                      {usernameInputBar}. Are you sure?
+                    </h3>
+                    <button onClick={() => setUsernameUpdateModalOpen(false)}>
+                      No, don't update
+                    </button>
+                    <button onClick={() => updateUsername(usernameInputBar)}>
+                      Yes, update username
+                    </button>
+                  </div>
+                </div>
+              )}
+            </fieldset>
+          </form>
+          {usernameUpdateMessage && <p>{usernameUpdateMessage}</p>}
           <h4>Email: {authState.data.email}</h4>
         </div>
         <div className="account-events-div">

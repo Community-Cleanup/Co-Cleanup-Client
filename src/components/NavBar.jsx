@@ -81,6 +81,11 @@ function NavBar() {
           <Button>
             <Link to={`/account/${authState.data._id}`}>My Account</Link>
           </Button>
+          {authState.data.isAdmin && (
+            <Button>
+              <Link to="/admin">Admin Portal</Link>
+            </Button>
+          )}
         </div>
       )}
     </StyledNavbar>

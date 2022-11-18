@@ -1,5 +1,7 @@
 // Libraries
 //import axios from "axios";
+// As function 'createEvent' calls a protected API route, we need to use
+// our Axios Interceptor to add the ID token to the 'createEvent' POST request header.
 import axios from "../utils/AxiosInterceptor";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -41,6 +43,7 @@ function EventForm() {
     if (event) {
       getEventDetails();
     }
+    // eslint-disable-next-line
   }, []);
 
   // This function makes a request to the server to retrieve the event data

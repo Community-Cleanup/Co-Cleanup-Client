@@ -9,6 +9,7 @@ import EventDetails from "./components/EventDetails";
 import EventForm from "./components/EventForm";
 import LoadingSpinner from "./components/LoadingSpinner";
 import UserAccount from "./components/UserAccount";
+import AdminPage from "./components/AdminPage";
 
 import { AuthContext } from "./utils/AuthContext";
 import AuthObserver from "./utils/AuthObserver";
@@ -23,6 +24,7 @@ function App() {
   const [authState, setAuthState] = useState({
     authObserverRegistered: false,
     authObserverError: null,
+    axiosInterceptorRegistered: false,
     data: null,
   });
 
@@ -34,19 +36,25 @@ function App() {
             <GlobalStyles />
             {authState.authObserverRegistered ? (
               <AxiosInterceptor>
-                <div>
-                  <Routes>
-                    <Route index element={<LandingPage />} />
-                    <Route path="*" element={<Navigate to="/" />} />
-                    <Route path="events" element={<EventsMap />} />
-                    <Route path="create-event" element={<EventForm />} />
-                    <Route path=":event" element={<EventDetails />} />
-                    <Route path=":event/update-event" element={<EventForm />} />
-                    <Route path="account/:user" element={<UserAccount />} />
-                    <Route path="sign-up" element={<SignupPage />} />
-                    <Route path="sign-in" element={<SigninPage />} />
-                  </Routes>
-                </div>
+                {authState.axiosInterceptorRegistered && (
+                  <div>
+                    <Routes>
+                      <Route index element={<LandingPage />} />
+                      <Route path="*" element={<Navigate to="/" />} />
+                      <Route path="events" element={<EventsMap />} />
+                      <Route path="create-event" element={<EventForm />} />
+                      <Route path=":event" element={<EventDetails />} />
+                      <Route
+                        path=":event/update-event"
+                        element={<EventForm />}
+                      />
+                      <Route path="admin" element={<AdminPage />} />
+                      <Route path="account/:user" element={<UserAccount />} />
+                      <Route path="sign-up" element={<SignupPage />} />
+                      <Route path="sign-in" element={<SigninPage />} />
+                    </Routes>
+                  </div>
+                )}
               </AxiosInterceptor>
             ) : (
               <div>
