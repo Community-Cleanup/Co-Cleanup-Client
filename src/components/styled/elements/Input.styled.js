@@ -7,5 +7,6 @@ export const Input = styled.input`
   font-size: 12px;
   font-weight: 500;
   height: 35px;
+  width: ${({ w }) => w || "100%"};
   padding: 0 20px;
 `;

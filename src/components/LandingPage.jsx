@@ -1,15 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Container } from "./styled/utility/Container.styled";
+import { useGlobalAuthState } from "../utils/AuthContext";
+import { Banner } from "./styled/utility/Banner.styled";
 import { Button } from "./styled/elements/Button.styled";
 import { Flex } from "./styled/utility/Flex.styled";
 import { Image } from "./styled/elements/Image.styled";
 import { theme } from "./styled/theme/Theme";
-import "./LandingPage.css";
 
 function LandingPage() {
+  const { authState } = useGlobalAuthState();
   return (
-    <Container bg={theme.colors.container}>
+    <Banner bg={theme.colors.bannerOne}>
       <Flex>
         <div>
           <h1>Landing Page</h1>
@@ -19,9 +20,11 @@ function LandingPage() {
             praesentium quos, suscipit, impedit cumque, eius tenetur et sequi
             saepe aliquid rerum repellendus.
           </p>
-          <Button bg={theme.colors.buttonTwo}>
-            <Link to="sign-up">Sign Up</Link>
-          </Button>
+          {!authState.data && (
+            <Button bg={theme.colors.buttonTwo}>
+              <Link to="sign-up">Sign Up</Link>
+            </Button>
+          )}
           <Button>
             <Link to="events">View Events</Link>
           </Button>
@@ -30,7 +33,7 @@ function LandingPage() {
           <Image src="./images/photos/community-group.jpg" />
         </div>
       </Flex>
-    </Container>
+    </Banner>
   );
 }
 

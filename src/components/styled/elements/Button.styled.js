@@ -9,7 +9,9 @@ export const Button = styled.button`
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
-  margin: 0 5px;
+  margin: ${({ margin }) => margin || "0 5px"};
+  width: ${({ w }) => w || "auto"};
+  white-space: nowrap;
   padding: 10px 20px;
   transition: 0.2s ease all;
 
