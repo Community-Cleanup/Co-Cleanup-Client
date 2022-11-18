@@ -17,6 +17,7 @@ function UserAccount() {
 
   useEffect(() => {
     getEvents("attendees", setAttendingEvents);
+    // eslint-disable-next-line
   }, []);
 
   async function getEvents(key, callback) {
