@@ -4,6 +4,7 @@ import axios from "../utils/AxiosInterceptor";
 import { useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 import { formatDate } from "../utils/formatDate";
+import NavBar from "./NavBar";
 import "./UserAccount.css";
 
 function UserAccount() {
@@ -64,124 +65,129 @@ function UserAccount() {
   }
 
   return (
-    <div className="account-main-div">
-      <div className="account-user-details">
-        <h2>User Details</h2>
-        <h4>Username: {authState.data.username}</h4>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setUsernameUpdateModalOpen(true);
-          }}
-        >
-          <fieldset>
-            <input
-              type="text"
-              placeholder="Enter a new username"
-              name="usernameInputBar"
-              value={usernameInputBar}
-              onChange={(e) => setUsernameInputBar(e.target.value)}
-            />
-            <input type="submit" value="Change Username" id="submit" />
-            {usernameUpdateModalOpen && (
-              <div className="account-update-modal">
-                <div className="modal-div">
-                  <h3>
-                    You are about to change your username to {usernameInputBar}.
-                    Are you sure?
-                  </h3>
-                  <button onClick={() => setUsernameUpdateModalOpen(false)}>
-                    No, don't update
-                  </button>
-                  <button onClick={() => updateUsername(usernameInputBar)}>
-                    Yes, update username
+    <>
+      <NavBar />
+      <div className="account-main-div">
+        <div className="account-user-details">
+          <h2>User Details</h2>
+          <h4>Username: {authState.data.username}</h4>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setUsernameUpdateModalOpen(true);
+            }}
+          >
+            <fieldset>
+              <input
+                type="text"
+                placeholder="Enter a new username"
+                name="usernameInputBar"
+                value={usernameInputBar}
+                onChange={(e) => setUsernameInputBar(e.target.value)}
+              />
+              <input type="submit" value="Change Username" id="submit" />
+              {usernameUpdateModalOpen && (
+                <div className="account-update-modal">
+                  <div className="modal-div">
+                    <h3>
+                      You are about to change your username to{" "}
+                      {usernameInputBar}. Are you sure?
+                    </h3>
+                    <button onClick={() => setUsernameUpdateModalOpen(false)}>
+                      No, don't update
+                    </button>
+                    <button onClick={() => updateUsername(usernameInputBar)}>
+                      Yes, update username
+                    </button>
+                  </div>
+                </div>
+              )}
+            </fieldset>
+          </form>
+          {usernameUpdateMessage && <p>{usernameUpdateMessage}</p>}
+          <h4>Email: {authState.data.email}</h4>
+        </div>
+        <div className="account-events-div">
+          <h2>Upcoming Events</h2>
+          {attendingEvents
+            .filter((item) => {
+              return new Date(item.date).getTime() > Date.now();
+            })
+            .map((event) => {
+              return (
+                <div className="account-event">
+                  <h4>{event.title}</h4>
+                  <p>{formatDate(event.date)}</p>
+                  <p>{event.address}</p>
+                  <button onClick={() => navigate("/" + event._id)}>
+                    View Event
                   </button>
                 </div>
-              </div>
-            )}
-          </fieldset>
-        </form>
-        {usernameUpdateMessage && <p>{usernameUpdateMessage}</p>}
-        <h4>Email: {authState.data.email}</h4>
-      </div>
-      <div className="account-events-div">
-        <h2>Upcoming Events</h2>
-        {attendingEvents
-          .filter((item) => {
-            return new Date(item.date).getTime() > Date.now();
-          })
-          .map((event) => {
-            return (
-              <div className="account-event">
-                <h4>{event.title}</h4>
-                <p>{formatDate(event.date)}</p>
-                <p>{event.address}</p>
-                <button onClick={() => navigate("/" + event._id)}>
-                  View Event
-                </button>
-              </div>
-            );
-          })}
-      </div>
-      <div className="account-events-div">
-        <h2>Visited Events</h2>
-        {attendingEvents
-          .filter((item) => {
-            return new Date(item.date).getTime() < Date.now();
-          })
-          .map((event) => {
-            return (
-              <div className="account-event">
-                <h4>{event.title}</h4>
-                <p>{formatDate(event.date)}</p>
-                <p>{event.address}</p>
-                <button onClick={() => navigate("/" + event._id)}>
-                  View Event
-                </button>
-              </div>
-            );
-          })}
-      </div>
-      <div className="account-events-div">
-        <h2>My Events</h2>
-        {attendingEvents
-          .filter((item) => {
-            return item.userId === authState.data._id;
-          })
-          .map((event) => {
-            return (
-              <div className="account-event">
-                <h4>{event.title}</h4>
-                <p>{formatDate(event.date)}</p>
-                <p>{event.address}</p>
-                <button onClick={() => navigate("/" + event._id)}>
-                  View Event
-                </button>
-                <button
-                  onClick={() => navigate("/" + event._id + "/update-event")}
-                >
-                  Update
-                </button>
+              );
+            })}
+        </div>
+        <div className="account-events-div">
+          <h2>Visited Events</h2>
+          {attendingEvents
+            .filter((item) => {
+              return new Date(item.date).getTime() < Date.now();
+            })
+            .map((event) => {
+              return (
+                <div className="account-event">
+                  <h4>{event.title}</h4>
+                  <p>{formatDate(event.date)}</p>
+                  <p>{event.address}</p>
+                  <button onClick={() => navigate("/" + event._id)}>
+                    View Event
+                  </button>
+                </div>
+              );
+            })}
+        </div>
+        <div className="account-events-div">
+          <h2>My Events</h2>
+          {attendingEvents
+            .filter((item) => {
+              return item.userId === authState.data._id;
+            })
+            .map((event) => {
+              return (
+                <div className="account-event">
+                  <h4>{event.title}</h4>
+                  <p>{formatDate(event.date)}</p>
+                  <p>{event.address}</p>
+                  <button onClick={() => navigate("/" + event._id)}>
+                    View Event
+                  </button>
+                  <button
+                    onClick={() => navigate("/" + event._id + "/update-event")}
+                  >
+                    Update
+                  </button>
 
-                <button onClick={() => setDeleteModalOpen(true)}>Delete</button>
-                {deleteModalOpen && (
-                  <div className="account-update-modal">
-                    <div className="modal-div">
-                      <h3>This event will be deleted. Are you sure?</h3>
-                      <button onClick={() => setDeleteModalOpen(false)}>
-                        No, don't delete
-                      </button>
-                      <button onClick={() => deleteEvent(event._id)}>
-                        Yes, delete event
-                      </button>
+                  <button onClick={() => setDeleteModalOpen(true)}>
+                    Delete
+                  </button>
+                  {deleteModalOpen && (
+                    <div className="account-update-modal">
+                      <div className="modal-div">
+                        <h3>This event will be deleted. Are you sure?</h3>
+                        <button onClick={() => setDeleteModalOpen(false)}>
+                          No, don't delete
+                        </button>
+                        <button onClick={() => deleteEvent(event._id)}>
+                          Yes, delete event
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  )}
+                </div>
+              );
+            })}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
