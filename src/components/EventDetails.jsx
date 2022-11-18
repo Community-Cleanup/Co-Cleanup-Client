@@ -134,7 +134,7 @@ function EventDetails() {
     <div className="event-details-main">
       <div className="event-title-register-div">
         <h2>{eventDetails.title}</h2>
-        {authState ? (
+        {!authState.data === null ? (
           eventDetails.attendees &&
           (!eventDetails.attendees.includes(authState.data._id) ? (
             <button onClick={handleRegistration}>Register</button>
@@ -150,7 +150,9 @@ function EventDetails() {
             </div>
           ))
         ) : (
-          <div>Sign in to register</div>
+          <div>
+            <Link to={`/sign-in`}>Sign in</Link> to register
+          </div>
         )}
       </div>
       <h4>{dateString}</h4>
@@ -180,11 +182,12 @@ function EventDetails() {
               <h4>{item.username}</h4>
               <span>{item.time && timeAgo(item.time)}</span>
               <p>{item.comment}</p>
-              {item.userId === authState.data._id && (
-                <button onClick={() => handleCommentDelete(index)}>
-                  Delete
-                </button>
-              )}
+              {!authState.data === null &&
+                item.userId === authState.data._id && (
+                  <button onClick={() => handleCommentDelete(index)}>
+                    Delete
+                  </button>
+                )}
             </div>
           );
         })}

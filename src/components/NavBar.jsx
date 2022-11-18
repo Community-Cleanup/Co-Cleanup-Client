@@ -1,11 +1,19 @@
 import { Logout } from "../firebase/Logout";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
+import { useGlobalSearchContext } from "../utils/SearchContext";
 import { useNavigate } from "react-router-dom";
+import { StyledNavbar } from "./styled/utility/Navbar.styled";
+import { Button } from "./styled/elements/Button.styled";
+import { Logo } from "./styled/elements/Logo.styled";
+import { theme } from "./styled/theme/Theme";
+import { Input } from "./styled/elements/Input.styled";
+import { Navigation } from "./styled/elements/Navigation.styled";
 
 function NavBar() {
   const navigate = useNavigate();
+  const { searchBar, setSearchBar } = useGlobalSearchContext();
   const { authState } = useGlobalAuthState();
 
   useEffect(() => {
@@ -25,47 +33,69 @@ function NavBar() {
     // as this will be automatically detected and handled by our auth observer in 'utils/AuthObserver.js'
   }
 
+  function handleFocus() {
+    navigate("/events");
+  }
+
+  function handleCreateLink() {
+    if (authState.data) {
+      navigate("/create-event");
+    } else {
+      navigate("/sign-in");
+    }
+  }
+
   return (
-    <nav>
-      {authState.data && <h3> Welcome, {authState.data.username}!</h3>}
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        {!authState.data && (
-          <li>
-            <Link to="/sign-up">Sign Up</Link>
-          </li>
-        )}
-        {!authState.data && (
-          <li>
+    <StyledNavbar>
+      <div>
+        <div>
+          <Logo
+            src="./images/logo/logo-icon.svg"
+            alt="Co Cleanup Logo"
+            onClick={() => navigate("/")}
+          />
+          <Input
+            placeholder="Search Events"
+            onFocus={handleFocus}
+            name="searchBar"
+            value={searchBar}
+            onChange={(e) => setSearchBar(e.target.value)}
+          />
+        </div>
+        <div>
+          <Navigation margin="0 8px 0 20px">
+            <Link>About</Link>
+          </Navigation>
+          <Navigation margin="0 8px 0" onClick={handleCreateLink}>
+            Create Event
+          </Navigation>
+        </div>
+      </div>
+      {!authState.data ? (
+        <div>
+          <Navigation margin="0 8px 0">
             <Link to="/sign-in">Sign In</Link>
-          </li>
-        )}
-        {authState.data && (
-          <li>
-            <button onClick={handleLogout}>Logout</button>
-          </li>
-        )}
-        {authState.data && (
-          <Link to={`/account/${authState.data._id}`}>My Account</Link>
-        )}
-        {authState.data && (
-          <li>
-            <Link to="/create-event">Create Event</Link>
-          </li>
-        )}
-        <li>
-          <Link to="/events">View Events</Link>
-        </li>
-        {authState.data && authState.data.isAdmin && (
-          <li>
-            <Link to="/admin">Admin Portal</Link>
-          </li>
-        )}
-      </ul>
-      <hr />
-    </nav>
+          </Navigation>
+          <Button bg={theme.colors.buttonTwo}>
+            <Link to="/sign-up">Sign Up</Link>
+          </Button>
+        </div>
+      ) : (
+        <div>
+          <Navigation margin="0 8px 0" onClick={handleLogout}>
+            Sign Out
+          </Navigation>
+          <Button>
+            <Link to={`/account/${authState.data._id}`}>My Account</Link>
+          </Button>
+          {authState.data.isAdmin && (
+            <Button>
+              <Link to="/admin">Admin Portal</Link>
+            </Button>
+          )}
+        </div>
+      )}
+    </StyledNavbar>
   );
 }
 
