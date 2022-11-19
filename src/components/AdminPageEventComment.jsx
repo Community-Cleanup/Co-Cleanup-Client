@@ -17,7 +17,7 @@ function AdminPageEventComment(props) {
   } = props;
   return (
     <>
-      <p>Index: {eventCommentIndex.toString()}</p>
+      <h4>Comment #{eventCommentIndex + 1}</h4>
       <p>{eventCommentUsername}</p>
       <p>{eventCommentComment}</p>
       <p>{formatDate(eventCommentTime)}</p>

@@ -70,6 +70,7 @@ function AdminPageEvents() {
               return (
                 <>
                   <div key={index}>
+                    <h3>Event:</h3>
                     <p>
                       Title:{" "}
                       <Link to={`/${foundEvent._id}`}>{foundEvent.title}</Link>
