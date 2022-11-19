@@ -16,8 +16,12 @@ import { FormMessage } from "./styled/elements/FormMessage.styled";
 import { Button } from "./styled/elements/Button.styled";
 import { theme } from "./styled/theme/Theme";
 
+import useBackSafe from "../utils/useBackSafe";
+
 function SigninPage() {
   const { authState } = useGlobalAuthState();
+
+  const { goBackSafe, hasPreviousState } = useBackSafe();
 
   const [signInFormState, setSignInFormState] = useState({
     emailAddress: "",
@@ -32,7 +36,9 @@ function SigninPage() {
 
   useEffect(() => {
     if (authState.data) {
-      navigate("/");
+      // If the user is successfully signed in, or was already sign in,
+      // try to redirect them back to the previous page (see ../utils/useBackSafe.js for comments and code source)
+      goBackSafe();
     }
     // eslint-disable-next-line
   }, [authState.data]);
