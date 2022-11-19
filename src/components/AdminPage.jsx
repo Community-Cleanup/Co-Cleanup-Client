@@ -44,7 +44,7 @@ function AdminPage() {
             setShowEventsComponents(true);
           }}
         >
-          Events
+          Events & Comments
         </button>
       </div>
       {showUsersComponents && <AdminPageUsers />}
