@@ -6,7 +6,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 import LoadingSpinner from "./LoadingSpinner";
 
-import { ContainerSignup } from "./styled/utility/ContainerSignup.styled";
+import { CenteredContainer } from "./styled/utility/CenteredContainer.styled";
 import { Logo } from "./styled/elements/Logo.styled";
 import { Navigation } from "./styled/elements/Navigation.styled";
 import { Fieldset } from "./styled/utility/Fieldset.styled";
@@ -135,7 +135,7 @@ function SigninPage() {
   }
 
   return (
-    <ContainerSignup>
+    <CenteredContainer>
       <div>
         <Logo
           src="./images/logo/logo-icon.svg"
@@ -200,7 +200,7 @@ function SigninPage() {
           )}
         </Fieldset>
       </form>
-    </ContainerSignup>
+    </CenteredContainer>
   );
 }
 
