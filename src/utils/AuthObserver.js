@@ -6,6 +6,7 @@ import axios from "axios";
 
 import { useGlobalAuthState } from "./AuthContext";
 
+// This helper component, 'AuthObserver' as a utility is
 const AuthObserver = ({ children }) => {
   const { setAuthState } = useGlobalAuthState();
 
