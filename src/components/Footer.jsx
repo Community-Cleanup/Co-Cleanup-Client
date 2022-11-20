@@ -22,16 +22,20 @@ function Footer() {
       bg={theme.colors.footer}
     >
       <div>
-        {footerLinks.map((link) => {
+        {footerLinks.map((link, index) => {
           return (
-            <Navigation margin="0 8px 0 20px" color={theme.colors.footerText}>
+            <Navigation
+              key={index}
+              margin="0 8px 0 20px"
+              color={theme.colors.footerText}
+            >
               <Link to={link.url}>{link.text}</Link>
             </Navigation>
           );
         })}
       </div>
       <p>
-        <i class="fa-regular fa-copyright"></i> {year} Co Cleanup
+        <i className="fa-regular fa-copyright"></i> {year} Co Cleanup
       </p>
     </StyledNavbar>
   );

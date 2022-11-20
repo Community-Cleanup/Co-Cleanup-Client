@@ -56,10 +56,7 @@ function App() {
                 )}
               </AxiosInterceptor>
             ) : (
-              <div>
-                <h1>Please wait</h1>
-                <LoadingSpinner />
-              </div>
+              <LoadingSpinner />
             )}
           </SearchProvider>
         </ThemeProvider>

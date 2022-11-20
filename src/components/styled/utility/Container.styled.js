@@ -10,8 +10,4 @@ export const Container = styled.div`
   position: ${({ position }) => position || "relative"};
   text-align: ${({ talign }) => talign || "left"};
   overflow-y: auto;
-
-  div p {
-    margin-bottom: 32px;
-  }
 `;

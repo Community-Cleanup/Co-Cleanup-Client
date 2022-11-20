@@ -268,7 +268,12 @@ function EventsMap() {
               {sidebarListings.length ? (
                 sidebarListings.map((event) => {
                   return (
-                    <CardSm cursor="pointer" pad="16px 24px 24px" w="100%">
+                    <CardSm
+                      cursor="pointer"
+                      pad="16px 24px 24px"
+                      w="100%"
+                      bs="true"
+                    >
                       <div
                         onMouseOver={() => showPopup(event)}
                         onMouseOut={removePopup}
@@ -303,20 +308,25 @@ function EventsMap() {
             </Grid>
 
             {!sidebarListings.length && (
-              <Container margin="100px 0 0" w="100%" bg={theme.colors.navbar}>
+              <Container
+                margin="100px 0 0"
+                w="100%"
+                talign="center"
+                bg={theme.colors.navbar}
+              >
                 <Span color={theme.colors.buttonOne} fs="22px" fw="600">
                   Pan map to search for events
                 </Span>
               </Container>
             )}
           </Container>
-          <Container h="90vh">
+          <Container h="90vh" w="50%">
             <Container
               h="100%"
               w="100%"
               position="absolute"
               ref={mapContainer}
-              className="map-container"
+              // className="map-container"
             />
           </Container>
         </Flex>

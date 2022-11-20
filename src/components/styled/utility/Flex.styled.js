@@ -9,8 +9,8 @@ export const Flex = styled.div`
   align-items: ${({ align }) => align || "left"};
   justify-content: ${({ justify }) => justify || "flex-start"};
 
-  & > div,
+  /* & > div,
   & > ul {
     flex: 1;
-  }
+  } */
 `;
