@@ -10,4 +10,8 @@ export const Container = styled.div`
   position: ${({ position }) => position || "relative"};
   text-align: ${({ talign }) => talign || "left"};
   overflow-y: auto;
+
+  @media (max-width: 900px) {
+    width: 300px;
+  }
 `;

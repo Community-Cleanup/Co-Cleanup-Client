@@ -6,6 +6,7 @@ import NavBar from "./NavBar";
 import Footer from "./Footer";
 import { Banner } from "./styled/utility/Banner.styled";
 import { Container } from "./styled/utility/Container.styled";
+import { Width } from "./styled/utility/Width.styled";
 import { Button } from "./styled/elements/Button.styled";
 import { Flex } from "./styled/utility/Flex.styled";
 import { Span } from "./styled/utility/Span.styled";
@@ -25,8 +26,8 @@ function LandingPage() {
         minh="100vh"
       >
         <Banner bg={theme.colors.bannerOne}>
-          <Flex>
-            <div>
+          <Flex justify="space-between">
+            <Width>
               <h1>
                 <Span fs="40px">Co Cleanup</Span>
               </h1>
@@ -41,7 +42,7 @@ function LandingPage() {
               <div>
                 <Button
                   w="130px"
-                  margin="32px 16px 0 0"
+                  margin="32px 16px 32px 0"
                   onClick={() => navigate("/events")}
                 >
                   View Events
@@ -56,13 +57,12 @@ function LandingPage() {
                   </Button>
                 )}
               </div>
-            </div>
-            <div>
+            </Width>
+            <Width>
               <Image
-                margin="0 0 0 64px"
                 src="./images/photos/community-group.jpg"
               />
-            </div>
+            </Width>
           </Flex>
         </Banner>
         <Container h="200px"></Container>

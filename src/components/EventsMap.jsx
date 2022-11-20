@@ -9,6 +9,7 @@ import NavBar from "./NavBar";
 import Footer from "./Footer";
 import { Container } from "./styled/utility/Container.styled";
 import { Flex } from "./styled/utility/Flex.styled";
+import { FlexRow } from "./styled/utility/FlexRow.styled";
 import { Grid } from "./styled/utility/Grid.styled";
 import { Span } from "./styled/utility/Span.styled";
 import { CardSm } from "./styled/utility/CardSm.styled";
@@ -262,7 +263,7 @@ function EventsMap() {
     <PageTitle title="Find Events">
       <NavBar />
       <Container h="90vh" w="100%" bg={theme.colors.navbar}>
-        <Flex>
+        <FlexRow>
           <Container h="90vh" w="50%" pad="16px" bg={theme.colors.navbar}>
             <Grid>
               {sidebarListings.length ? (
@@ -329,7 +330,7 @@ function EventsMap() {
               // className="map-container"
             />
           </Container>
-        </Flex>
+        </FlexRow>
       </Container>
       <Footer />
     </PageTitle>

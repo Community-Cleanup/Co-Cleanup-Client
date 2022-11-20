@@ -193,7 +193,7 @@ function SignupPage() {
 
   return (
     <PageTitle title="Sign Up">
-      <Container margin="150px auto">
+      <Container margin="120px auto">
         <Container talign="center">
           <Logo
             src="./images/logo/logo-icon.svg"

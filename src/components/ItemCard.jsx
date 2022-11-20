@@ -3,13 +3,14 @@ import { theme } from "./styled/theme/Theme";
 import { formatDate } from "../utils/formatDate";
 import { CardSm } from "./styled/utility/CardSm.styled";
 import { Flex } from "./styled/utility/Flex.styled";
+import { FlexRow } from "./styled/utility/FlexRow.styled";
 import { Span } from "./styled/utility/Span.styled";
 import { Button } from "./styled/elements/Button.styled";
 
 function ItemCard(props) {
   return (
     <CardSm w="100%">
-      <Flex align="flex-start" justify="space-between">
+      <FlexRow align="flex-start" justify="space-between">
         <div>
           <h4>{props.title}</h4>
           <p>
@@ -63,7 +64,7 @@ function ItemCard(props) {
             </Button>
           )}
         </Flex>
-      </Flex>
+      </FlexRow>
     </CardSm>
   );
 }
