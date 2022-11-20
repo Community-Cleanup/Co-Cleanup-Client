@@ -5,8 +5,9 @@ import { SignIn } from "../firebase/SignIn";
 import { useNavigate, Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 import LoadingSpinner from "./LoadingSpinner";
-
-import { ContainerSignup } from "./styled/utility/ContainerSignup.styled";
+import PageTitle from "./PageTitle";
+import { Container } from "./styled/utility/Container.styled";
+import { Flex } from "./styled/utility/Flex.styled";
 import { Logo } from "./styled/elements/Logo.styled";
 import { Navigation } from "./styled/elements/Navigation.styled";
 import { Fieldset } from "./styled/utility/Fieldset.styled";
@@ -191,100 +192,105 @@ function SignupPage() {
   }
 
   return (
-    <ContainerSignup>
-      <div>
-        <Logo
-          src="./images/logo/logo-icon.svg"
-          alt="Co Cleanup Logo"
-          onClick={() => navigate("/")}
-        />
-        <h1>Sign Up</h1>
-        <p>
-          Already have an account?{" "}
-          <Navigation fs="16px" color={theme.colors.signLink}>
-            <Link to="/sign-in">Sign In</Link>
-          </Navigation>
-        </p>
-      </div>
-      <form onSubmit={handleFormSubmit}>
-        <Fieldset>
-          <FormLabel htmlFor="username">Username</FormLabel>
-          <Input
-            onBlur={(e) => validate(e)}
-            type="text"
-            name="username"
-            id="username"
-            value={signUpFormState.username}
-            onChange={(e) => handleChange(e)}
+    <PageTitle title="Sign Up">
+      <Container margin="150px auto">
+        <Container talign="center">
+          <Logo
+            src="./images/logo/logo-icon.svg"
+            alt="Co Cleanup Logo"
+            onClick={() => navigate("/")}
           />
-          {signUpFormState.usernameError && (
-            <FormMessage>{signUpFormState.usernameError}</FormMessage>
-          )}
-        </Fieldset>
-        <Fieldset>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Input
-            onBlur={(e) => validate(e)}
-            type="email"
-            placeholder="example@email.com"
-            name="emailAddress"
-            id="emailAddress"
-            value={signUpFormState.emailAddress}
-            onChange={(e) => handleChange(e)}
-          />
-          {signUpFormState.emailAddressError && (
-            <FormMessage>{signUpFormState.emailAddressError}</FormMessage>
-          )}
-        </Fieldset>
-        <Fieldset>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <Input
-            onBlur={(e) => validate(e)}
-            type="password"
-            name="password"
-            id="password"
-            value={signUpFormState.password}
-            onChange={(e) => handleChange(e)}
-          />
-          {signUpFormState.passwordError && (
-            <FormMessage>{signUpFormState.passwordError}</FormMessage>
-          )}
-        </Fieldset>
-        <Fieldset>
-          <FormLabel htmlFor="passwordConfirm">Confirm Password</FormLabel>
-          <Input
-            onBlur={(e) => validate(e)}
-            type="password"
-            name="passwordConfirm"
-            id="passwordConfirm"
-            value={signUpFormState.passwordConfirm}
-            onChange={(e) => handleChange(e)}
-          />
-          {signUpFormState.passwordConfirmError && (
-            <FormMessage>{signUpFormState.passwordConfirmError}</FormMessage>
-          )}
-        </Fieldset>
-        <Fieldset>
-          {signUpFormState.showLoadingSpinner ? (
-            <LoadingSpinner />
-          ) : (
-            <Button
-              type="submit"
-              value="Submit"
-              id="submit"
-              w="100%"
-              margin="0"
-            >
-              Sign Up
-            </Button>
-          )}
-
-          {signUpFormState.submitError && (
-            <FormMessage>{signUpFormState.submitError}</FormMessage>
-          )}
-        </Fieldset>
-      </form>
-    </ContainerSignup>
+          <h1>Sign Up</h1>
+          <p>
+            Already have an account?{" "}
+            <Navigation fs="16px" color={theme.colors.signLink}>
+              <Link to="/sign-in">Sign In</Link>
+            </Navigation>
+          </p>
+        </Container>
+        <form onSubmit={handleFormSubmit}>
+          <Fieldset>
+            <FormLabel htmlFor="username">Username</FormLabel>
+            <Input
+              w="400px"
+              onBlur={(e) => validate(e)}
+              type="text"
+              name="username"
+              id="username"
+              value={signUpFormState.username}
+              onChange={(e) => handleChange(e)}
+            />
+            {signUpFormState.usernameError && (
+              <FormMessage>{signUpFormState.usernameError}</FormMessage>
+            )}
+          </Fieldset>
+          <Fieldset>
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <Input
+              w="400px"
+              onBlur={(e) => validate(e)}
+              type="email"
+              placeholder="example@email.com"
+              name="emailAddress"
+              id="emailAddress"
+              value={signUpFormState.emailAddress}
+              onChange={(e) => handleChange(e)}
+            />
+            {signUpFormState.emailAddressError && (
+              <FormMessage>{signUpFormState.emailAddressError}</FormMessage>
+            )}
+          </Fieldset>
+          <Fieldset>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <Input
+              w="400px"
+              onBlur={(e) => validate(e)}
+              type="password"
+              name="password"
+              id="password"
+              value={signUpFormState.password}
+              onChange={(e) => handleChange(e)}
+            />
+            {signUpFormState.passwordError && (
+              <FormMessage>{signUpFormState.passwordError}</FormMessage>
+            )}
+          </Fieldset>
+          <Fieldset>
+            <FormLabel htmlFor="passwordConfirm">Confirm Password</FormLabel>
+            <Input
+              w="400px"
+              onBlur={(e) => validate(e)}
+              type="password"
+              name="passwordConfirm"
+              id="passwordConfirm"
+              value={signUpFormState.passwordConfirm}
+              onChange={(e) => handleChange(e)}
+            />
+            {signUpFormState.passwordConfirmError && (
+              <FormMessage>{signUpFormState.passwordConfirmError}</FormMessage>
+            )}
+          </Fieldset>
+          <Fieldset>
+            {signUpFormState.showLoadingSpinner ? (
+              <LoadingSpinner />
+            ) : (
+              <Button
+                type="submit"
+                value="Submit"
+                id="submit"
+                w="400px"
+                margin="0"
+              >
+                Sign Up
+              </Button>
+            )}
+            {signUpFormState.submitError && (
+              <FormMessage>{signUpFormState.submitError}</FormMessage>
+            )}
+          </Fieldset>
+        </form>
+      </Container>
+    </PageTitle>
   );
 }
 

@@ -1,9 +1,11 @@
 import styled from "styled-components";
+import { theme } from "../theme/Theme";
 
 export const StyledNavbar = styled.nav`
-  background-color: ${({ theme }) => theme.colors.navbar};
-  height: 50px;
-  padding: 0 12px;
+  background-color: ${({ bg }) => bg || theme.colors.navbar};
+  color: ${({ color }) => color || "black"};
+  height: ${({ h }) => h || "60px"};
+  padding: ${({ pad }) => pad || "0 12px"};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -12,7 +14,7 @@ export const StyledNavbar = styled.nav`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: min-content;
+    /* width: min-content; */
   }
 
   input {

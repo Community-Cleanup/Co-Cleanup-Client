@@ -7,10 +7,20 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 //Components
+import PageTitle from "./PageTitle";
 import NavBar from "./NavBar";
+import Footer from "./Footer";
 import Geocoder from "./Geocoder";
-//CSS Stylsheet
-import "./EventForm.css";
+
+import { theme } from "./styled/theme/Theme";
+import { Flex } from "./styled/utility/Flex.styled";
+import { CardLg } from "./styled/utility/CardLg.styled";
+import { Container } from "./styled/utility/Container.styled";
+import { Span } from "./styled/utility/Span.styled";
+import { FormLabel } from "./styled/elements/FormLabel.styled";
+import { Input } from "./styled/elements/Input.styled";
+import { Textarea } from "./styled/elements/Textarea.sytled";
+import { Button } from "./styled/elements/Button.styled";
 
 // Form component used to create and edit an event
 function EventForm() {
@@ -120,49 +130,66 @@ function EventForm() {
   // Create/Update event form jsx
   // Controlled components with onChange setting state
   return (
-    <>
+    <PageTitle title="Create Event">
       <NavBar />
-      <div className="event-form-main">
-        <h1>Event Form</h1>
-        <form>
-          <label>Title</label>
-          <input
-            type="text"
-            placeholder="Event Title"
-            name="title"
-            value={eventData.title}
-            onChange={(event) => handleChange(event)}
-          />
-          <label>Date</label>
-          <input
-            type="datetime-local"
-            name="date"
-            value={eventData.date}
-            onChange={(event) => handleChange(event)}
-          />
-          <label>Address</label>
-          <p>{eventData.address}</p>
-          {/* Geocoder component  */}
-          <Geocoder setEventData={setEventData} />
-          <label>Description</label>
-          <textarea
-            placeholder="Desciption"
-            id="description"
-            cols="30"
-            rows="10"
-            name="description"
-            value={eventData.description}
-            onChange={(event) => handleChange(event)}
-          ></textarea>
-          {/* Ternary based on if an event is defined. This form is used to both update and save an event*/}
-          {event ? (
-            <button onClick={updateEvent}>Update Event</button>
-          ) : (
-            <button onClick={createEvent}>Save Event</button>
-          )}
-        </form>
-      </div>
-    </>
+      <Flex
+        direction="column"
+        align="none"
+        justify="space-between"
+        minh="100vh"
+      >
+        <CardLg margin="36px" bg={theme.colors.cardTwo}>
+          <Container w="500px" margin="0 auto" bg="transparent">
+            {event ? <h1>Update Event</h1> : <h1>Create Event</h1>}
+            <form>
+              <FormLabel>Title</FormLabel>
+              <Input
+                type="text"
+                placeholder="Event Title"
+                name="title"
+                value={eventData.title}
+                onChange={(event) => handleChange(event)}
+              />
+              <FormLabel>Date</FormLabel>
+              <Input
+                type="datetime-local"
+                name="date"
+                value={eventData.date}
+                onChange={(event) => handleChange(event)}
+              />
+              <FormLabel>Address Search</FormLabel>
+              {/* Geocoder component  */}
+              <Geocoder setEventData={setEventData} />
+              <FormLabel>Address</FormLabel>
+              <CardLg pad="16px 20px">
+                <Span fs="12px" fw="500" color={theme.colors.navigationLink}>
+                  {eventData.address
+                    ? eventData.address
+                    : "Please search for an address"}
+                </Span>
+              </CardLg>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                placeholder="Desciption"
+                id="description"
+                name="description"
+                pad="10px 20px"
+                h="150px"
+                value={eventData.description}
+                onChange={(event) => handleChange(event)}
+              ></Textarea>
+              {/* Ternary based on if an event is defined. This form is used to both update and save an event*/}
+              {event ? (
+                <Button onClick={updateEvent}>Update Event</Button>
+              ) : (
+                <Button onClick={createEvent}>Save Event</Button>
+              )}
+            </form>
+          </Container>
+        </CardLg>
+        <Footer />
+      </Flex>
+    </PageTitle>
   );
 }
 

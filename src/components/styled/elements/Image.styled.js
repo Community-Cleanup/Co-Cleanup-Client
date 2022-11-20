@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
 export const Image = styled.img`
-    width: 400px;
-`
+  margin: ${({ margin }) => margin || "0"};
+  width: 400px;
+`;

@@ -137,24 +137,24 @@ function EventDetails() {
       <div className="event-details-main">
         <div className="event-title-register-div">
           <h2>{eventDetails.title}</h2>
-
-          {authState.data ? (
-            eventDetails.attendees &&
-            (!eventDetails.attendees.includes(authState.data._id) ? (
-              <button onClick={handleRegistration}>Register</button>
-            ) : eventDetails.userId === authState.data._id ? (
-              <div>
-                You are the organiser{" "}
-                <Link to={`/${event}/update-event`}>Edit Event</Link>
-              </div>
-            ) : (
-              <div>
-                <button onClick={handleDeregister}>Deregister</button>
-              </div>
-            ))
-          ) : (
+          {authState.data === null && (
             <div>
               <Link to={`/sign-in`}>Sign in</Link> to register
+            </div>
+          )}
+          {eventDetails.attendees &&
+          !eventDetails.attendees.includes(authState.data._id) ? (
+            <button onClick={handleRegistration}>Register</button>
+          ) : (
+            <div>
+              You are attending{" "}
+              <button onClick={handleDeregister}>Deregister</button>
+            </div>
+          )}
+          {authState.data && eventDetails.userId === authState.data._id && (
+            <div>
+              You are the organiser{" "}
+              <Link to={`/${event}/update-event`}>Edit Event</Link>
             </div>
           )}
         </div>

@@ -1,5 +1,5 @@
 import { Logout } from "../firebase/Logout";
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 import { useGlobalSearchContext } from "../utils/SearchContext";
@@ -81,11 +81,7 @@ function NavBar() {
           <Button>
             <Link to={`/account/${authState.data._id}`}>My Account</Link>
           </Button>
-          {authState.data.isAdmin && (
-            <Button>
-              <Link to="/admin">Admin Portal</Link>
-            </Button>
-          )}
+
         </div>
       )}
     </StyledNavbar>

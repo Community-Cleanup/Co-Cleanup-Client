@@ -12,7 +12,7 @@ export const Button = styled.button`
   margin: ${({ margin }) => margin || "0 5px"};
   width: ${({ w }) => w || "auto"};
   white-space: nowrap;
-  padding: 10px 20px;
+  padding: ${({ pad }) => pad || "10px 20px"};
   transition: 0.2s ease all;
 
   &:hover {
