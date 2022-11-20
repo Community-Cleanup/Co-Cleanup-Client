@@ -1,10 +1,14 @@
 import { Logout } from "../firebase/Logout";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 import { useGlobalSearchContext } from "../utils/SearchContext";
 import { useNavigate } from "react-router-dom";
+import { useViewport } from "../utils/useViewport";
+import DropDownMenu from "./DropDownMenu";
 import { StyledNavbar } from "./styled/utility/Navbar.styled";
+import { Flex } from "./styled/utility/Flex.styled";
+import { FlexRow } from "./styled/utility/FlexRow.styled";
 import { Button } from "./styled/elements/Button.styled";
 import { Logo } from "./styled/elements/Logo.styled";
 import { theme } from "./styled/theme/Theme";
@@ -15,6 +19,9 @@ function NavBar() {
   const navigate = useNavigate();
   const { searchBar, setSearchBar } = useGlobalSearchContext();
   const { authState } = useGlobalAuthState();
+  const { width } = useViewport();
+  const breakPoint = 900;
+  const [showDropDownMenu, setShowDropDownMenu] = useState(false);
 
   async function handleLogout(e) {
     e.preventDefault();
@@ -40,31 +47,56 @@ function NavBar() {
 
   return (
     <StyledNavbar>
-      <div>
-        <div>
-          <Logo
-            src="./images/logo/logo-icon.svg"
-            alt="Co Cleanup Logo"
-            onClick={() => navigate("/")}
-          />
+      <FlexRow align="center">
+        <FlexRow align="center">
+          {width < 550 ? (
+            <Logo
+              src="./images/logo/icon.svg"
+              alt="Co Cleanup Logo"
+              onClick={() => navigate("/")}
+            />
+          ) : (
+            <Logo
+              src="./images/logo/logo-icon.svg"
+              alt="Co Cleanup Logo"
+              onClick={() => navigate("/")}
+            />
+          )}
           <Input
+            w="350px"
+            wmobile="180px"
             placeholder="Search Events"
             onFocus={handleFocus}
             name="searchBar"
             value={searchBar}
             onChange={(e) => setSearchBar(e.target.value)}
           />
-        </div>
-        <div>
-          <Navigation margin="0 8px 0 20px">
-            <Link>About</Link>
-          </Navigation>
-          <Navigation margin="0 8px 0" onClick={handleCreateLink}>
-            Create Event
-          </Navigation>
-        </div>
-      </div>
-      {!authState.data ? (
+        </FlexRow>
+        {width > breakPoint && (
+          <div>
+            <Navigation margin="0 8px 0 20px">
+              <Link>About</Link>
+            </Navigation>
+            <Navigation margin="0 8px 0" onClick={handleCreateLink}>
+              Create Event
+            </Navigation>
+          </div>
+        )}
+      </FlexRow>
+
+      {width < breakPoint ? (
+        showDropDownMenu ? (
+          <i
+            onClick={() => setShowDropDownMenu(false)}
+            class="fa-solid fa-xl fa-xmark"
+          ></i>
+        ) : (
+          <i
+            onClick={() => setShowDropDownMenu(true)}
+            className="fa-solid fa-xl fa-bars"
+          ></i>
+        )
+      ) : !authState.data ? (
         <div>
           <Navigation margin="0 8px 0">
             <Link to="/sign-in">Sign In</Link>
@@ -81,13 +113,15 @@ function NavBar() {
           <Button>
             <Link to={`/account/${authState.data._id}`}>My Account</Link>
           </Button>
-          {authState.data.isAdmin && (
-            <Button>
-              <Link to="/admin">Admin Portal</Link>
-            </Button>
-          )}
         </div>
       )}
+
+      <DropDownMenu
+        showDropDownMenu={showDropDownMenu}
+        handleCreateLink={handleCreateLink}
+        authState={authState}
+        handleLogout={handleLogout}
+      />
     </StyledNavbar>
   );
 }

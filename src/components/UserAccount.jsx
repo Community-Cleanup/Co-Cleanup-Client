@@ -3,23 +3,42 @@ import React, { useState, useEffect } from "react";
 import axios from "../utils/AxiosInterceptor";
 import { useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
-import { formatDate } from "../utils/formatDate";
+import PageTitle from "./PageTitle";
 import NavBar from "./NavBar";
-import "./UserAccount.css";
+import Footer from "./Footer";
+import ItemCard from "./ItemCard";
+import ModalConfirm from "./ModalConfirm";
+import { Margin } from "./styled/utility/Margin.styled";
+import { CardLg } from "./styled/utility/CardLg.styled";
+import { Fieldset } from "./styled/utility/Fieldset.styled";
+import { Input } from "./styled/elements/Input.styled";
+import { Button } from "./styled/elements/Button.styled";
+import { FormMessage } from "./styled/elements/FormMessage.styled";
+import { Span } from "./styled/utility/Span.styled";
+import { Flex } from "./styled/utility/Flex.styled";
+import { FlexRow } from "./styled/utility/FlexRow.styled";
+import { Grid } from "./styled/utility/Grid.styled";
+import { theme } from "./styled/theme/Theme";
 
 function UserAccount() {
   const navigate = useNavigate();
   const { authState, setAuthState } = useGlobalAuthState();
   const [attendingEvents, setAttendingEvents] = useState([]);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [myEvents, setMyEvents] = useState([]);
+  const [deleteModalIndex, setDeleteModalIndex] = useState(-1);
   const [usernameInputBar, setUsernameInputBar] = useState("");
   const [usernameUpdateModalOpen, setUsernameUpdateModalOpen] = useState(false);
   const [usernameUpdateMessage, setUsernameUpdateMessage] = useState("");
 
   useEffect(() => {
     getEvents("attendees", setAttendingEvents);
+    getEvents("userId", setMyEvents);
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    console.log("my events", myEvents);
+  }, [myEvents]);
 
   async function getEvents(key, callback) {
     try {
@@ -37,12 +56,14 @@ function UserAccount() {
       const res = await axios.delete(
         `${process.env.REACT_APP_SERVER_URL}/api/events/${eventId}`
       );
-      const newEventList = attendingEvents.filter(
+      const newAttendingList = attendingEvents.filter(
         (item) => item._id !== eventId
       );
-      setAttendingEvents(newEventList);
+      const newMyList = myEvents.filter((item) => item._id !== eventId);
+      setAttendingEvents(newAttendingList);
+      setMyEvents(newMyList);
       console.log(res);
-      setDeleteModalOpen(false);
+      setDeleteModalIndex(-1);
     } catch (e) {
       console.log(e);
     }
@@ -71,129 +92,165 @@ function UserAccount() {
   }
 
   return (
-    <>
+    <PageTitle title="My Account">
       <NavBar />
-      <div className="account-main-div">
-        <div className="account-user-details">
-          <h2>User Details</h2>
-          <h4>Username: {authState.data.username}</h4>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setUsernameUpdateModalOpen(true);
-            }}
-          >
-            <fieldset>
-              <input
-                type="text"
-                placeholder="Enter a new username"
-                name="usernameInputBar"
-                value={usernameInputBar}
-                onChange={(e) => setUsernameInputBar(e.target.value)}
-              />
-              <input type="submit" value="Change Username" id="submit" />
-              {usernameUpdateModalOpen && (
-                <div className="account-update-modal">
-                  <div className="modal-div">
-                    <h3>
-                      You are about to change your username to{" "}
-                      {usernameInputBar}. Are you sure?
-                    </h3>
-                    <button onClick={() => setUsernameUpdateModalOpen(false)}>
-                      No, don't update
-                    </button>
-                    <button onClick={() => updateUsername(usernameInputBar)}>
-                      Yes, update username
-                    </button>
-                  </div>
-                </div>
-              )}
-            </fieldset>
-          </form>
-          {usernameUpdateMessage && <p>{usernameUpdateMessage}</p>}
-          <h4>Email: {authState.data.email}</h4>
-        </div>
-        <div className="account-events-div">
-          <h2>Upcoming Events</h2>
-          {attendingEvents
-            .filter((item) => {
-              return new Date(item.date).getTime() > Date.now();
-            })
-            .map((event) => {
-              return (
-                <div className="account-event">
-                  <h4>{event.title}</h4>
-                  <p>{formatDate(event.date)}</p>
-                  <p>{event.address}</p>
-                  <button onClick={() => navigate("/" + event._id)}>
-                    View Event
-                  </button>
-                </div>
-              );
-            })}
-        </div>
-        <div className="account-events-div">
-          <h2>Visited Events</h2>
-          {attendingEvents
-            .filter((item) => {
-              return new Date(item.date).getTime() < Date.now();
-            })
-            .map((event) => {
-              return (
-                <div className="account-event">
-                  <h4>{event.title}</h4>
-                  <p>{formatDate(event.date)}</p>
-                  <p>{event.address}</p>
-                  <button onClick={() => navigate("/" + event._id)}>
-                    View Event
-                  </button>
-                </div>
-              );
-            })}
-        </div>
-        <div className="account-events-div">
-          <h2>My Events</h2>
-          {attendingEvents
-            .filter((item) => {
-              return item.userId === authState.data._id;
-            })
-            .map((event) => {
-              return (
-                <div className="account-event">
-                  <h4>{event.title}</h4>
-                  <p>{formatDate(event.date)}</p>
-                  <p>{event.address}</p>
-                  <button onClick={() => navigate("/" + event._id)}>
-                    View Event
-                  </button>
-                  <button
-                    onClick={() => navigate("/" + event._id + "/update-event")}
+      <Margin>
+        <CardLg bg={theme.colors.cardOne}>
+          <FlexRow align="center" justify="space-between">
+            <h2>User Details</h2>
+            {authState.data.isAdmin && (
+              <Button
+                bg={theme.colors.buttonTwo}
+                onClick={() => navigate("/admin")}
+              >
+                Admin Portal
+              </Button>
+            )}
+          </FlexRow>
+          <Flex align="flex-start">
+            <div>
+              <h4>
+                Username:{" "}
+                <Span fw="400" margin="0 0 0 1rem">
+                  {authState.data.username}
+                </Span>
+              </h4>
+              <h4>
+                Email:{" "}
+                <Span fw="400" margin="0 0 0 1rem">
+                  {authState.data.email}
+                </Span>
+              </h4>
+            </div>
+            <div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setUsernameUpdateModalOpen(true);
+                }}
+              >
+                <Fieldset>
+                  <Button
+                    bg={theme.colors.buttonTwo}
+                    margin="0 0 0 36px"
+                    type="submit"
+                    value="Change Username"
+                    id="submit"
                   >
-                    Update
-                  </button>
-
-                  <button onClick={() => setDeleteModalOpen(true)}>
-                    Delete
-                  </button>
-                  {deleteModalOpen && (
-                    <div className="account-update-modal">
-                      <div className="modal-div">
-                        <h3>This event will be deleted. Are you sure?</h3>
-                        <button onClick={() => setDeleteModalOpen(false)}>
-                          No, don't delete
-                        </button>
-                        <button onClick={() => deleteEvent(event._id)}>
-                          Yes, delete event
-                        </button>
-                      </div>
-                    </div>
+                    Update Username
+                  </Button>
+                  <Input
+                    w="200px"
+                    type="text"
+                    placeholder="Enter a new username"
+                    name="usernameInputBar"
+                    value={usernameInputBar}
+                    onChange={(e) => setUsernameInputBar(e.target.value)}
+                  />
+                  {usernameUpdateModalOpen && (
+                    <ModalConfirm
+                      message={`You are about to update your username to ${usernameInputBar}.`}
+                      buttonYesFunction={() => updateUsername(usernameInputBar)}
+                      buttonYesText="Yes, update username"
+                      buttonNoFunction={() => setUsernameUpdateModalOpen(false)}
+                      buttonNoText="No, don't update"
+                    />
                   )}
-                </div>
-              );
-            })}
-        </div>
-      </div>
-    </>
+                </Fieldset>
+              </form>
+              {usernameUpdateMessage && (
+                <FormMessage>{usernameUpdateMessage}</FormMessage>
+              )}
+            </div>
+          </Flex>
+        </CardLg>
+        <CardLg bg={theme.colors.cardTwo} margin="24px 0 0">
+          <h2>Upcoming Events</h2>
+          <Grid>
+            {attendingEvents
+              .filter((item) => {
+                return new Date(item.date).getTime() > Date.now();
+              })
+              .map((event) => {
+                return (
+                  <ItemCard
+                    key={event._id}
+                    title={event.title}
+                    date={event.date}
+                    address={event.address}
+                    button1Color={theme.colors.buttonGray}
+                    button1Function={() => navigate("/" + event._id)}
+                    button1Text="View"
+                  />
+                );
+              })}
+          </Grid>
+        </CardLg>
+        <CardLg bg={theme.colors.cardTwo} margin="24px 0 0">
+          <h2>Visited Events</h2>
+          <Grid>
+            {attendingEvents
+              .filter((item) => {
+                return new Date(item.date).getTime() < Date.now();
+              })
+              .map((event) => {
+                return (
+                  <ItemCard
+                    key={event._id}
+                    title={event.title}
+                    date={event.date}
+                    address={event.address}
+                    button1Color={theme.colors.buttonGray}
+                    button1Function={() => navigate("/" + event._id)}
+                    button1Text="View"
+                  />
+                );
+              })}
+          </Grid>
+        </CardLg>
+        <CardLg bg={theme.colors.cardTwo} margin="24px 0 0">
+          <h2>My Events</h2>
+          <Grid>
+            <>
+              {myEvents.map((event, i) => {
+                return (
+                  <div key={event._id}>
+                    <ItemCard
+                      title={event.title}
+                      date={event.date}
+                      address={event.address}
+                      button1Color={theme.colors.buttonGray}
+                      button1Function={() => navigate("/" + event._id)}
+                      button1Text="View"
+                      button2Color={theme.colors.buttonTwo}
+                      button2Function={() =>
+                        navigate("/" + event._id + "/update-event")
+                      }
+                      button2Text="Update"
+                      button3Color={theme.colors.buttonCancel}
+                      button3Function={() => setDeleteModalIndex(i)}
+                      button3Text="Delete"
+                    />
+                  </div>
+                );
+              })}
+              {deleteModalIndex > -1 && (
+                <ModalConfirm
+                  message={`${myEvents[deleteModalIndex].title} will be deleted..`}
+                  buttonYesFunction={() =>
+                    deleteEvent(myEvents[deleteModalIndex]._id)
+                  }
+                  buttonYesText="Yes, delete event"
+                  buttonNoFunction={() => setDeleteModalIndex(-1)}
+                  buttonNoText="No, don't delete"
+                />
+              )}
+            </>
+          </Grid>
+        </CardLg>
+      </Margin>
+      <Footer />
+    </PageTitle>
   );
 }
 

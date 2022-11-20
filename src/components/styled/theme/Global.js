@@ -11,6 +11,18 @@ const GlobalStyles = createGlobalStyle`
     a, a:visited, a:hover, a:active {
         color: inherit;
     }
+    h1 {
+        margin: 12px 0 24px;
+    }
+    h2 {
+        margin: 10px 0 20px;
+    }
+    h3 {
+        margin: 8px 0 10px;
+    }
+    h4 {
+        margin: 4px 0 4px;
+    }
 `;
 
 export default GlobalStyles;
