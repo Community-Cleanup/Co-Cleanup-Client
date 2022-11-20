@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { StyledNavbar } from "./styled/utility/Navbar.styled";
+import { Flex } from "./styled/utility/Flex.styled";
+import { Span } from "./styled/utility/Span.styled";
 import { theme } from "./styled/theme/Theme";
 import { Navigation } from "./styled/elements/Navigation.styled";
 
@@ -17,21 +19,25 @@ function Footer() {
   return (
     <StyledNavbar
       h="100px"
-      pad="0 28px"
+      pad="28px 12px"
       color={theme.colors.footerText}
       bg={theme.colors.footer}
     >
-      <div>
-        {footerLinks.map((link) => {
+      <Flex>
+        {footerLinks.map((link, index) => {
           return (
-            <Navigation margin="0 8px 0 20px" color={theme.colors.footerText}>
+            <Navigation
+              key={index}
+              margin="0 8px 3px 20px"
+              color={theme.colors.footerText}
+            >
               <Link to={link.url}>{link.text}</Link>
             </Navigation>
           );
         })}
-      </div>
+      </Flex>
       <p>
-        <i class="fa-regular fa-copyright"></i> {year} Co Cleanup
+        <Span fs="12px" color={theme.colors.footerText}><i className="fa-regular fa-copyright"></i> {year} Co Cleanup</Span>
       </p>
     </StyledNavbar>
   );

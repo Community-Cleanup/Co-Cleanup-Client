@@ -16,6 +16,7 @@ import { Button } from "./styled/elements/Button.styled";
 import { FormMessage } from "./styled/elements/FormMessage.styled";
 import { Span } from "./styled/utility/Span.styled";
 import { Flex } from "./styled/utility/Flex.styled";
+import { FlexRow } from "./styled/utility/FlexRow.styled";
 import { Grid } from "./styled/utility/Grid.styled";
 import { theme } from "./styled/theme/Theme";
 
@@ -95,7 +96,7 @@ function UserAccount() {
       <NavBar />
       <Margin>
         <CardLg bg={theme.colors.cardOne}>
-          <Flex justify="space-between">
+          <FlexRow align="center" justify="space-between">
             <h2>User Details</h2>
             {authState.data.isAdmin && (
               <Button
@@ -105,7 +106,7 @@ function UserAccount() {
                 Admin Portal
               </Button>
             )}
-          </Flex>
+          </FlexRow>
           <Flex align="flex-start">
             <div>
               <h4>

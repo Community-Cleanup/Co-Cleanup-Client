@@ -4,5 +4,5 @@ import { theme } from "../theme/Theme";
 export const FormMessage = styled.p`
   color: ${({ color }) => color || theme.colors.formMessage};
   font-size: 12px;
-  margin-top: 4px;
+  margin: ${({ margin }) => margin || "4px 0 0 0"};
 `;

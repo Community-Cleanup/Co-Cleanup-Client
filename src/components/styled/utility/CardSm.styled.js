@@ -11,6 +11,7 @@ export const CardSm = styled.div`
   padding: ${({ pad }) => pad || "16px"};
 
   &:hover {
-    box-shadow: 0px 4px 10px 2px ${theme.colors.shadow};
+    box-shadow: ${({ bs }) =>
+      bs === "true" && `0px 4px 10px 2px ${theme.colors.shadow}`};
   }
 `;

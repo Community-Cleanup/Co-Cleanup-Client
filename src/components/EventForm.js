@@ -138,7 +138,7 @@ function EventForm() {
         justify="space-between"
         minh="100vh"
       >
-        <CardLg margin="36px" bg={theme.colors.cardTwo}>
+        <CardLg margin="3%" bg={theme.colors.cardTwo}>
           <Container w="500px" margin="0 auto" bg="transparent">
             {event ? <h1>Update Event</h1> : <h1>Create Event</h1>}
             <form>

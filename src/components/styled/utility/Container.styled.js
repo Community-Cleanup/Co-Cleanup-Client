@@ -11,7 +11,7 @@ export const Container = styled.div`
   text-align: ${({ talign }) => talign || "left"};
   overflow-y: auto;
 
-  div p {
-    margin-bottom: 32px;
+  @media (max-width: 900px) {
+    width: 300px;
   }
 `;

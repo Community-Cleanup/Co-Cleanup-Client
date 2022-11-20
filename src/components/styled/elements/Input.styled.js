@@ -9,4 +9,12 @@ export const Input = styled.input`
   height: 35px;
   width: ${({ w }) => w || "100%"};
   padding: 0 20px;
+
+  @media (max-width: 900px) {
+    width: "300px";
+  }
+
+  @media (max-width: 450px) {
+    width: ${({ wmobile }) => wmobile};
+  }
 `;
