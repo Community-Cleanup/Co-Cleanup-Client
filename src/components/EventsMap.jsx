@@ -4,8 +4,15 @@ import axios from "axios";
 import mapboxgl from "mapbox-gl";
 import { useGlobalSearchContext } from "../utils/SearchContext";
 import { formatDate } from "../utils/formatDate";
+import PageTitle from "./PageTitle";
 import NavBar from "./NavBar";
-import "./EventsMap.css";
+import Footer from "./Footer";
+import { Container } from "./styled/utility/Container.styled";
+import { Flex } from "./styled/utility/Flex.styled";
+import { Grid } from "./styled/utility/Grid.styled";
+import { Span } from "./styled/utility/Span.styled";
+import { CardSm } from "./styled/utility/CardSm.styled";
+import { theme } from "./styled/theme/Theme";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
 function EventsMap() {
@@ -118,6 +125,7 @@ function EventsMap() {
                 title: event.title,
                 date: event.date,
                 address: event.address,
+                attendees: event.attendees,
                 id: event._id,
               },
             };
@@ -251,35 +259,70 @@ function EventsMap() {
   }
 
   return (
-    <>
+    <PageTitle title="Find Events">
       <NavBar />
-      <div className="map-listings-main">
-        <div>
-          {sidebarListings.length ? (
-            sidebarListings.map((event) => {
-              return (
-                <div className="event-listing-div">
-                  <Link
-                    onMouseEnter={() => showPopup(event)}
-                    onMouseOut={removePopup}
-                    to={`/${event.properties.id}`}
-                  >
-                    {event.properties.title}
-                  </Link>
-                  <p>{formatDate(event.properties.date)}</p>
-                  <p>{event.properties.address}</p>
-                </div>
-              );
-            })
-          ) : (
-            <div>Pan map to search for events...</div>
-          )}
-        </div>
-        <div className="map-div">
-          <div ref={mapContainer} className="map-container" />
-        </div>
-      </div>
-    </>
+      <Container h="90vh" w="100%" bg={theme.colors.navbar}>
+        <Flex>
+          <Container h="90vh" w="50%" pad="16px" bg={theme.colors.navbar}>
+            <Grid>
+              {sidebarListings.length ? (
+                sidebarListings.map((event) => {
+                  return (
+                    <CardSm cursor="pointer" pad="16px 24px 24px" w="100%">
+                      <div
+                        onMouseOver={() => showPopup(event)}
+                        onMouseOut={removePopup}
+                        onClick={() => navigate(`/${event.properties.id}`)}
+                      >
+                        <Flex direction="column" align="flex-start">
+                          <h3>
+                            <Span>{event.properties.title}</Span>
+                          </h3>
+                          <Span
+                            fs="12px"
+                            fw="600"
+                            tf="uppercase"
+                            color={theme.colors.dateText}
+                          >
+                            {formatDate(event.properties.date)}
+                          </Span>
+                          <Span fs="12px" margin="6px 0 0">
+                            {event.properties.address}
+                          </Span>
+                          <Span fs="12px" margin="6px 0 0">
+                            {event.properties.attendees.length} attending
+                          </Span>
+                        </Flex>
+                      </div>
+                    </CardSm>
+                  );
+                })
+              ) : (
+                <div></div>
+              )}
+            </Grid>
+
+            {!sidebarListings.length && (
+              <Container margin="100px 0 0" w="100%" bg={theme.colors.navbar}>
+                <Span color={theme.colors.buttonOne} fs="22px" fw="600">
+                  Pan map to search for events
+                </Span>
+              </Container>
+            )}
+          </Container>
+          <Container h="90vh">
+            <Container
+              h="100%"
+              w="100%"
+              position="absolute"
+              ref={mapContainer}
+              className="map-container"
+            />
+          </Container>
+        </Flex>
+      </Container>
+      <Footer />
+    </PageTitle>
   );
 }
 

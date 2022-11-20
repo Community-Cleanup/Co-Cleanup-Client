@@ -29,15 +29,17 @@ function ItemCard(props) {
           </p>
         </div>
         <Flex direction="column" align="flex-end">
-          <Button
-            w="70px"
-            margin="0 0 4px"
-            pad="6px 0px"
-            bg={props.button1Color}
-            onClick={props.button1Function}
-          >
-            {props.button1Text}
-          </Button>
+          {props.button1Text && (
+            <Button
+              w="70px"
+              margin="0 0 4px"
+              pad="6px 0px"
+              bg={props.button1Color}
+              onClick={props.button1Function}
+            >
+              {props.button1Text}
+            </Button>
+          )}
           {props.button2Text && (
             <Button
               w="70px"

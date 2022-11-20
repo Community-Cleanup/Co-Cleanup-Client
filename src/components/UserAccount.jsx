@@ -3,8 +3,9 @@ import React, { useState, useEffect } from "react";
 import axios from "../utils/AxiosInterceptor";
 import { useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
-
+import PageTitle from "./PageTitle";
 import NavBar from "./NavBar";
+import Footer from "./Footer";
 import ItemCard from "./ItemCard";
 import ModalConfirm from "./ModalConfirm";
 import { Margin } from "./styled/utility/Margin.styled";
@@ -13,9 +14,7 @@ import { Fieldset } from "./styled/utility/Fieldset.styled";
 import { Input } from "./styled/elements/Input.styled";
 import { Button } from "./styled/elements/Button.styled";
 import { FormMessage } from "./styled/elements/FormMessage.styled";
-import { Modal } from "./styled/utility/Modal.styled";
 import { Span } from "./styled/utility/Span.styled";
-import { CenteredContainer } from "./styled/utility/CenteredContainer.styled";
 import { Flex } from "./styled/utility/Flex.styled";
 import { Grid } from "./styled/utility/Grid.styled";
 import { theme } from "./styled/theme/Theme";
@@ -59,7 +58,7 @@ function UserAccount() {
       const newAttendingList = attendingEvents.filter(
         (item) => item._id !== eventId
       );
-      const newMyList = attendingEvents.filter((item) => item._id !== eventId);
+      const newMyList = myEvents.filter((item) => item._id !== eventId);
       setAttendingEvents(newAttendingList);
       setMyEvents(newMyList);
       console.log(res);
@@ -86,7 +85,7 @@ function UserAccount() {
   }
 
   return (
-    <>
+    <PageTitle title="My Account">
       <NavBar />
       <Margin>
         <CardLg bg={theme.colors.cardOne}>
@@ -229,37 +228,22 @@ function UserAccount() {
                 );
               })}
               {deleteModalIndex > -1 && (
-                <Modal>
-                  <CenteredContainer>
-                    <h3>
-                      {myEvents[deleteModalIndex].title} will be deleted. Are
-                      you sure?
-                    </h3>
-                    <Flex margin="16px 0 0">
-                      <Button
-                        w="50%"
-                        onClick={() =>
-                          deleteEvent(myEvents[deleteModalIndex]._id)
-                        }
-                      >
-                        Yes, delete event
-                      </Button>
-                      <Button
-                        w="50%"
-                        bg={theme.colors.buttonCancel}
-                        onClick={() => setDeleteModalIndex(-1)}
-                      >
-                        No, don't delete
-                      </Button>
-                    </Flex>
-                  </CenteredContainer>
-                </Modal>
+                <ModalConfirm
+                  message={`${myEvents[deleteModalIndex].title} will be deleted..`}
+                  buttonYesFunction={() =>
+                    deleteEvent(myEvents[deleteModalIndex]._id)
+                  }
+                  buttonYesText="Yes, delete event"
+                  buttonNoFunction={() => setDeleteModalIndex(-1)}
+                  buttonNoText="No, don't delete"
+                />
               )}
             </>
           </Grid>
         </CardLg>
       </Margin>
-    </>
+      <Footer />
+    </PageTitle>
   );
 }
 

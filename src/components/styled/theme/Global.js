@@ -18,7 +18,7 @@ const GlobalStyles = createGlobalStyle`
         margin: 10px 0 20px;
     }
     h3 {
-        margin: 8px 0 16px;
+        margin: 8px 0 10px;
     }
     h4 {
         margin: 4px 0 4px;

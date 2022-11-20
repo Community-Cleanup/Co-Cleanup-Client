@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 //import axios from "axios";
 import axios from "../utils/AxiosInterceptor";
-
+import PageTitle from "./PageTitle";
 import NavBar from "./NavBar";
 import AdminPageUsers from "./AdminPageUsers";
 import AdminPageEvents from "./AdminPageEvents";
@@ -28,7 +28,7 @@ function AdminPage() {
   }
 
   return (
-    <>
+    <PageTitle title="Admin Dashboard">
       <NavBar />
       <div>
         <h1>Admin Dashboard</h1>
@@ -53,7 +53,7 @@ function AdminPage() {
         {showUsersComponents && <AdminPageUsers />}
         {showEventsComponents && <AdminPageEvents />}
       </div>
-    </>
+    </PageTitle>
   );
 }
 

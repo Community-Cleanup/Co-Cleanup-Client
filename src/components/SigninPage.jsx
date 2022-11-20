@@ -5,8 +5,9 @@ import { useNavigate, Link } from "react-router-dom";
 
 import { useGlobalAuthState } from "../utils/AuthContext";
 import LoadingSpinner from "./LoadingSpinner";
-
-import { CenteredContainer } from "./styled/utility/CenteredContainer.styled";
+import PageTitle from "./PageTitle";
+import { Container } from "./styled/utility/Container.styled";
+import { Flex } from "./styled/utility/Flex.styled";
 import { Logo } from "./styled/elements/Logo.styled";
 import { Navigation } from "./styled/elements/Navigation.styled";
 import { Fieldset } from "./styled/utility/Fieldset.styled";
@@ -135,72 +136,75 @@ function SigninPage() {
   }
 
   return (
-    <CenteredContainer>
-      <div>
-        <Logo
-          src="./images/logo/logo-icon.svg"
-          alt="Co Cleanup Logo"
-          onClick={() => navigate("/")}
-        />
-        <h1>Sign In</h1>
-        <p>
-          Not a member yet?{" "}
-          <Navigation fs="16px" color={theme.colors.signLink}>
-            <Link to="/sign-up">Sign Up</Link>
-          </Navigation>
-        </p>
-      </div>
-      <form onSubmit={handleFormSubmit}>
-        <Fieldset>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Input
-            onBlur={(e) => validate(e)}
-            type="email"
-            name="emailAddress"
-            id="emailAddress"
-            value={signInFormState.emailAddress}
-            onChange={(e) => handleChange(e)}
+    <PageTitle title="Sign In">
+      <Container margin="150px auto">
+        <Container talign="center">
+          <Logo
+            src="./images/logo/logo-icon.svg"
+            alt="Co Cleanup Logo"
+            onClick={() => navigate("/")}
           />
-          {signInFormState.emailAddressError && (
-            <FormMessage>{signInFormState.emailAddressError}</FormMessage>
-          )}
-        </Fieldset>
-        <Fieldset>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <Input
-            onBlur={(e) => validate(e)}
-            type="password"
-            // placeholder="Password"
-            name="password"
-            id="password"
-            value={signInFormState.password}
-            onChange={(e) => handleChange(e)}
-          />
-          {signInFormState.passwordError && (
-            <FormMessage>{signInFormState.passwordError}</FormMessage>
-          )}
-        </Fieldset>
-        <Fieldset>
-          {signInFormState.showLoadingSpinner ? (
-            <LoadingSpinner />
-          ) : (
-            <Button
-              type="submit"
-              value="Submit"
-              id="submit"
-              w="100%"
-              margin="0"
-            >
-              Sign In
-            </Button>
-          )}
-
-          {signInFormState.submitError && (
-            <FormMessage>{signInFormState.submitError}</FormMessage>
-          )}
-        </Fieldset>
-      </form>
-    </CenteredContainer>
+          <h1>Sign In</h1>
+          <p>
+            Not a member yet?{" "}
+            <Navigation fs="16px" color={theme.colors.signLink}>
+              <Link to="/sign-up">Sign Up</Link>
+            </Navigation>
+          </p>
+        </Container>
+        <form onSubmit={handleFormSubmit}>
+          <Fieldset>
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <Input
+              w="400px"
+              onBlur={(e) => validate(e)}
+              type="email"
+              name="emailAddress"
+              id="emailAddress"
+              value={signInFormState.emailAddress}
+              onChange={(e) => handleChange(e)}
+            />
+            {signInFormState.emailAddressError && (
+              <FormMessage>{signInFormState.emailAddressError}</FormMessage>
+            )}
+          </Fieldset>
+          <Fieldset>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <Input
+              w="400px"
+              onBlur={(e) => validate(e)}
+              type="password"
+              // placeholder="Password"
+              name="password"
+              id="password"
+              value={signInFormState.password}
+              onChange={(e) => handleChange(e)}
+            />
+            {signInFormState.passwordError && (
+              <FormMessage>{signInFormState.passwordError}</FormMessage>
+            )}
+          </Fieldset>
+          <Fieldset>
+            {signInFormState.showLoadingSpinner ? (
+              <LoadingSpinner />
+            ) : (
+              <Button
+                type="submit"
+                value="Submit"
+                id="submit"
+                w="100%"
+                margin="0"
+              >
+                Sign In
+              </Button>
+            )}
+            {signInFormState.submitError && (
+              <FormMessage>{signInFormState.submitError}</FormMessage>
+            )}
+          </Fieldset>
+        </form>
+      </Container>
+    </PageTitle>
   );
 }
 

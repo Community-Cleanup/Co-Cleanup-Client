@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { theme } from "../theme/Theme";
 
 export const CardSm = styled.div`
+  cursor: ${({ cursor }) => cursor || "default"};
   background-color: ${({ bg }) => bg || "white"};
   margin: ${({ margin }) => margin || "0"};
   border-radius: 6px;
