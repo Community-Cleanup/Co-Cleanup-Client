@@ -21,7 +21,7 @@ import useBackSafe from "../utils/useBackSafe";
 function SigninPage() {
   const { authState } = useGlobalAuthState();
 
-  const { goBackSafe, hasPreviousState } = useBackSafe();
+  const { goBackSafe } = useBackSafe();
 
   const [signInFormState, setSignInFormState] = useState({
     emailAddress: "",

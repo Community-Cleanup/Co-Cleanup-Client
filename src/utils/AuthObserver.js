@@ -54,13 +54,13 @@ const AuthObserver = ({ children }) => {
           .catch((error) => {
             // When the user clicks the submit button on the Sign Up form, this 'onIdTokenChanged' function gets called multiple times,
             // due to raised events as per the docs here - https://firebase.google.com/docs/reference/unity/class/firebase/auth/firebase-auth#idtokenchanged
-            // as such, the app will first throw a 404 error when calling the above API endpoint with Axios, but this "first" event raised can be safely ignored.
-            if (error.response.status === 404) {
+            // as such, only on Sign Up the app will first throw a 500 error when calling the above API endpoint with Axios,
+            // but this "first" event raised can be safely ignored.
+            if (error.response.status === 500) {
               console.log(
-                "Ignore initial 404 error to find user from DB whilst auth observer is still registering."
+                "Ignore initial 500 error to find user from DB whilst auth observer is still registering."
               );
-            } else if (error.response.status === 401) {
-              console.log("Unauthorization error:", error);
+            } else {
               setAuthState((prev) => {
                 return {
                   ...prev,
