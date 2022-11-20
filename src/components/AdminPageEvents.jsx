@@ -3,6 +3,7 @@ import axios from "../utils/AxiosInterceptor";
 
 import LoadingSpinner from "./LoadingSpinner";
 import AdminDeleteEventForm from "./AdminDeleteEventForm";
+import AdminPageEventComment from "./AdminPageEventComment";
 import { formatDate } from "../utils/formatDate";
 import { Link } from "react-router-dom";
 
@@ -64,11 +65,12 @@ function AdminPageEvents() {
         (!foundEvents.length ? (
           <p>No results found</p>
         ) : (
-          <ul>
+          <>
             {foundEvents.map((foundEvent, index) => {
               return (
                 <>
                   <div key={index}>
+                    <h3>Event:</h3>
                     <p>
                       Title:{" "}
                       <Link to={`/${foundEvent._id}`}>{foundEvent.title}</Link>
@@ -76,12 +78,27 @@ function AdminPageEvents() {
                     <p>Date of Event: {formatDate(foundEvent.date)}</p>
                     <p>Address: {foundEvent.address}</p>
                     <AdminDeleteEventForm foundEventUID={foundEvent._id} />
+                    {foundEvent.comments.map((eventComment, index) => {
+                      return (
+                        <>
+                          <div key={index}>
+                            <AdminPageEventComment
+                              foundEventUID={foundEvent._id}
+                              eventCommentIndex={index}
+                              eventCommentUsername={eventComment.username}
+                              eventCommentComment={eventComment.comment}
+                              eventCommentTime={eventComment.time}
+                            />
+                          </div>
+                        </>
+                      );
+                    })}
                   </div>
                   <br />
                 </>
               );
             })}
-          </ul>
+          </>
         ))}
     </>
   );

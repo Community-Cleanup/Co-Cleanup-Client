@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/AxiosInterceptor";
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
@@ -187,12 +187,11 @@ function EventDetails() {
                 <h4>{item.username}</h4>
                 <span>{item.time && timeAgo(item.time)}</span>
                 <p>{item.comment}</p>
-                {!authState.data === null &&
-                  item.userId === authState.data._id && (
-                    <button onClick={() => handleCommentDelete(index)}>
-                      Delete
-                    </button>
-                  )}
+                {authState.data && item.userId === authState.data._id && (
+                  <button onClick={() => handleCommentDelete(index)}>
+                    Delete
+                  </button>
+                )}
               </div>
             );
           })}

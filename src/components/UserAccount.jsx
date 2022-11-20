@@ -21,7 +21,7 @@ import { theme } from "./styled/theme/Theme";
 
 function UserAccount() {
   const navigate = useNavigate();
-  const { authState } = useGlobalAuthState();
+  const { authState, setAuthState } = useGlobalAuthState();
   const [attendingEvents, setAttendingEvents] = useState([]);
   const [myEvents, setMyEvents] = useState([]);
   const [deleteModalIndex, setDeleteModalIndex] = useState(-1);
@@ -77,6 +77,12 @@ function UserAccount() {
         }
       );
       setUsernameUpdateModalOpen(false);
+      setAuthState((prev) => {
+        return {
+          ...prev,
+          data: { ...authState.data, username: usernameInput },
+        };
+      });
       setUsernameUpdateMessage("Success! Your username has been updated");
     } catch (error) {
       setUsernameUpdateModalOpen(false);

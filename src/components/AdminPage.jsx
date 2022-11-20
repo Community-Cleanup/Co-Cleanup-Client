@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 //import axios from "axios";
 import axios from "../utils/AxiosInterceptor";
-import PageTitle from "./PageTitle";
-import NavBar from "./NavBar";
+
 import AdminPageUsers from "./AdminPageUsers";
 import AdminPageEvents from "./AdminPageEvents";
 
@@ -28,32 +27,29 @@ function AdminPage() {
   }
 
   return (
-    <PageTitle title="Admin Dashboard">
-      <NavBar />
+    <div>
+      <h1>Admin Dashboard</h1>
       <div>
-        <h1>Admin Dashboard</h1>
-        <div>
-          <button
-            onClick={(e) => {
-              setShowUsersComponents(true);
-              setShowEventsComponents(false);
-            }}
-          >
-            Users
-          </button>
-          <button
-            onClick={(e) => {
-              setShowUsersComponents(false);
-              setShowEventsComponents(true);
-            }}
-          >
-            Events
-          </button>
-        </div>
-        {showUsersComponents && <AdminPageUsers />}
-        {showEventsComponents && <AdminPageEvents />}
+        <button
+          onClick={(e) => {
+            setShowUsersComponents(true);
+            setShowEventsComponents(false);
+          }}
+        >
+          Users
+        </button>
+        <button
+          onClick={(e) => {
+            setShowUsersComponents(false);
+            setShowEventsComponents(true);
+          }}
+        >
+          Events & Comments
+        </button>
       </div>
-    </PageTitle>
+      {showUsersComponents && <AdminPageUsers />}
+      {showEventsComponents && <AdminPageEvents />}
+    </div>
   );
 }
 
