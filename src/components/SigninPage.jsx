@@ -1,9 +1,12 @@
-import { SignIn } from "../firebase/SignIn";
-import { Logout } from "../firebase/Logout";
+import { SignIn } from "../auth/SignIn";
+import { Logout } from "../auth/Logout";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 import { useGlobalAuthState } from "../utils/AuthContext";
+
+import { formErrorMessages } from "../data/formErrorMessages";
+
 import LoadingSpinner from "./LoadingSpinner";
 import PageTitle from "./PageTitle";
 import { Container } from "./styled/utility/Container.styled";
@@ -64,7 +67,7 @@ function SigninPage() {
       setSignInFormState((prev) => {
         return {
           ...prev,
-          [`${event.target.name}Error`]: "This field is required",
+          [`${event.target.name}Error`]: `Error: ${formErrorMessages.showFieldRequired()}`,
         };
       });
     } else {
@@ -83,7 +86,7 @@ function SigninPage() {
         setSignInFormState((prev) => {
           return {
             ...prev,
-            emailAddressError: "Email is not a valid address",
+            emailAddressError: `Error: ${formErrorMessages.showValidEmailRequired()}`,
           };
         });
       }
@@ -99,7 +102,7 @@ function SigninPage() {
       setSignInFormState((prev) => {
         return {
           ...prev,
-          submitError: "Please fix any errors above",
+          submitError: `Error: ${formErrorMessages.showDefaultSubmitError()}`,
         };
       });
       return;

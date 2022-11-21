@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Logout } from "../firebase/Logout";
-import { SignUp } from "../firebase/SignUp";
-import { SignIn } from "../firebase/SignIn";
+import { Logout } from "../auth/Logout";
+import { SignUp } from "../auth/SignUp";
+import { SignIn } from "../auth/SignIn";
 import { useNavigate, Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
+import { formErrorMessages } from "../data/formErrorMessages";
 import LoadingSpinner from "./LoadingSpinner";
 import PageTitle from "./PageTitle";
 import { Container } from "./styled/utility/Container.styled";
@@ -49,7 +50,7 @@ function SignupPage() {
       setSignUpFormState((prev) => {
         return {
           ...prev,
-          [`${event.target.name}Error`]: "This field is required",
+          [`${event.target.name}Error`]: `Error: ${formErrorMessages.showFieldRequired()}`,
         };
       });
     } else {
@@ -68,7 +69,7 @@ function SignupPage() {
         setSignUpFormState((prev) => {
           return {
             ...prev,
-            emailAddressError: "Email is not a valid address",
+            emailAddressError: `Error: ${formErrorMessages.showValidEmailRequired()}`,
           };
         });
       }
@@ -79,7 +80,9 @@ function SignupPage() {
         setSignUpFormState((prev) => {
           return {
             ...prev,
-            passwordError: "Minimum password length is 6 characters",
+            passwordError: `Error: ${formErrorMessages.showMinimumPasswordLength(
+              6
+            )}`,
           };
         });
       }
@@ -90,7 +93,7 @@ function SignupPage() {
         setSignUpFormState((prev) => {
           return {
             ...prev,
-            passwordConfirmError: "Password does not match",
+            passwordConfirmError: `Error: ${formErrorMessages.showPasswordsDontMatch()}`,
           };
         });
       }
@@ -137,7 +140,7 @@ function SignupPage() {
       setSignUpFormState((prev) => {
         return {
           ...prev,
-          submitError: "Please fix any errors above",
+          submitError: `Error: ${formErrorMessages.showDefaultSubmitError()}`,
         };
       });
       return;

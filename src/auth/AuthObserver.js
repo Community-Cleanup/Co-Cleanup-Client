@@ -1,10 +1,10 @@
 // This component will wrap App.js so that we can keep track of user's auth state
 
 import React, { useEffect } from "react";
-import { firebaseAuth } from "../firebase/firebaseApp";
+import { firebaseAuth } from "./firebaseApp";
 import axios from "axios";
 
-import { useGlobalAuthState } from "./AuthContext";
+import { useGlobalAuthState } from "../utils/AuthContext";
 
 // This helper component, 'AuthObserver' as a utility is
 const AuthObserver = ({ children }) => {
@@ -15,7 +15,7 @@ const AuthObserver = ({ children }) => {
     // which includes sign-in, sign-out, and token refresh events.
     // On initial webpage load, this function below will get called twice! The first time to 'register' the observer (i.e. the listener),
     // and the second time immediately after to check change to the 'User' object in the callback below
-    // Refer to the list of calls/event raises here - https://firebase.google.com/docs/reference/unity/class/firebase/auth/firebase-auth#idtokenchanged
+    // Refer to the list of calls/event raises here - https://firebase.google.com/docs/reference/unity/class/auth/auth/firebase-auth#idtokenchanged
     return firebaseAuth.onIdTokenChanged(async (user) => {
       if (!user) {
         console.log(
@@ -54,7 +54,7 @@ const AuthObserver = ({ children }) => {
           )
           .catch((error) => {
             // When the user clicks the submit button on the Sign Up form, this 'onIdTokenChanged' function gets called multiple times,
-            // due to raised events as per the docs here - https://firebase.google.com/docs/reference/unity/class/firebase/auth/firebase-auth#idtokenchanged
+            // due to raised events as per the docs here - https://firebase.google.com/docs/reference/unity/class/auth/auth/firebase-auth#idtokenchanged
             // as such, only on Sign Up the app will first throw a 500 error when calling the above API endpoint with Axios,
             // but this "first" event raised can be safely ignored.
             if (error.response.status === 500) {
