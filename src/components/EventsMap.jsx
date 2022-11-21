@@ -144,7 +144,12 @@ function EventsMap() {
 
     function addSourceLayer() {
       // The eventsGeoJSON is added a source and given the name "points"
-      map.current.addSource("points", eventsGeoJSON);
+      try {
+        map.current.addSource("points", eventsGeoJSON);
+      } catch (error) {
+        console.log("Source of ID 'points' already added");
+      }
+
       // This "points" data is then added to the map as a layer
       // The paint properties are used to style the location icon displayed on the map
       map.current.addLayer({
@@ -172,7 +177,7 @@ function EventsMap() {
         addSourceLayer();
       });
       map.current.on("idle", () => {
-        if (!sourceLayerAdded.current) {
+        if (sourceLayerAdded.current === false) {
           addSourceLayer();
         }
       });
