@@ -1,14 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-// import "./App.css";
 import { BrowserRouter } from "react-router-dom";
 // import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // Had to comment out 'StrictMode' whilst working in development environment,
-  // as this causes some React components to re-render twice, even when in a useEffect
+  // as this causes some React components to re-render twice, even when in a useEffect with
+  // an empty dependency array.
   // See this user's post: https://github.com/axios/axios/issues/2825#issuecomment-784264784
   // <React.StrictMode>
   <BrowserRouter>

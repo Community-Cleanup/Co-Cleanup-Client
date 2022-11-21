@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useEffect } from "react";
-import { firebaseAuth } from "../firebase/firebaseApp";
+import { firebaseAuth } from "../auth/firebaseApp";
 import { useGlobalAuthState } from "./AuthContext";
 
 const axiosInstance = axios.create();

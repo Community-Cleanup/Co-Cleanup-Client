@@ -1,5 +1,6 @@
 import { firebaseAuth, createUserWithEmailAndPassword } from "./firebaseApp";
 import axios from "axios";
+import { formErrorMessages } from "../data/formErrorMessages";
 
 async function SignUp(username, emailAddress, password) {
   const res = await axios.post(
@@ -10,7 +11,7 @@ async function SignUp(username, emailAddress, password) {
   );
   if (res.data.usernameExists) {
     throw new Error(
-      `Error: The username '${username}' is already taken, please try another`
+      `Error: ${formErrorMessages.showUsernameTakenError(username)}`
     );
   }
 
@@ -30,10 +31,10 @@ async function SignUp(username, emailAddress, password) {
     console.log(`Error caught creating new user on Firebase: ${error}`);
     if (errorCode === "auth/email-already-in-use") {
       throw new Error(
-        "Error: An account with that email address already exists"
+        `Error: ${formErrorMessages.showEmailTakenError(emailAddress)}`
       );
     } else {
-      throw new Error("Error: Something unexpected occured");
+      throw new Error(`Error: ${formErrorMessages.showUnexpectedError()}`);
     }
   }
 
@@ -58,7 +59,7 @@ async function SignUp(username, emailAddress, password) {
         error
       );
 
-      throw new Error("Error: Something unexpected occured");
+      throw new Error(`Error: ${formErrorMessages.showUnexpectedError()}`);
     }
   }
 }

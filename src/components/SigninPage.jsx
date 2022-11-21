@@ -1,9 +1,12 @@
-import { SignIn } from "../firebase/SignIn";
-import { Logout } from "../firebase/Logout";
+import { SignIn } from "../auth/SignIn";
+import { Logout } from "../auth/Logout";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 import { useGlobalAuthState } from "../utils/AuthContext";
+
+import { formErrorMessages } from "../data/formErrorMessages";
+
 import LoadingSpinner from "./LoadingSpinner";
 import PageTitle from "./PageTitle";
 import { Container } from "./styled/utility/Container.styled";
@@ -18,8 +21,12 @@ import { FormMessage } from "./styled/elements/FormMessage.styled";
 import { Button } from "./styled/elements/Button.styled";
 import { theme } from "./styled/theme/Theme";
 
+import useBackSafe from "../utils/useBackSafe";
+
 function SigninPage() {
   const { authState } = useGlobalAuthState();
+
+  const { goBackSafe } = useBackSafe();
 
   const [signInFormState, setSignInFormState] = useState({
     emailAddress: "",
@@ -34,7 +41,9 @@ function SigninPage() {
 
   useEffect(() => {
     if (authState.data) {
-      navigate("/");
+      // If the user is successfully signed in, or was already sign in,
+      // try to redirect them back to the previous page (see ../utils/useBackSafe.js for comments and code source)
+      goBackSafe();
     }
     // eslint-disable-next-line
   }, [authState.data]);
@@ -53,12 +62,12 @@ function SigninPage() {
     // eslint-disable-next-line
   }, [authState.authObserverError]);
 
-  function validate(event) {
+  function checkEmptyField(event) {
     if (!event.target.value) {
       setSignInFormState((prev) => {
         return {
           ...prev,
-          [`${event.target.name}Error`]: "This field is required",
+          [`${event.target.name}Error`]: `Error: ${formErrorMessages.showFieldRequired()}`,
         };
       });
     } else {
@@ -69,7 +78,9 @@ function SigninPage() {
         };
       });
     }
+  }
 
+  function checkValidEmailSyntax(event) {
     if (`${event.target.name}` === "emailAddress") {
       // Valid email address regex pattern sourced from: https://www.w3resource.com/javascript/form/email-validation.php
       const validEmailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -77,26 +88,59 @@ function SigninPage() {
         setSignInFormState((prev) => {
           return {
             ...prev,
-            emailAddressError: "Email is not a valid address",
+            emailAddressError: `Error: ${formErrorMessages.showValidEmailRequired()}`,
+          };
+        });
+      } else {
+        setSignInFormState((prev) => {
+          return {
+            ...prev,
+            emailAddressError: "",
           };
         });
       }
     }
   }
 
-  async function handleFormSubmit(e) {
-    e.preventDefault();
+  function checkPasswordError(event) {
+    if (`${event.target.name}` === "password") {
+      if (!event.target.value) {
+        setSignInFormState((prev) => {
+          return {
+            ...prev,
+            passwordError: `Error: ${formErrorMessages.showEmptyPasswordError()}`,
+          };
+        });
+      } else {
+        setSignInFormState((prev) => {
+          return {
+            ...prev,
+            passwordError: "",
+          };
+        });
+      }
+    }
+  }
 
+  function validateOnBlur(event) {
+    checkEmptyField(event);
+
+    checkValidEmailSyntax(event);
+
+    checkPasswordError(event);
+  }
+
+  function checkAnyInvalidFields() {
     const { emailAddressError, passwordError } = signInFormState;
 
     if (emailAddressError || passwordError) {
       setSignInFormState((prev) => {
         return {
           ...prev,
-          submitError: "Please fix any errors above",
+          submitError: `Error: ${formErrorMessages.showDefaultSubmitError()}`,
         };
       });
-      return;
+      return true;
     } else {
       setSignInFormState((prev) => {
         return {
@@ -104,26 +148,33 @@ function SigninPage() {
           submitError: "",
         };
       });
+      return false;
     }
+  }
 
-    setSignInFormState((prev) => {
-      return {
-        ...prev,
-        showLoadingSpinner: true,
-      };
-    });
-    try {
-      await SignIn(signInFormState.emailAddress, signInFormState.password);
-    } catch (error) {
-      console.log(error);
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+
+    if (!checkAnyInvalidFields()) {
       setSignInFormState((prev) => {
         return {
           ...prev,
-          showLoadingSpinner: false,
-          submitError: error.message,
+          showLoadingSpinner: true,
         };
       });
-      return error;
+      try {
+        await SignIn(signInFormState.emailAddress, signInFormState.password);
+      } catch (error) {
+        console.log(error);
+        setSignInFormState((prev) => {
+          return {
+            ...prev,
+            showLoadingSpinner: false,
+            submitError: error.message,
+          };
+        });
+        return error;
+      }
     }
   }
 
@@ -158,7 +209,7 @@ function SigninPage() {
             <FormLabel htmlFor="email">Email</FormLabel>
             <Input
               w="400px"
-              onBlur={(e) => validate(e)}
+              onBlur={(e) => validateOnBlur(e)}
               type="email"
               name="emailAddress"
               id="emailAddress"
@@ -173,7 +224,7 @@ function SigninPage() {
             <FormLabel htmlFor="password">Password</FormLabel>
             <Input
               w="400px"
-              onBlur={(e) => validate(e)}
+              onBlur={(e) => validateOnBlur(e)}
               type="password"
               // placeholder="Password"
               name="password"

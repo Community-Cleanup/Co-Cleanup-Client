@@ -1,4 +1,4 @@
-import { Logout } from "../firebase/Logout";
+import { Logout } from "../auth/Logout";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";

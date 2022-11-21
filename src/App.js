@@ -11,7 +11,7 @@ import UserAccount from "./components/UserAccount";
 import AdminPage from "./components/AdminPage";
 
 import { AuthContext } from "./utils/AuthContext";
-import AuthObserver from "./utils/AuthObserver";
+import AuthObserver from "./auth/AuthObserver";
 import { AxiosInterceptor } from "./utils/AxiosInterceptor";
 import { SearchProvider } from "./utils/SearchContext";
 

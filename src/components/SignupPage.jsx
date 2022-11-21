@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Logout } from "../firebase/Logout";
-import { SignUp } from "../firebase/SignUp";
-import { SignIn } from "../firebase/SignIn";
+import { Logout } from "../auth/Logout";
+import { SignUp } from "../auth/SignUp";
+import { SignIn } from "../auth/SignIn";
 import { useNavigate, Link } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
+import { formErrorMessages } from "../data/formErrorMessages";
 import LoadingSpinner from "./LoadingSpinner";
 import PageTitle from "./PageTitle";
 import { Container } from "./styled/utility/Container.styled";
@@ -44,12 +45,12 @@ function SignupPage() {
     });
   }
 
-  function validate(event) {
+  function checkEmptyField(event) {
     if (!event.target.value) {
       setSignUpFormState((prev) => {
         return {
           ...prev,
-          [`${event.target.name}Error`]: "This field is required",
+          [`${event.target.name}Error`]: `Error: ${formErrorMessages.showFieldRequired()}`,
         };
       });
     } else {
@@ -60,7 +61,9 @@ function SignupPage() {
         };
       });
     }
+  }
 
+  function checkValidEmailSyntax(event) {
     if (`${event.target.name}` === "emailAddress") {
       // Valid email address regex pattern sourced from: https://www.w3resource.com/javascript/form/email-validation.php
       const validEmailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -68,33 +71,70 @@ function SignupPage() {
         setSignUpFormState((prev) => {
           return {
             ...prev,
-            emailAddressError: "Email is not a valid address",
+            emailAddressError: `Error: ${formErrorMessages.showValidEmailRequired()}`,
+          };
+        });
+      } else {
+        setSignUpFormState((prev) => {
+          return {
+            ...prev,
+            emailAddressError: "",
           };
         });
       }
     }
+  }
 
+  function checkPasswordError(event) {
     if (`${event.target.name}` === "password") {
       if (signUpFormState.password.length < 6) {
         setSignUpFormState((prev) => {
           return {
             ...prev,
-            passwordError: "Minimum password length is 6 characters",
+            passwordError: `Error: ${formErrorMessages.showMinimumPasswordLength(
+              6
+            )}`,
+          };
+        });
+      } else {
+        setSignUpFormState((prev) => {
+          return {
+            ...prev,
+            passwordError: "",
           };
         });
       }
     }
+  }
 
+  function checkPasswordConfirmError(event) {
     if (`${event.target.name}` === "passwordConfirm") {
       if (event.target.value !== signUpFormState.password) {
         setSignUpFormState((prev) => {
           return {
             ...prev,
-            passwordConfirmError: "Password does not match",
+            passwordConfirmError: `Error: ${formErrorMessages.showPasswordsDontMatch()}`,
+          };
+        });
+      } else {
+        setSignUpFormState((prev) => {
+          return {
+            ...prev,
+            passwordConfirmError: "",
           };
         });
       }
     }
+  }
+
+  function validateOnBlur(event) {
+    checkEmptyField(event);
+
+    checkValidEmailSyntax(event);
+
+    checkPasswordError(event);
+
+    checkPasswordConfirmError(event);
   }
 
   useEffect(() => {
@@ -118,9 +158,7 @@ function SignupPage() {
     // eslint-disable-next-line
   }, [authState.authObserverError]);
 
-  async function handleFormSubmit(e) {
-    e.preventDefault();
-
+  function checkAnyInvalidFields() {
     const {
       usernameError,
       emailAddressError,
@@ -137,10 +175,10 @@ function SignupPage() {
       setSignUpFormState((prev) => {
         return {
           ...prev,
-          submitError: "Please fix any errors above",
+          submitError: `Error: ${formErrorMessages.showDefaultSubmitError()}`,
         };
       });
-      return;
+      return true;
     } else {
       setSignUpFormState((prev) => {
         return {
@@ -148,36 +186,28 @@ function SignupPage() {
           submitError: "",
         };
       });
+      return false;
     }
+  }
 
-    setSignUpFormState((prev) => {
-      return {
-        ...prev,
-        showLoadingSpinner: true,
-      };
-    });
+  async function handleFormSubmit(e) {
+    e.preventDefault();
 
-    let signUpResponse;
-    try {
-      signUpResponse = await SignUp(
-        signUpFormState.username,
-        signUpFormState.emailAddress,
-        signUpFormState.password
-      );
-    } catch (error) {
+    if (!checkAnyInvalidFields()) {
       setSignUpFormState((prev) => {
         return {
           ...prev,
-          showLoadingSpinner: false,
-          submitError: error.message,
+          showLoadingSpinner: true,
         };
       });
-      return error;
-    }
 
-    if (signUpResponse.status === 200) {
+      let signUpResponse;
       try {
-        await SignIn(signUpFormState.emailAddress, signUpFormState.password);
+        signUpResponse = await SignUp(
+          signUpFormState.username,
+          signUpFormState.emailAddress,
+          signUpFormState.password
+        );
       } catch (error) {
         setSignUpFormState((prev) => {
           return {
@@ -187,6 +217,21 @@ function SignupPage() {
           };
         });
         return error;
+      }
+
+      if (signUpResponse.status === 200) {
+        try {
+          await SignIn(signUpFormState.emailAddress, signUpFormState.password);
+        } catch (error) {
+          setSignUpFormState((prev) => {
+            return {
+              ...prev,
+              showLoadingSpinner: false,
+              submitError: error.message,
+            };
+          });
+          return error;
+        }
       }
     }
   }
@@ -213,7 +258,7 @@ function SignupPage() {
             <FormLabel htmlFor="username">Username</FormLabel>
             <Input
               w="400px"
-              onBlur={(e) => validate(e)}
+              onBlur={(e) => validateOnBlur(e)}
               type="text"
               name="username"
               id="username"
@@ -228,7 +273,7 @@ function SignupPage() {
             <FormLabel htmlFor="email">Email</FormLabel>
             <Input
               w="400px"
-              onBlur={(e) => validate(e)}
+              onBlur={(e) => validateOnBlur(e)}
               type="email"
               placeholder="example@email.com"
               name="emailAddress"
@@ -244,7 +289,7 @@ function SignupPage() {
             <FormLabel htmlFor="password">Password</FormLabel>
             <Input
               w="400px"
-              onBlur={(e) => validate(e)}
+              onBlur={(e) => validateOnBlur(e)}
               type="password"
               name="password"
               id="password"
@@ -259,7 +304,7 @@ function SignupPage() {
             <FormLabel htmlFor="passwordConfirm">Confirm Password</FormLabel>
             <Input
               w="400px"
-              onBlur={(e) => validate(e)}
+              onBlur={(e) => validateOnBlur(e)}
               type="password"
               name="passwordConfirm"
               id="passwordConfirm"
