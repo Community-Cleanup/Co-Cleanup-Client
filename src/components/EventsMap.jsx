@@ -148,6 +148,7 @@ function EventsMap() {
         map.current.addSource("points", eventsGeoJSON);
       } catch (error) {
         console.log("Source of ID 'points' already added");
+        return;
       }
 
       // This "points" data is then added to the map as a layer
