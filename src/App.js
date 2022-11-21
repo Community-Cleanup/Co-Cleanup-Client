@@ -39,7 +39,6 @@ function App() {
                   <div>
                     <Routes>
                       <Route path="/" element={<LandingPage />} />
-                      <Route path="*" element={<Navigate to="/" />} />
                       <Route path="events" element={<EventsMap />} />
                       <Route path="create-event" element={<EventForm />} />
                       <Route path=":event" element={<EventDetails />} />
@@ -51,6 +50,7 @@ function App() {
                       <Route path="account/:user" element={<UserAccount />} />
                       <Route path="sign-up" element={<SignupPage />} />
                       <Route path="sign-in" element={<SigninPage />} />
+                      <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
                   </div>
                 )}
