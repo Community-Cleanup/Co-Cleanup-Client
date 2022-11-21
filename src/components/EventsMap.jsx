@@ -22,6 +22,7 @@ function EventsMap() {
   //The mapContainer useRef specifies that App should be drawn to the HTML page in the <div> with the attribute ref={mapContainer}.
   const mapContainer = useRef(null);
   const map = useRef(null);
+  const sourceLayerAdded = useRef(false);
 
   // The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
   const [lng, setLng] = useState(148.055033);
@@ -164,14 +165,14 @@ function EventsMap() {
     if (Object.keys(eventsGeoJSON).length > 0) {
       // There is a discovered issue where sometimes the on "load" event listener isn't firing for an unknown reason,
       // so if this were to occur and the 'addSourceLayer' function to add the "points" layer doesn't get called,
-      // we'll then call it on the below "idle" event listener, as this is guaranteed to fire
-      let sourceLayerAdded = false;
+      // we'll then call it on the below "idle" event listener, as "idle" is guaranteed to fire
+      // Refer to the list of lifecycle events in the docs: https://docs.mapbox.com/mapbox-gl-js/api/map/#events-lifecycle
       map.current.on("load", () => {
-        sourceLayerAdded = true;
+        sourceLayerAdded.current = true;
         addSourceLayer();
       });
       map.current.on("idle", () => {
-        if (!sourceLayerAdded) {
+        if (!sourceLayerAdded.current) {
           addSourceLayer();
         }
       });
