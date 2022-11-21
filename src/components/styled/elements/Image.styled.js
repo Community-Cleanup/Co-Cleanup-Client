@@ -2,7 +2,10 @@ import styled from "styled-components";
 
 export const Image = styled.img`
   margin: ${({ margin }) => margin || "0 0 0 12px"};
-  width: 100%;
+  border-radius: ${({ br }) => br || "0"};
+  height: ${({ h }) => h || "auto"};
+  margin: ${({ margin }) => margin || "0"};
+  /* width: 100%; */
   max-width: 600px;
 
   @media (max-width: 900px) {
