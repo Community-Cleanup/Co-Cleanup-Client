@@ -154,13 +154,12 @@ function EventDetails() {
             </Span>
           </h1>
           <div>
-            {authState.data === null && (
+            {!authState.data ? (
               <div>
                 <Link to={`/sign-in`}>Sign in</Link> to register
               </div>
-            )}
-            {eventDetails.attendees &&
-            !eventDetails.attendees.includes(authState.data._id) ? (
+            ) : eventDetails.attendees &&
+              !eventDetails.attendees.includes(authState.data._id) ? (
               <Button margin="0" onClick={handleRegistration}>
                 Register
               </Button>
@@ -178,6 +177,7 @@ function EventDetails() {
                 </FormMessage>
               </div>
             )}
+
             {authState.data && eventDetails.userId === authState.data._id && (
               <div>
                 <Button

@@ -141,25 +141,39 @@ function EventsMap() {
   useEffect(() => {
     console.log("eventsGeoJSON:", eventsGeoJSON);
 
+    function addSourceLayer() {
+      // The eventsGeoJSON is added a source and given the name "points"
+      map.current.addSource("points", eventsGeoJSON);
+      // This "points" data is then added to the map as a layer
+      // The paint properties are used to style the location icon displayed on the map
+      map.current.addLayer({
+        id: "points",
+        type: "circle",
+        source: "points",
+        paint: {
+          "circle-radius": 4,
+          "circle-stroke-width": 2,
+          "circle-color": "blue",
+          "circle-stroke-color": "white",
+        },
+      });
+    }
+
     // The initial if statement is used to only add the data to the map once
     // Mapbox geoJSON data can only be added to the map once, then Mapbox methods need to used filter the location data
     if (Object.keys(eventsGeoJSON).length > 0) {
-      // The eventsGeoJSON is added a source and given the name "points"
+      // There is a discovered issue where sometimes the on "load" event listener isn't firing for an unknown reason,
+      // so if this were to occur and the 'addSourceLayer' function to add the "points" layer doesn't get called,
+      // we'll then call it on the below "idle" event listener, as this is guaranteed to fire
+      let sourceLayerAdded = false;
       map.current.on("load", () => {
-        map.current.addSource("points", eventsGeoJSON);
-        // This "points" data is then added to the map as a layer
-        // The paint properties are used to style the location icon displayed on the map
-        map.current.addLayer({
-          id: "points",
-          type: "circle",
-          source: "points",
-          paint: {
-            "circle-radius": 4,
-            "circle-stroke-width": 2,
-            "circle-color": "blue",
-            "circle-stroke-color": "white",
-          },
-        });
+        sourceLayerAdded = true;
+        addSourceLayer();
+      });
+      map.current.on("idle", () => {
+        if (!sourceLayerAdded) {
+          addSourceLayer();
+        }
       });
       map.current.on("movestart", () => {
         // setFilter must be used to filter points on the map
