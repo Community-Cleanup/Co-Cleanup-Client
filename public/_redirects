@@ -1,0 +1,2 @@
+# Required by Netlify to ensure react router uses internal routes for 404 page not found errors
+/* /index.html 200

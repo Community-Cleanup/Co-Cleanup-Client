@@ -38,7 +38,7 @@ function App() {
                 {authState.axiosInterceptorRegistered && (
                   <div>
                     <Routes>
-                      <Route index element={<LandingPage />} />
+                      <Route path="/" element={<LandingPage />} />
                       <Route path="*" element={<Navigate to="/" />} />
                       <Route path="events" element={<EventsMap />} />
                       <Route path="create-event" element={<EventForm />} />
