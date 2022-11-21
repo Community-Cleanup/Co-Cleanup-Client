@@ -9,7 +9,7 @@ export const Container = styled.div`
   padding: ${({ pad }) => pad || "0"};
   position: ${({ position }) => position || "relative"};
   text-align: ${({ talign }) => talign || "left"};
-  overflow-y: auto;
+  overflow-y: ${({ overflow }) => overflow || "auto"};
 
   @media (max-width: 900px) {
     width: 300px;

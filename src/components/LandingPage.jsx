@@ -9,8 +9,10 @@ import { Container } from "./styled/utility/Container.styled";
 import { Width } from "./styled/utility/Width.styled";
 import { Button } from "./styled/elements/Button.styled";
 import { Flex } from "./styled/utility/Flex.styled";
+import { Grid } from "./styled/utility/Grid.styled";
 import { Span } from "./styled/utility/Span.styled";
 import { Image } from "./styled/elements/Image.styled";
+import { ImageBackground } from "./styled/elements/ImageBackground";
 import { theme } from "./styled/theme/Theme";
 
 function LandingPage() {
@@ -33,10 +35,8 @@ function LandingPage() {
               </h1>
               <p>
                 <Span fs="18px">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Dolor aliquid quasi, debitis voluptates odio asperiores
-                  voluptatem! Est praesentium quos, suscipit, impedit cumque,
-                  eius tenetur et sequi saepe aliquid rerum repellendus.
+                  Aiming to help communities coordinate natural disaster clean up
+                  efforts.
                 </Span>
               </p>
               <div>
@@ -59,13 +59,18 @@ function LandingPage() {
               </div>
             </Width>
             <Width>
-              <Image
-                src="./images/photos/community-group.jpg"
-              />
+              <Image h="300px" br="10px" src="./images/photos/beach-illus.jpg" />
             </Width>
           </Flex>
         </Banner>
-        <Container h="200px"></Container>
+        <Container w="100%" pad="0 2%" margin="0 auto">
+          <Grid justifycontent="center">
+            <ImageBackground url="./images/photos/rubbish-pickup.jpg" />
+            <ImageBackground url="./images/photos/flooding.jpg" />
+            <ImageBackground url="./images/photos/community-group.jpg" />
+            <ImageBackground url="./images/photos/house.jpg" />
+          </Grid>
+        </Container>
         <Footer />
       </Flex>
     </PageTitle>
