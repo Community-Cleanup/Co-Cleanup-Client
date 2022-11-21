@@ -28,6 +28,9 @@ export const formErrorMessages = {
   showUnexpectedError: () => {
     return "Something unexpected occured";
   },
+  showEmptyPasswordError: () => {
+    return "Password cannot be blank";
+  },
   showWrongPasswordError: () => {
     return "Incorrect password";
   },

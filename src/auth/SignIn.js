@@ -24,6 +24,8 @@ async function SignIn(emailAddress, password) {
       throw new Error(
         `Error: ${formErrorMessages.showEmailNotFoundError(emailAddress)}`
       );
+    } else if (errorCode === "auth/internal-error") {
+      throw new Error(`Error: ${formErrorMessages.showUnexpectedError()}`);
     } else {
       throw new Error(error);
     }
