@@ -1,19 +1,24 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import mapboxgl from "mapbox-gl";
-import { useGlobalSearchContext } from "../utils/SearchContext";
-import { formatDate } from "../utils/formatDate";
+// React JSX Components
 import PageTitle from "./PageTitle";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
+// styled components saved in the utilities folder apply styling to containers
+// styled components saved in the elements folder apply styling to individual elements like buttons etc.
+import { theme } from "./styled/theme/Theme";
 import { Container } from "./styled/utility/Container.styled";
 import { Flex } from "./styled/utility/Flex.styled";
 import { FlexRow } from "./styled/utility/FlexRow.styled";
 import { Grid } from "./styled/utility/Grid.styled";
 import { Span } from "./styled/utility/Span.styled";
 import { CardSm } from "./styled/utility/CardSm.styled";
-import { theme } from "./styled/theme/Theme";
+// utils functions
+import { useGlobalSearchContext } from "../utils/SearchContext";
+import { formatDate } from "../utils/formatDate";
+// mapbox token
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
 function EventsMap() {
@@ -28,11 +33,17 @@ function EventsMap() {
   const [lng, setLng] = useState(148.055033);
   const [lat, setLat] = useState(-25.978749);
   const [zoom, setZoom] = useState(3);
+  // eventsAPIData saves all of the events in state
   const [eventsAPIData, setEventsAPIData] = useState([]);
+  // eventsGeoJSON is all of the events in geoJSON format saved to state
   const [eventsGeoJSON, setEventsGeoJSON] = useState([]);
+  // mapFilteredEvents are the events which the Mapbox map renders when the user navigates around the map
+  // this is used to only display listing in the sidebar that are displayed on the map
   const [mapFilteredEvents, setMapFilteredEvents] = useState([]);
+  // sideBarListings is used to show events in the side bar and on the map
   const [sidebarListings, setSidebarListings] = useState([]);
 
+  // popup is a mapbox method that creates a popup on the map
   const popup = new mapboxgl.Popup({
     closeButton: false,
   });
@@ -208,7 +219,7 @@ function EventsMap() {
         // Change the cursor style as a UI indicator.
         map.current.getCanvas().style.cursor = "pointer";
 
-        // Populate the popup and set its coordinates based on the feature.
+        // When mouse enters a event feature marker -> populate the popup and set its coordinates based on the feature.
         const feature = e.features[0];
         popup
           .setLngLat(feature.geometry.coordinates)
@@ -216,11 +227,13 @@ function EventsMap() {
           .addTo(map.current);
       });
 
+      // removes popup when mouse leaves the event feature marker
       map.current.on("mouseleave", "points", () => {
         map.current.getCanvas().style.cursor = "";
         popup.remove();
       });
 
+      // when the event feature marker is clicked the user is navigated to the event details page
       map.current.on("click", "points", (e) => {
         console.log(e.features[0].properties.title);
         navigate("/" + e.features[0].properties.id);
@@ -252,7 +265,6 @@ function EventsMap() {
 
     // This array is then used to update the sidebarListings state
     // sidebarListings is later mapped over to display all listings filtered by the searchBar
-    console.log("filteredArray:", searchFiltered);
     setSidebarListings(searchFiltered);
 
     // The below if statement is used to update the map with the features filtered by the searchBar
@@ -269,6 +281,8 @@ function EventsMap() {
     }
   }, [mapFilteredEvents, searchBar]);
 
+  // function to show the popup
+  // this function is used with onMouseOver for the side bar event card
   function showPopup(event) {
     popup
       .setLngLat(event.geometry.coordinates)
@@ -276,10 +290,13 @@ function EventsMap() {
       .addTo(map.current);
   }
 
+  // function to remove the popup
+  // this function is used with onMouseOut for the side bar event card
   function removePopup() {
     popup.remove();
   }
 
+  // styled components are passed props to help fine tune different css properties
   return (
     <PageTitle title="Find Events">
       <NavBar />
@@ -287,6 +304,7 @@ function EventsMap() {
         <FlexRow>
           <Container h="90vh" w="50%" pad="16px" bg={theme.colors.navbar}>
             <Grid>
+              {/* sidbarListings is mapped over to display all of the filtered listings in the side bar */}
               {sidebarListings.length ? (
                 sidebarListings.map((event) => {
                   return (
@@ -296,6 +314,7 @@ function EventsMap() {
                       w="100%"
                       bs="true"
                     >
+                      {/* event listeners are used to display popups on the map */}
                       <div
                         onMouseOver={() => showPopup(event)}
                         onMouseOut={removePopup}
@@ -329,6 +348,8 @@ function EventsMap() {
               )}
             </Grid>
 
+            {/* This message is displayed when the map first loads */}
+            {/* This mapbox methods require the map to be panned so data on the map can be queried */}
             {!sidebarListings.length && (
               <Container
                 margin="100px 0 0"
@@ -342,13 +363,14 @@ function EventsMap() {
               </Container>
             )}
           </Container>
+
+          {/* Mapbox containers for map */}
           <Container h="90vh" w="50%">
             <Container
               h="100%"
               w="100%"
               position="absolute"
               ref={mapContainer}
-              // className="map-container"
             />
           </Container>
         </FlexRow>

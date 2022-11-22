@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { theme } from "../theme/Theme";
 
+// Textarea is the default Textarea style
 export const Textarea = styled.textarea`
   border: 1px solid ${theme.colors.inputBorder};
   border-radius: 4px;

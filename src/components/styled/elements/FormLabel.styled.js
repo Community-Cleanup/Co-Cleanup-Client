@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+//FormLabel is used to style form input field labels
 export const FormLabel = styled.label`
   display: block;
   font-size: 12px;

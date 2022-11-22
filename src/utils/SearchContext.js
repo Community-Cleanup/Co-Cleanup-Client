@@ -1,13 +1,13 @@
+//Search Context creates a global state for the search bar input field
+// This is so that the search bar state can be passed to the EventsMap component and used for filtering events
+// SearchProvider wraps all routes in App.js to provide {searchBar, setSearchBar} to the application
+
 import React, { useState, useContext, useEffect } from "react";
 
 const SearchContext = React.createContext();
 
 const SearchProvider = ({ children }) => {
   const [searchBar, setSearchBar] = useState("");
-
-  useEffect(() => {
-    console.log("Searchbar", searchBar);
-  }, [searchBar]);
 
   return (
     <SearchContext.Provider value={{ searchBar, setSearchBar }}>

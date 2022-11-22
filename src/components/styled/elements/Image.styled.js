@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+//Image is used to style any img elements
 export const Image = styled.img`
   margin: ${({ margin }) => margin || "0 0 0 12px"};
   border-radius: ${({ br }) => br || "0"};

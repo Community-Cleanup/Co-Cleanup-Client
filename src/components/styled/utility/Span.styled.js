@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+// Used when text needs additional inline styling
 export const Span = styled.span`
   display: inline-block;
   color: ${({ color }) => color || "black"};

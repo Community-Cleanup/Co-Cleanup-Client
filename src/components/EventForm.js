@@ -1,17 +1,16 @@
-// Libraries
-//import axios from "axios";
 // As function 'createEvent' calls a protected API route, we need to use
-// our Axios Interceptor to add the ID token to the 'createEvent' POST request header.
+// Axios Interceptor to add the ID token to the 'createEvent' POST request header.
 import axios from "../utils/AxiosInterceptor";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
-//Components
+// React JSX Components
 import PageTitle from "./PageTitle";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import Geocoder from "./Geocoder";
-
+// styled components saved in the utilities folder apply styling to containers
+// styled components saved in the elements folder apply styling to individual elements like buttons etc.
 import { theme } from "./styled/theme/Theme";
 import { Flex } from "./styled/utility/Flex.styled";
 import { CardLg } from "./styled/utility/CardLg.styled";
@@ -21,6 +20,8 @@ import { FormLabel } from "./styled/elements/FormLabel.styled";
 import { Input } from "./styled/elements/Input.styled";
 import { Textarea } from "./styled/elements/Textarea.sytled";
 import { Button } from "./styled/elements/Button.styled";
+
+import { getEventDetails } from "../utils/getEventDetails";
 
 // Form component used to create and edit an event
 function EventForm() {
@@ -49,27 +50,17 @@ function EventForm() {
 
   // When the form is used to update an event the 'event' variable will not be undefined
   // when the 'event' variable is not undefined it will run the getEventDetails() function when the page loads
+  // This function makes a request to the server to retrieve the event data
+  // This event data is then used to update the state using setEventData
   useEffect(() => {
     if (event) {
-      getEventDetails();
+      getEventDetails(event, setEventData);
     }
     // eslint-disable-next-line
   }, []);
 
-  // This function makes a request to the server to retrieve the event data
-  // This event data is then used to update the state using setEventData
-  async function getEventDetails() {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/api/events/${event}`
-      );
-      setEventData(res.data);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
   // This function sets state for the controlled form components
+  // Any changes to the input fields will update eventData state
   function handleChange(event) {
     setEventData((prev) => {
       return {
@@ -81,6 +72,7 @@ function EventForm() {
 
   // createEvent() function makes a request to the server to create a new event in the database
   // After the event is created, the user is navigated to the home page
+  // try/catch is used to catch any errors and log to the console
   async function createEvent(e) {
     e.preventDefault();
     try {
@@ -129,6 +121,7 @@ function EventForm() {
 
   // Create/Update event form jsx
   // Controlled components with onChange setting state
+  // styled components are passed props to help fine tune different css properties
   return (
     <PageTitle title="Create Event">
       <NavBar />
@@ -158,8 +151,10 @@ function EventForm() {
                 onChange={(event) => handleChange(event)}
               />
               <FormLabel>Address Search</FormLabel>
+
               {/* Geocoder component  */}
               <Geocoder setEventData={setEventData} />
+
               <FormLabel>Address</FormLabel>
               <CardLg pad="16px 20px">
                 <Span fs="12px" fw="500" color={theme.colors.navigationLink}>
@@ -178,6 +173,7 @@ function EventForm() {
                 value={eventData.description}
                 onChange={(event) => handleChange(event)}
               ></Textarea>
+
               {/* Ternary based on if an event is defined. This form is used to both update and save an event*/}
               {event ? (
                 <Button onClick={updateEvent}>Update Event</Button>
