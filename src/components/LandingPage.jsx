@@ -35,8 +35,8 @@ function LandingPage() {
               </h1>
               <p>
                 <Span fs="18px">
-                  Aiming to help communities coordinate natural disaster clean up
-                  efforts.
+                  Aiming to help communities coordinate natural disaster clean
+                  up efforts.
                 </Span>
               </p>
               <div>
@@ -49,17 +49,22 @@ function LandingPage() {
                 </Button>
                 {!authState.data && (
                   <Button
+                    onClick={() => navigate("/sign-up")}
                     w="130px"
                     margin="32px 0 0"
                     bg={theme.colors.buttonTwo}
                   >
-                    <Link to="sign-up">Sign Up</Link>
+                    Sign Up
                   </Button>
                 )}
               </div>
             </Width>
             <Width>
-              <Image h="300px" br="10px" src="./images/photos/beach-illus.jpg" />
+              <Image
+                h="300px"
+                br="10px"
+                src="./images/photos/beach-illus.jpg"
+              />
             </Width>
           </Flex>
         </Banner>
