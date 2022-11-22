@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+// Banner is used for title/banner sections of pages i.e landing page
 export const Banner = styled.div`
   background-color: ${({ bg }) => bg || "white"};
   width: 100%;

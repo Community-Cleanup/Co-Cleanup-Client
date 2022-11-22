@@ -1,5 +1,9 @@
+// This color palette was imported to make it easier to choose colors
 import { Palette } from "./Palette";
 
+// these colors control all of the colors used in the app
+// every color is selected from one of the colors in this object
+// combined with the color palette, this makes choosing and changing colors quick and easy
 export const theme = {
   colors: {
     cardOne: Palette.color.yellowOC0,

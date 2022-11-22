@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { theme } from "../theme/Theme";
 
+// Input is the default input field style
 export const Input = styled.input`
   border: 1px solid ${theme.colors.inputBorder};
   border-radius: 4px;

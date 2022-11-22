@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+// Container is a general purpose container that is highly customisable, 
+// it is used often throughout the app to apply margin, text alignment, overflow etc
 export const Container = styled.div`
   background-color: ${({ bg }) => bg || "white"};
   border-radius: ${({ br }) => br || "0"};

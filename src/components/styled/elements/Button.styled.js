@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { theme } from "../theme/Theme";
 
+//Button is the default button element across the application
 export const Button = styled.button`
   cursor: pointer;
   color: ${({ color }) => color || "white"};

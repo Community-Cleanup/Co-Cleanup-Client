@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { theme } from "../theme/Theme";
 
+// used for the Navigation bar and footer
 export const StyledNavbar = styled.nav`
   background-color: ${({ bg }) => bg || theme.colors.navbar};
   color: ${({ color }) => color || "black"};

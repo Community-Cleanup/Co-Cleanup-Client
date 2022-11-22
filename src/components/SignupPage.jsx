@@ -236,6 +236,7 @@ function SignupPage() {
     }
   }
 
+  // styled components are passed props to help fine tune different css properties
   return (
     <PageTitle title="Sign Up">
       <Container margin="120px auto">
