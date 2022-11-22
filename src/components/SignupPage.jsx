@@ -220,6 +220,10 @@ function SignupPage() {
       }
 
       if (signUpResponse.status === 200) {
+        // Probably not really necessary to force a Sign In here, as the functionality in
+        // '../auth/SignUp.js' should trigger an automatic Sign In as per stated in the docs
+        // for 'createUserWithEmailAndPassword' here: https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#createuserwithemailandpassword
+        // But it doesn't hurt.
         try {
           await SignIn(signUpFormState.emailAddress, signUpFormState.password);
         } catch (error) {

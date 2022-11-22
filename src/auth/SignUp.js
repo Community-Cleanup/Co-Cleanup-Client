@@ -2,21 +2,29 @@ import { firebaseAuth, createUserWithEmailAndPassword } from "./firebaseApp";
 import axios from "axios";
 import { formErrorMessages } from "../data/formErrorMessages";
 
-async function SignUp(username, emailAddress, password) {
-  const res = await axios.post(
-    `${process.env.REACT_APP_SERVER_URL}/api/users/check-username-uniqueness`,
-    {
-      username: username,
-    }
-  );
-  if (res.data.usernameExists) {
+async function checkUsernameUniqueness(username) {
+  let res = null;
+  try {
+    res = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/api/users/check-username-uniqueness`,
+      {
+        username: username,
+      }
+    );
+  } catch (error) {
     throw new Error(
       `Error: ${formErrorMessages.showUsernameTakenError(username)}`
     );
   }
 
-  // Use Firebase client SDK to try and create a new user on Firebase with email and password
-  // and if successful, return the ID token of the user and add their username to their profile
+  if (res.data.usernameExists) {
+    throw new Error(
+      `Error: ${formErrorMessages.showUsernameTakenError(username)}`
+    );
+  }
+}
+
+async function createUserOnFirebase(emailAddress, password) {
   let token = "";
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -26,6 +34,7 @@ async function SignUp(username, emailAddress, password) {
     );
     const user = userCredential.user;
     token = await user.getIdToken();
+    return token;
   } catch (error) {
     const errorCode = error.code;
     console.log(`Error caught creating new user on Firebase: ${error}`);
@@ -37,31 +46,57 @@ async function SignUp(username, emailAddress, password) {
       throw new Error(`Error: ${formErrorMessages.showUnexpectedError()}`);
     }
   }
+}
 
-  if (token) {
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/api/users/create-current-user`,
-        {
-          username: username,
+async function createUserOnMongoDB(username, token) {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/api/users/create-current-user`,
+      {
+        username: username,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      }
+    );
 
-      return res;
-    } catch (error) {
-      console.log(
-        `Error in POST to ${process.env.REACT_APP_SERVER_URL}/api/users/create-current-user with error data:`,
-        error
-      );
+    return res;
+  } catch (error) {
+    console.log(
+      `Error in POST to ${process.env.REACT_APP_SERVER_URL}/api/users/create-current-user with error data:`,
+      error
+    );
 
-      throw new Error(`Error: ${formErrorMessages.showUnexpectedError()}`);
-    }
+    throw new Error(`Error: ${formErrorMessages.showUnexpectedError()}`);
   }
+}
+
+// 'SignUp' function used by our Sign Up form.
+// This function conducts the following in order (assuming each step is successful):
+// 1. Check that the user's chosen username is unique in MongoDB
+// 2. Create the new user's account on Firebase Auth (client) with the email address and password
+// 3.
+async function SignUp(username, emailAddress, password) {
+  // Firstly we need to query MongoDB on our Server API app to confirm that the
+  // user's chosen username is unique (i.e. hasn't already been taken by another user).
+  // This needs to be done first because otherwise in the following functions, the
+  // new user is created successfully on Firebase, but can't also be created on our MongoDB user model,
+  // then there's going to be a bad account unsync issue between Firebase's database and our MongoDB database
+
+  await checkUsernameUniqueness(username);
+
+  // Use Firebase client SDK to try and create a new user on Firebase with their chosen email and password
+  // and if successful, return the ID token of the user and then automatically sign in the user.
+  // Note that we're not storing the user's chosen username with Firebase directly.
+  const token = await createUserOnFirebase(emailAddress, password);
+
+  let response = null;
+  if (token) {
+    response = await createUserOnMongoDB(username, token);
+  }
+  return response;
 }
 
 export { SignUp };
