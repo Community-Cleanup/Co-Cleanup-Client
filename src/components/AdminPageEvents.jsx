@@ -1,28 +1,19 @@
 import React, { useState } from "react";
 import axios from "../utils/AxiosInterceptor";
 
-import PageTitle from "./PageTitle";
-import NavBar from "./NavBar";
-import Footer from "./Footer";
-import ItemCard from "./ItemCard";
-import ModalConfirm from "./ModalConfirm";
 import { Margin } from "./styled/utility/Margin.styled";
-import { Container } from "./styled/utility/Container.styled";
 import { CardLg } from "./styled/utility/CardLg.styled";
 import { Fieldset } from "./styled/utility/Fieldset.styled";
 import { Input } from "./styled/elements/Input.styled";
 import { Button } from "./styled/elements/Button.styled";
-import { FormMessage } from "./styled/elements/FormMessage.styled";
-import { Span } from "./styled/utility/Span.styled";
 import { Flex } from "./styled/utility/Flex.styled";
-import { FlexRow } from "./styled/utility/FlexRow.styled";
-import { Grid } from "./styled/utility/Grid.styled";
+import { Width } from "./styled/utility/Width.styled";
 import { theme } from "./styled/theme/Theme";
 import AdminEventsItemCard from "./AdminEventsItemCard";
+import AdminShowComments from "./AdminShowComments";
 
-import LoadingSpinner from "./LoadingSpinner";
+import Spinner from "./Spinner";
 import AdminDeleteEventForm from "./AdminDeleteEventForm";
-import AdminPageEventComment from "./AdminPageEventComment";
 import { formatDate } from "../utils/formatDate";
 import { Link } from "react-router-dom";
 
@@ -78,7 +69,9 @@ function AdminPageEvents() {
                 onChange={(e) => setEventSearchBar(e.target.value)}
               />
               {showLoadingSpinner ? (
-                <LoadingSpinner />
+                <Width>
+                  <Spinner />
+                </Width>
               ) : (
                 <Button
                   bg={theme.colors.buttonOne}
@@ -110,6 +103,18 @@ function AdminPageEvents() {
                       }
                       date={formatDate(foundEvent.date)}
                       address={foundEvent.address}
+                      adminDeleteEventForm={
+                        <AdminDeleteEventForm
+                          foundEventUID={foundEvent._id}
+                          foundEventTitle={foundEvent.title}
+                        />
+                      }
+                      adminShowComments={
+                        <AdminShowComments
+                          foundEventUID={foundEvent._id}
+                          foundEventComments={foundEvent.comments}
+                        />
+                      }
                     />
 
                     // <>
@@ -148,46 +153,6 @@ function AdminPageEvents() {
             ))}
         </CardLg>
       </Margin>
-
-      {showFoundEventResults &&
-        (!foundEvents.length ? (
-          <p>No results found</p>
-        ) : (
-          <>
-            {foundEvents.map((foundEvent, index) => {
-              return (
-                <>
-                  <div key={index}>
-                    <h3>Event:</h3>
-                    <p>
-                      Title:{" "}
-                      <Link to={`/${foundEvent._id}`}>{foundEvent.title}</Link>
-                    </p>
-                    <p>Date of Event: {formatDate(foundEvent.date)}</p>
-                    <p>Address: {foundEvent.address}</p>
-                    <AdminDeleteEventForm foundEventUID={foundEvent._id} />
-                    {foundEvent.comments.map((eventComment, index) => {
-                      return (
-                        <>
-                          <div key={index}>
-                            <AdminPageEventComment
-                              foundEventUID={foundEvent._id}
-                              eventCommentIndex={index}
-                              eventCommentUsername={eventComment.username}
-                              eventCommentComment={eventComment.comment}
-                              eventCommentTime={eventComment.time}
-                            />
-                          </div>
-                        </>
-                      );
-                    })}
-                  </div>
-                  <br />
-                </>
-              );
-            })}
-          </>
-        ))}
     </>
   );
 }

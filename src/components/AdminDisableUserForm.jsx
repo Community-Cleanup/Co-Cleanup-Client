@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "../utils/AxiosInterceptor";
 
-import { Margin } from "./styled/utility/Margin.styled";
-import { CardLg } from "./styled/utility/CardLg.styled";
 import { Fieldset } from "./styled/utility/Fieldset.styled";
-import { Input } from "./styled/elements/Input.styled";
 import { Button } from "./styled/elements/Button.styled";
-import { FormMessage } from "./styled/elements/FormMessage.styled";
 import { Span } from "./styled/utility/Span.styled";
-import { Flex } from "./styled/utility/Flex.styled";
-import { FlexRow } from "./styled/utility/FlexRow.styled";
-import { Grid } from "./styled/utility/Grid.styled";
 import { theme } from "./styled/theme/Theme";
 import ModalConfirm from "./ModalConfirm";
 
@@ -99,7 +92,7 @@ function AdminDisableUserForm({
                   </Button>
                   {disableUserModalOpen && (
                     <ModalConfirm
-                      message={`You are about to ENABLE this user's account: ${foundUserUsername}.`}
+                      message={`You are about to ENABLE this user's account: "${foundUserUsername}".`}
                       buttonYesFunction={handleConfirmationSubmit}
                       buttonYesText="Yes, enable account"
                       buttonNoFunction={() => setDisableUserModalOpen(false)}
@@ -118,7 +111,7 @@ function AdminDisableUserForm({
                   </Button>
                   {disableUserModalOpen && (
                     <ModalConfirm
-                      message={`You are about to DISABLE this user's account: ${foundUserUsername}.`}
+                      message={`You are about to DISABLE this user's account: "${foundUserUsername}".`}
                       buttonYesFunction={handleConfirmationSubmit}
                       buttonYesText="Yes, disable account"
                       buttonNoFunction={() => setDisableUserModalOpen(false)}
