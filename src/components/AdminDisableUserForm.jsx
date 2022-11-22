@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from "react";
 import axios from "../utils/AxiosInterceptor";
 
-import LoadingSpinner from "./LoadingSpinner";
+import { Margin } from "./styled/utility/Margin.styled";
+import { CardLg } from "./styled/utility/CardLg.styled";
+import { Fieldset } from "./styled/utility/Fieldset.styled";
+import { Input } from "./styled/elements/Input.styled";
+import { Button } from "./styled/elements/Button.styled";
+import { FormMessage } from "./styled/elements/FormMessage.styled";
+import { Span } from "./styled/utility/Span.styled";
+import { Flex } from "./styled/utility/Flex.styled";
+import { FlexRow } from "./styled/utility/FlexRow.styled";
+import { Grid } from "./styled/utility/Grid.styled";
+import { theme } from "./styled/theme/Theme";
+import ModalConfirm from "./ModalConfirm";
 
 import { useGlobalAuthState } from "../utils/AuthContext";
 
-function AdminDisableUserForm({ foundUserUID, foundUserIsDisabled }) {
+function AdminDisableUserForm({
+  foundUserUID,
+  foundUserIsDisabled,
+  foundUserUsername,
+}) {
   const { authState } = useGlobalAuthState();
 
   const loggedInUserUID = authState.data._id;
 
   const [userIsDisabledState, setUserIsDisabledState] =
     useState(foundUserIsDisabled);
-
-  const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
+  const [disableUserModalOpen, setDisableUserModalOpen] = useState(false);
 
   useEffect(() => {
     setUserIsDisabledState(foundUserIsDisabled);
@@ -25,12 +39,10 @@ function AdminDisableUserForm({ foundUserUID, foundUserIsDisabled }) {
     return loggedInUserUID === foundUserUID ? true : false;
   }
 
-  function handleFormSubmit(e) {
+  async function handleConfirmationSubmit(e) {
     e.preventDefault();
 
-    setShowLoadingSpinner(true);
-
-    updateDisabledStatus();
+    await updateDisabledStatus();
   }
 
   async function updateDisabledStatus() {
@@ -54,47 +66,70 @@ function AdminDisableUserForm({ foundUserUID, foundUserIsDisabled }) {
         );
         setUserIsDisabledState(true);
       }
-      setShowLoadingSpinner(false);
+      setDisableUserModalOpen(false);
     } catch (e) {
       console.log(e);
-      setShowLoadingSpinner(false);
+      setDisableUserModalOpen(false);
     }
   }
 
   return (
     <>
-      <form onSubmit={handleFormSubmit}>
-        <fieldset>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setDisableUserModalOpen(true);
+        }}
+      >
+        <Fieldset>
           {preventChange() ? (
-            <h3>You can't disable your own user account!</h3>
+            <Span color={theme.colors.warningText}>
+              You can't disable your own user account!
+            </Span>
           ) : (
             <>
               {userIsDisabledState ? (
                 <>
-                  <p style={{ color: "red" }}>
-                    This user's account is currently DISABLED
-                  </p>
-                  {showLoadingSpinner ? (
-                    <LoadingSpinner />
-                  ) : (
-                    <button type="submit">Enable User</button>
+                  <Span color={theme.colors.warningText}>
+                    This user's account <br />
+                    is currently DISABLED
+                  </Span>
+                  <Button type="submit" bg={theme.colors.buttonTwo}>
+                    Enable User
+                  </Button>
+                  {disableUserModalOpen && (
+                    <ModalConfirm
+                      message={`You are about to ENABLE this user's account: ${foundUserUsername}.`}
+                      buttonYesFunction={handleConfirmationSubmit}
+                      buttonYesText="Yes, enable account"
+                      buttonNoFunction={() => setDisableUserModalOpen(false)}
+                      buttonNoText="No, don't enable"
+                    />
                   )}
                 </>
               ) : (
                 <>
-                  <p style={{ color: "green" }}>
-                    This user's account is currently ENABLED
-                  </p>
-                  {showLoadingSpinner ? (
-                    <LoadingSpinner />
-                  ) : (
-                    <button type="submit">Disable User</button>
+                  <Span color={theme.colors.okText}>
+                    This user's account <br />
+                    is currently ENABLED
+                  </Span>
+                  <Button type="submit" bg={theme.colors.buttonThree}>
+                    Disable User
+                  </Button>
+                  {disableUserModalOpen && (
+                    <ModalConfirm
+                      message={`You are about to DISABLE this user's account: ${foundUserUsername}.`}
+                      buttonYesFunction={handleConfirmationSubmit}
+                      buttonYesText="Yes, disable account"
+                      buttonNoFunction={() => setDisableUserModalOpen(false)}
+                      buttonNoText="No, don't disable"
+                    />
                   )}
                 </>
               )}
             </>
           )}
-        </fieldset>
+        </Fieldset>
       </form>
     </>
   );

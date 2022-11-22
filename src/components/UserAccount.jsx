@@ -99,12 +99,14 @@ function UserAccount() {
           <FlexRow align="center" justify="space-between">
             <h2>User Details</h2>
             {authState.data.isAdmin && (
-              <Button
-                bg={theme.colors.buttonTwo}
-                onClick={() => navigate("/admin")}
-              >
-                Admin Portal
-              </Button>
+              <>
+                <Button
+                  bg={theme.colors.buttonThree}
+                  onClick={() => navigate("/admin")}
+                >
+                  View Admin Dashboard
+                </Button>
+              </>
             )}
           </FlexRow>
           <Flex align="flex-start">
