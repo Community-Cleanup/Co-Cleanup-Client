@@ -101,8 +101,11 @@ function NavBar() {
           <Navigation margin="0 8px 0">
             <Link to="/sign-in">Sign In</Link>
           </Navigation>
-          <Button bg={theme.colors.buttonTwo}>
-            <Link to="/sign-up">Sign Up</Link>
+          <Button
+            onClick={() => navigate("/sign-up")}
+            bg={theme.colors.buttonTwo}
+          >
+            Sign Up
           </Button>
         </div>
       ) : (
