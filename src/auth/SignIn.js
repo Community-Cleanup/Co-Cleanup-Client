@@ -10,6 +10,12 @@ import { formErrorMessages } from "../data/formErrorMessages";
 // as our Firebase auth observer/listener setup in `../auth/AuthObserver.js` component will
 // magically automatically detect the new ID token from Firebase, which the component will then use Axios to send the token up to the server API.
 
+// Note regarding disabled user accounts:
+// Even if the user's account had been disabled by an administrator of Co Cleanup, the Firebase sign in process below will still succeed.
+// It is only when our auth observer/listener in './AuthObserver.js' detects this successful sign in event, it will query our Server API to retrieve the
+// user's document from MongoDB, at which point the Server API will respond with an error response that the account is disabled. Then the user's details
+// won't be added our global auth state in React, and a logout will be forced on '../components/SigninPage.jsx' to remove the token.
+
 async function SignIn(emailAddress, password) {
   try {
     const signInResult = await signInWithEmailAndPassword(
