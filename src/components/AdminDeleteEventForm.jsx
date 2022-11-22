@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import axios from "../utils/AxiosInterceptor";
 
-import LoadingSpinner from "./LoadingSpinner";
+import { Fieldset } from "./styled/utility/Fieldset.styled";
+import { Button } from "./styled/elements/Button.styled";
+import { Span } from "./styled/utility/Span.styled";
+import { theme } from "./styled/theme/Theme";
+import ModalConfirm from "./ModalConfirm";
 
-function AdminDeleteEventForm({ foundEventUID }) {
-  const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
-
+function AdminDeleteEventForm({ foundEventUID, foundEventTitle }) {
   const [eventDeleted, setEventDeleted] = useState(false);
 
-  function handleFormSubmit(e) {
+  const [deleteEventModalOpen, setDeleteEventModalOpen] = useState(false);
+
+  async function handleConfirmationSubmit(e) {
     e.preventDefault();
 
-    setEventDeleted(false);
-
-    setShowLoadingSpinner(true);
-
-    deleteEvent();
+    await deleteEvent();
   }
 
   async function deleteEvent() {
@@ -24,27 +24,43 @@ function AdminDeleteEventForm({ foundEventUID }) {
         `${process.env.REACT_APP_SERVER_URL}/api/admin/events/${foundEventUID}`
       );
       setEventDeleted(true);
-      setShowLoadingSpinner(false);
+      setDeleteEventModalOpen(false);
     } catch (e) {
       console.log(e);
-      setShowLoadingSpinner(false);
+      setDeleteEventModalOpen(false);
     }
   }
 
   return (
     <>
-      <form onSubmit={handleFormSubmit}>
-        <fieldset>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setDeleteEventModalOpen(true);
+        }}
+      >
+        <Fieldset>
           <>
-            {showLoadingSpinner ? (
-              <LoadingSpinner />
-            ) : eventDeleted ? (
-              <p style={{ color: "red" }}>This event has been deleted</p>
+            {eventDeleted ? (
+              <Span color={theme.colors.warningText}>Event deleted</Span>
             ) : (
-              <button type="submit">Delete This Event</button>
+              <>
+                <Button type="submit" bg={theme.colors.buttonThree}>
+                  Delete This Event
+                </Button>
+                {deleteEventModalOpen && (
+                  <ModalConfirm
+                    message={`You are about to delete this event: "${foundEventTitle}".`}
+                    buttonYesFunction={handleConfirmationSubmit}
+                    buttonYesText="Yes, delete event"
+                    buttonNoFunction={() => setDeleteEventModalOpen(false)}
+                    buttonNoText="No, don't delete"
+                  />
+                )}
+              </>
             )}
           </>
-        </fieldset>
+        </Fieldset>
       </form>
     </>
   );

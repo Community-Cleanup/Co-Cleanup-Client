@@ -1,13 +1,9 @@
 import React from "react";
 import { theme } from "./styled/theme/Theme";
-import { formatDate } from "../utils/formatDate";
 import { CardLg } from "./styled/utility/CardLg.styled";
-import { CardSm } from "./styled/utility/CardSm.styled";
 import { Flex } from "./styled/utility/Flex.styled";
 import { FlexRow } from "./styled/utility/FlexRow.styled";
 import { Span } from "./styled/utility/Span.styled";
-import { Button } from "./styled/elements/Button.styled";
-import { Container } from "./styled/utility/Container.styled";
 
 function AdminEventsItemCard(props) {
   return (
@@ -35,9 +31,8 @@ function AdminEventsItemCard(props) {
         </Flex>
 
         <Flex direction="column" align="flex-end" margin="10px" w="200px">
-          {props.adminDisableUserForm}
-
-          {props.adminAssignAdminForm}
+          {props.adminDeleteEventForm}
+          {props.adminShowComments}
         </Flex>
       </FlexRow>
     </CardLg>

@@ -1,21 +1,25 @@
 import React, { useState } from "react";
 import axios from "../utils/AxiosInterceptor";
 
-import LoadingSpinner from "./LoadingSpinner";
+import { Fieldset } from "./styled/utility/Fieldset.styled";
+import { Button } from "./styled/elements/Button.styled";
+import { Span } from "./styled/utility/Span.styled";
+import { theme } from "./styled/theme/Theme";
+import ModalConfirm from "./ModalConfirm";
 
-function AdminDeleteCommentForm({ foundEventUID, eventCommentIndex }) {
-  const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
-
+function AdminDeleteCommentForm({
+  foundEventUID,
+  eventCommentIndex,
+  commentUsername,
+  commentTime,
+}) {
   const [commentDeleted, setCommentDeleted] = useState(false);
+  const [deleteCommentModalOpen, setDeleteCommentModalOpen] = useState(false);
 
-  function handleFormSubmit(e) {
+  async function handleConfirmationSubmit(e) {
     e.preventDefault();
 
-    setCommentDeleted(false);
-
-    setShowLoadingSpinner(true);
-
-    deleteComment();
+    await deleteComment();
   }
 
   async function deleteComment() {
@@ -25,27 +29,41 @@ function AdminDeleteCommentForm({ foundEventUID, eventCommentIndex }) {
         { eventCommentIndex: eventCommentIndex }
       );
       setCommentDeleted(true);
-      setShowLoadingSpinner(false);
+      setDeleteCommentModalOpen(false);
     } catch (e) {
       console.log(e);
-      setShowLoadingSpinner(false);
+      setDeleteCommentModalOpen(false);
     }
   }
 
   return (
     <>
-      <form onSubmit={handleFormSubmit}>
-        <fieldset>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setDeleteCommentModalOpen(true);
+        }}
+      >
+        <Fieldset>
           <>
-            {showLoadingSpinner ? (
-              <LoadingSpinner />
-            ) : commentDeleted ? (
-              <p style={{ color: "red" }}>This comment has been deleted</p>
+            {commentDeleted ? (
+              <Span color={theme.colors.warningText}>Comment deleted</Span>
             ) : (
-              <button type="submit">Delete This Comment</button>
+              <>
+                <Button type="submit">Delete This Comment</Button>
+                {deleteCommentModalOpen && (
+                  <ModalConfirm
+                    message={`You are about to delete this comment by "${commentUsername}".`}
+                    buttonYesFunction={handleConfirmationSubmit}
+                    buttonYesText="Yes, delete comment"
+                    buttonNoFunction={() => setDeleteCommentModalOpen(false)}
+                    buttonNoText="No, don't delete"
+                  />
+                )}
+              </>
             )}
           </>
-        </fieldset>
+        </Fieldset>
       </form>
     </>
   );
