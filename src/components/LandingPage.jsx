@@ -35,8 +35,8 @@ function LandingPage() {
               </h1>
               <p>
                 <Span fs="18px">
-                  Aiming to help communities coordinate natural disaster clean up
-                  efforts.
+                  Aiming to help communities coordinate natural disaster clean
+                  up efforts.
                 </Span>
               </p>
               <div>
@@ -58,8 +58,12 @@ function LandingPage() {
                 )}
               </div>
             </Width>
-            <Width>
-              <Image h="300px" br="10px" src="./images/photos/beach-illus.jpg" />
+            <Width talign="center">
+              <Image
+                h="300px"
+                br="10px"
+                src="./images/photos/beach-illus.jpg"
+              />
             </Width>
           </Flex>
         </Banner>
