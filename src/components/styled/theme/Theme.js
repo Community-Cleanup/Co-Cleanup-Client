@@ -4,9 +4,11 @@ export const theme = {
   colors: {
     cardOne: Palette.color.yellowOC0,
     cardTwo: Palette.color.blueOC0,
+    cardThree: Palette.color.redOC4,
     bannerOne: Palette.color.greenOC0,
     buttonOne: Palette.color.blueTW6,
     buttonTwo: Palette.color.tealTW6,
+    buttonThree: Palette.color.redOC6,
     buttonCancel: Palette.color.redTW5,
     buttonGray: Palette.color.slateTW5,
     dateText: Palette.color.amberTW7,
@@ -19,5 +21,7 @@ export const theme = {
     navigationLink: Palette.color.slateTW7,
     signLink: Palette.color.blueTW7,
     shadow: Palette.color.grayOC4,
+    warningText: Palette.color.redOC7,
+    okText: Palette.color.greenTW6,
   },
 };

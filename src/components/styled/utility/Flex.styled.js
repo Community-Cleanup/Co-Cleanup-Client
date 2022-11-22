@@ -8,6 +8,7 @@ export const Flex = styled.div`
   flex-direction: ${({ direction }) => direction || "row"};
   align-items: ${({ align }) => align || "left"};
   justify-content: ${({ justify }) => justify || "flex-start"};
+  flex-wrap: ${({ wrap }) => wrap || "nowrap"};
 
   @media (max-width: 900px) {
     flex-direction: column;

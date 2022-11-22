@@ -1,18 +1,34 @@
 import React, { useState, useEffect } from "react";
 import axios from "../utils/AxiosInterceptor";
 
+import { Margin } from "./styled/utility/Margin.styled";
+import { CardLg } from "./styled/utility/CardLg.styled";
+import { Fieldset } from "./styled/utility/Fieldset.styled";
+import { Input } from "./styled/elements/Input.styled";
+import { Button } from "./styled/elements/Button.styled";
+import { FormMessage } from "./styled/elements/FormMessage.styled";
+import { Span } from "./styled/utility/Span.styled";
+import { Flex } from "./styled/utility/Flex.styled";
+import { FlexRow } from "./styled/utility/FlexRow.styled";
+import { Grid } from "./styled/utility/Grid.styled";
+import { theme } from "./styled/theme/Theme";
+import ModalConfirm from "./ModalConfirm";
+
 import LoadingSpinner from "./LoadingSpinner";
 
 import { useGlobalAuthState } from "../utils/AuthContext";
 
-function AdminAssignAdminForm({ foundUserUID, foundUserIsAdmin }) {
+function AdminAssignAdminForm({
+  foundUserUID,
+  foundUserIsAdmin,
+  foundUserUsername,
+}) {
   const { authState } = useGlobalAuthState();
 
   const loggedInUserUID = authState.data._id;
 
   const [userIsAdminState, setUserIsAdminState] = useState(foundUserIsAdmin);
-
-  const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
+  const [adminAssignModalOpen, setAdminAssignModalOpen] = useState(false);
 
   useEffect(() => {
     setUserIsAdminState(foundUserIsAdmin);
@@ -24,10 +40,8 @@ function AdminAssignAdminForm({ foundUserUID, foundUserIsAdmin }) {
     return loggedInUserUID === foundUserUID ? true : false;
   }
 
-  function handleFormSubmit(e) {
+  function handleConfirmationSubmit(e) {
     e.preventDefault();
-
-    setShowLoadingSpinner(true);
 
     updateAdminStatus();
   }
@@ -53,49 +67,74 @@ function AdminAssignAdminForm({ foundUserUID, foundUserIsAdmin }) {
         );
         setUserIsAdminState(true);
       }
-      setShowLoadingSpinner(false);
+      setAdminAssignModalOpen(false);
     } catch (e) {
       console.log(e);
-      setShowLoadingSpinner(false);
+      setAdminAssignModalOpen(false);
     }
   }
 
   return (
     <>
-      {/* <p>loggedInUserUID is {loggedInUserUID}</p>
-      <p>foundUserUID is {foundUserUID}</p> */}
-      <form onSubmit={handleFormSubmit}>
-        <fieldset>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setAdminAssignModalOpen(true);
+        }}
+      >
+        <Fieldset>
           {preventChange() ? (
-            <h3>You can't revoke admin role from your own account!</h3>
+            <Span color={theme.colors.warningText}>
+              You can't revoke admin role from your own account!
+            </Span>
           ) : (
             <>
               {userIsAdminState ? (
                 <>
-                  <p style={{ color: "green" }}>
-                    This user is currently AN ADMIN
-                  </p>
-                  {showLoadingSpinner ? (
-                    <LoadingSpinner />
-                  ) : (
-                    <button type="submit">Revoke Admin Role</button>
+                  <Span color={theme.colors.warningText}>
+                    This user <br />
+                    is currently <br />
+                    AN ADMIN
+                  </Span>
+
+                  <Button type="submit" bg={theme.colors.buttonThree}>
+                    Revoke Admin Role
+                  </Button>
+                  {adminAssignModalOpen && (
+                    <ModalConfirm
+                      message={`You are about to REVOKE ADMIN role from this user's account: ${foundUserUsername}.`}
+                      buttonYesFunction={handleConfirmationSubmit}
+                      buttonYesText="Yes, revoke admin role"
+                      buttonNoFunction={() => setAdminAssignModalOpen(false)}
+                      buttonNoText="No, don't revoke"
+                    />
                   )}
                 </>
               ) : (
                 <>
-                  <p style={{ color: "blue" }}>
-                    This user is currently NOT AN ADMIN
-                  </p>
-                  {showLoadingSpinner ? (
-                    <LoadingSpinner />
-                  ) : (
-                    <button type="submit">Give Admin Role</button>
+                  <Span color={theme.colors.okText}>
+                    This user <br />
+                    is currently <br />
+                    NOT AN ADMIN
+                  </Span>
+
+                  <Button type="submit" bg={theme.colors.buttonTwo}>
+                    Give Admin Role
+                  </Button>
+                  {adminAssignModalOpen && (
+                    <ModalConfirm
+                      message={`You are about to GIVE ADMIN role to this user's account: ${foundUserUsername}.`}
+                      buttonYesFunction={handleConfirmationSubmit}
+                      buttonYesText="Yes, give admin role"
+                      buttonNoFunction={() => setAdminAssignModalOpen(false)}
+                      buttonNoText="No, don't give"
+                    />
                   )}
                 </>
               )}
             </>
           )}
-        </fieldset>
+        </Fieldset>
       </form>
     </>
   );

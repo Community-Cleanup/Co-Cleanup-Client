@@ -1,4 +1,4 @@
-// Firebase client-side API configuration
+// Firebase public client-side API/credential configuration for Co Cleanup
 const firebaseConfig = {
   apiKey: "AIzaSyD5IPJxv0EMB7ZNm0qShwmqndVeDSpdzZU",
   authDomain: "co-cleanup.firebaseapp.com",

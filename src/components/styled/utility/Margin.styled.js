@@ -1,5 +1,5 @@
 import styled from "styled-components";
 
 export const Margin = styled.div`
-    margin: 4%;
-`
+  margin: ${({ margin }) => margin || "4%"};
+`;

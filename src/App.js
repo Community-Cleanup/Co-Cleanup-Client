@@ -20,13 +20,19 @@ import GlobalStyles from "./components/styled/theme/Global";
 import { theme } from "./components/styled/theme/Theme";
 
 function App() {
+  // This global state is used by the authentication ('auth') system,
+  // held in React Context in './utils/AuthContext.js' for easy access.
   const [authState, setAuthState] = useState({
-    authObserverRegistered: false,
+    authObserverRegistered: false, // Raises to true when our auth observer/listener component is registered
     authObserverError: null,
-    axiosInterceptorRegistered: false,
-    data: null,
+    axiosInterceptorRegistered: false, // Raises to true when Axios has been established
+    data: null, // Very important. This 'data' property in the state will hold the exact response object of
+    // a signed in user's MongoDB document (if any) primarily used for conditional rendering on React.
   });
 
+  // It is necessary for the auth global state, the Axios interceptor,
+  // and the auth observer/listener component, to all be registered before the render of any webpage,
+  // As such, conditional rendering below will load a loading page until such an occurance
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
       <AuthObserver>
@@ -50,6 +56,7 @@ function App() {
                       <Route path="account/:user" element={<UserAccount />} />
                       <Route path="sign-up" element={<SignupPage />} />
                       <Route path="sign-in" element={<SigninPage />} />
+                      {/* Rather than a 404 page not found, redirect unhandled paths back to the landing page */}
                       <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
                   </div>
