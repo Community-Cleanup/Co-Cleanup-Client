@@ -9,7 +9,7 @@ import { Span } from "./styled/utility/Span.styled";
 import { Button } from "./styled/elements/Button.styled";
 import { Container } from "./styled/utility/Container.styled";
 
-function AdminItemCard(props) {
+function AdminEventsItemCard(props) {
   return (
     <CardLg margin="10px" maxw="100%" bord="1px solid black">
       <FlexRow align="flex-start" justify="space-between">
@@ -24,7 +24,7 @@ function AdminItemCard(props) {
               tf="uppercase"
               color={theme.colors.dateText}
             >
-              {props.email}
+              {props.date}
             </Span>
           </p>
           <p>
@@ -44,4 +44,4 @@ function AdminItemCard(props) {
   );
 }
 
-export default AdminItemCard;
+export default AdminEventsItemCard;

@@ -18,7 +18,7 @@ import { Flex } from "./styled/utility/Flex.styled";
 import { FlexRow } from "./styled/utility/FlexRow.styled";
 import { Grid } from "./styled/utility/Grid.styled";
 import { theme } from "./styled/theme/Theme";
-import AdminItemCard from "./AdminItemCard";
+import AdminUsersItemCard from "./AdminUsersItemCard";
 
 import LoadingSpinner from "./LoadingSpinner";
 import AdminDisableUserForm from "./AdminDisableUserForm";
@@ -103,7 +103,7 @@ function AdminPageUsers() {
               <Flex wrap="wrap">
                 {foundUsers.map((foundUser, index) => {
                   return (
-                    <AdminItemCard
+                    <AdminUsersItemCard
                       key={index}
                       title={foundUser.username}
                       email={foundUser.email}
