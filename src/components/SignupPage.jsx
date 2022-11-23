@@ -8,7 +8,7 @@ import { formErrorMessages } from "../data/formErrorMessages";
 import LoadingSpinner from "./LoadingSpinner";
 import PageTitle from "./PageTitle";
 import { Container } from "./styled/utility/Container.styled";
-import { Flex } from "./styled/utility/Flex.styled";
+import { Span } from "./styled/utility/Span.styled";
 import { Logo } from "./styled/elements/Logo.styled";
 import { Navigation } from "./styled/elements/Navigation.styled";
 import { Fieldset } from "./styled/utility/Fieldset.styled";
@@ -339,6 +339,13 @@ function SignupPage() {
             )}
           </Fieldset>
         </form>
+        <Container margin="16px 0 0 0" talign="center">
+          <p>
+            <Span fs="13px">
+              By signing up, you agree to the Privacy Policy.
+            </Span>
+          </p>
+        </Container>
       </Container>
     </PageTitle>
   );

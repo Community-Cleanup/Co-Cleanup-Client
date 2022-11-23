@@ -44,7 +44,9 @@ function EventDetails() {
   const map = useRef(null);
 
   // The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
+  // eslint-disable-next-line
   const [lng, setLng] = useState(0);
+  // eslint-disable-next-line
   const [lat, setLat] = useState(0);
   const [zoom, setZoom] = useState(15);
 
@@ -54,6 +56,7 @@ function EventDetails() {
   // the response is set as eventDetails state
   useEffect(() => {
     getEventDetails(event, setEventDetails);
+    // eslint-disable-next-line
   }, []);
 
   // The map is initialised within useEffect
@@ -71,6 +74,7 @@ function EventDetails() {
       // map.current.addControl(new mapboxgl.FullscreenControl());
       map.current.addControl(new mapboxgl.NavigationControl());
 
+      // eslint-disable-next-line
       const marker1 = new mapboxgl.Marker()
         .setLngLat([eventDetails.coordinates[0], eventDetails.coordinates[1]])
         .addTo(map.current);
@@ -92,11 +96,12 @@ function EventDetails() {
   // try/catch is used to catch any errors and log to the console
   async function updateEvent(detailsObject) {
     try {
+      // eslint-disable-next-line
       const res = await axios.put(
         `${process.env.REACT_APP_SERVER_URL}/api/events/${event}`,
         detailsObject
       );
-      console.log("Data Saved", res.status, res.data);
+      console.log("Data Saved");
     } catch (e) {
       console.log(e);
     }

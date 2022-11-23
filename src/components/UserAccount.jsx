@@ -15,7 +15,6 @@ import { Margin } from "./styled/utility/Margin.styled";
 import { CardLg } from "./styled/utility/CardLg.styled";
 import { Fieldset } from "./styled/utility/Fieldset.styled";
 import { Span } from "./styled/utility/Span.styled";
-import { Flex } from "./styled/utility/Flex.styled";
 import { FlexRow } from "./styled/utility/FlexRow.styled";
 import { Grid } from "./styled/utility/Grid.styled";
 import { Input } from "./styled/elements/Input.styled";
@@ -74,6 +73,7 @@ function UserAccount() {
   // try/catch is used to catch any errors and log to the console
   async function deleteEvent(eventId) {
     try {
+      // eslint-disable-next-line
       const res = await axios.delete(
         `${process.env.REACT_APP_SERVER_URL}/api/events/${eventId}`
       );
@@ -134,68 +134,66 @@ function UserAccount() {
               </>
             )}
           </FlexRow>
-          <Flex align="flex-start">
-            <div>
-              <h4>
-                Username:{" "}
-                <Span fw="400" margin="0 0 0 1rem">
-                  {authState.data.username}
-                </Span>
-              </h4>
-              <h4>
-                Email:{" "}
-                <Span fw="400" margin="0 0 0 1rem">
-                  {authState.data.email}
-                </Span>
-              </h4>
-            </div>
+          <div>
+            <h4>
+              Username:{" "}
+              <Span fw="400" margin="0 0 0 1rem">
+                {authState.data.username}
+              </Span>
+            </h4>
+            <h4>
+              Email:{" "}
+              <Span fw="400" margin="0 0 0 1rem">
+                {authState.data.email}
+              </Span>
+            </h4>
+          </div>
 
-            {/* Username update input section */}
-            {/* When the form is submitted the modal to confirm username change is opened */}
-            <div>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setUsernameUpdateModalOpen(true);
-                }}
-              >
-                <Fieldset>
-                  <Button
-                    bg={theme.colors.buttonTwo}
-                    margin="0 0 0 36px"
-                    type="submit"
-                    value="Change Username"
-                    id="submit"
-                  >
-                    Update Username
-                  </Button>
-                  {/* Controlled input field */}
-                  <Input
-                    w="200px"
-                    type="text"
-                    placeholder="Enter a new username"
-                    name="usernameInputBar"
-                    value={usernameInputBar}
-                    onChange={(e) => setUsernameInputBar(e.target.value)}
+          {/* Username update input section */}
+          {/* When the form is submitted the modal to confirm username change is opened */}
+          <div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setUsernameUpdateModalOpen(true);
+              }}
+            >
+              <Fieldset>
+                <Button
+                  bg={theme.colors.buttonTwo}
+                  margin="16px 0 0 0"
+                  type="submit"
+                  value="Change Username"
+                  id="submit"
+                >
+                  Update Username
+                </Button>
+                {/* Controlled input field */}
+                <Input
+                  w="200px"
+                  type="text"
+                  placeholder="Enter a new username"
+                  name="usernameInputBar"
+                  value={usernameInputBar}
+                  onChange={(e) => setUsernameInputBar(e.target.value)}
+                />
+                {/* Modal to confirm username change */}
+                {usernameUpdateModalOpen && (
+                  <ModalConfirm
+                    message={`You are about to update your username to ${usernameInputBar}.`}
+                    buttonYesFunction={() => updateUsername(usernameInputBar)}
+                    buttonYesText="Yes, update username"
+                    buttonNoFunction={() => setUsernameUpdateModalOpen(false)}
+                    buttonNoText="No, don't update"
                   />
-                  {/* Modal to confirm username change */}
-                  {usernameUpdateModalOpen && (
-                    <ModalConfirm
-                      message={`You are about to update your username to ${usernameInputBar}.`}
-                      buttonYesFunction={() => updateUsername(usernameInputBar)}
-                      buttonYesText="Yes, update username"
-                      buttonNoFunction={() => setUsernameUpdateModalOpen(false)}
-                      buttonNoText="No, don't update"
-                    />
-                  )}
-                </Fieldset>
-              </form>
-              {/* Message displayed after username update is confirmed in the modal */}
-              {usernameUpdateMessage && (
-                <FormMessage>{usernameUpdateMessage}</FormMessage>
-              )}
-            </div>
-          </Flex>
+                )}
+              </Fieldset>
+            </form>
+            {/* Message displayed after username update is confirmed in the modal */}
+            {usernameUpdateMessage && (
+              <FormMessage>{usernameUpdateMessage}</FormMessage>
+            )}
+          </div>
         </CardLg>
 
         {/* Upcoming events section */}
