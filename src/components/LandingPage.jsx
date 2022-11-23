@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 // React JSX Components
 import PageTitle from "./PageTitle";

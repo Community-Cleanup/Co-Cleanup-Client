@@ -23,6 +23,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
 function EventsMap() {
   const navigate = useNavigate();
+  // eslint-disable-next-line
   const { searchBar, setSearchBar } = useGlobalSearchContext();
   //The mapContainer useRef specifies that App should be drawn to the HTML page in the <div> with the attribute ref={mapContainer}.
   const mapContainer = useRef(null);
@@ -239,6 +240,7 @@ function EventsMap() {
         navigate("/" + e.features[0].properties.id);
       });
     }
+    // eslint-disable-next-line
   }, [eventsGeoJSON]);
 
   // mapFilteredEvents is used to updated the sidebarListings state

@@ -7,6 +7,7 @@ function PageTitle(props) {
   useEffect(() => {
     document.title = `Co Cleanup | ${props.title}`;
     window.scrollTo(0, 0);
+    // eslint-disable-next-line
   }, []);
 
   return <>{props.children}</>;

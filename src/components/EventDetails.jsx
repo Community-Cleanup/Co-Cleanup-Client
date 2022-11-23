@@ -1,4 +1,5 @@
-// Axios Interceptor to add the ID token to the 'createEvent' POST request header.
+// As function 'updateEvent' calls a protected API route, we need to use
+// Axios Interceptor to add the ID token to the 'updateEvent' POST request header.
 import axios from "../utils/AxiosInterceptor";
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
@@ -44,7 +45,9 @@ function EventDetails() {
   const map = useRef(null);
 
   // The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
+  // eslint-disable-next-line
   const [lng, setLng] = useState(0);
+  // eslint-disable-next-line
   const [lat, setLat] = useState(0);
   const [zoom, setZoom] = useState(15);
 
@@ -54,6 +57,7 @@ function EventDetails() {
   // the response is set as eventDetails state
   useEffect(() => {
     getEventDetails(event, setEventDetails);
+    // eslint-disable-next-line
   }, []);
 
   // The map is initialised within useEffect
@@ -71,6 +75,7 @@ function EventDetails() {
       // map.current.addControl(new mapboxgl.FullscreenControl());
       map.current.addControl(new mapboxgl.NavigationControl());
 
+      // eslint-disable-next-line
       const marker1 = new mapboxgl.Marker()
         .setLngLat([eventDetails.coordinates[0], eventDetails.coordinates[1]])
         .addTo(map.current);
@@ -256,12 +261,7 @@ function EventDetails() {
 
         {/* Mapbox containers for map */}
         <Container h="400px" w="75%" br="12px" margin="36px 0">
-          <Container
-            h="100%"
-            w="100%"
-            position="absolute"
-            ref={mapContainer}
-          />
+          <Container h="100%" w="100%" position="absolute" ref={mapContainer} />
         </Container>
 
         {/* About section */}

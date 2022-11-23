@@ -43,6 +43,7 @@ function Geocoder({ setEventData }) {
         };
       });
     }
+    // eslint-disable-next-line
   }, [savedAddress]);
 
   // The clearButton style is set to block once the input field has been inputted
@@ -84,6 +85,7 @@ function Geocoder({ setEventData }) {
             <ul className="suggestions">
               {suggestions.map((suggestion, index) => {
                 const arr = suggestion.place_name.split(/[,]+/);
+                // eslint-disable-next-line
                 const street = arr.shift();
                 const cityCountry = arr.join();
                 return (
@@ -95,6 +97,7 @@ function Geocoder({ setEventData }) {
                       setSavedAddress(suggestion);
                     }}
                   >
+                    {/* eslint-disable-next-line */}
                     <a>
                       <div className="mapboxgl-ctrl-geocoder--suggestion">
                         <div className="mapboxgl-ctrl-geocoder--suggestion-title">
@@ -109,6 +112,7 @@ function Geocoder({ setEventData }) {
                 );
               })}
               <div className="mapboxgl-ctrl-geocoder--powered-by">
+                {/* eslint-disable-next-line */}
                 <a>Powered by Mapbox</a>
               </div>
             </ul>
