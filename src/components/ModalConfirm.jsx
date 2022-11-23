@@ -14,23 +14,23 @@ function ModalConfirm(props) {
   return (
     <Modal>
       <Container
-        w="500px"
-        wmobile="min-content"
+        w="min-content"
+        // wmobile="min-content"
         br="10px"
         pad="36px"
         margin="150px auto"
         talign="center"
         overflow="visible"
       >
-        <Flex direction="column" w="max-content" margin="0 auto">
+        <Flex direction="column" w="min-content" margin="0 auto">
           <p>{props.message}</p>
           <p>Are you sure?</p>
           <Flex margin="16px 0 0">
-            <Button w="50%" onClick={props.buttonYesFunction}>
+            <Button w="max-content" onClick={props.buttonYesFunction}>
               {props.buttonYesText}
             </Button>
             <Button
-              w="50%"
+              w="max-content"
               bg={theme.colors.buttonCancel}
               onClick={props.buttonNoFunction}
             >

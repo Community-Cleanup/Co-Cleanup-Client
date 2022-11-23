@@ -69,7 +69,7 @@ function AdminDeleteCommentForm({
               <Span color={theme.colors.warningText}>Comment deleted</Span>
             ) : (
               <>
-                <Button type="submit">Delete This Comment</Button>
+                <button type="submit">Delete This Comment</button>
                 {deleteCommentModalOpen && (
                   // Prompt the user in the modal whether or not to delete the comment.
                   // If 'yes' is selected, trigger the handleConfirmationSubmit function
