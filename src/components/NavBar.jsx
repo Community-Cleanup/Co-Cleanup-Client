@@ -87,7 +87,7 @@ function NavBar() {
         {width > breakPoint && (
           <div>
             <Navigation margin="0 8px 0 20px">
-              <Link>About</Link>
+              <Link to="/about">About</Link>
             </Navigation>
             <Navigation margin="0 8px 0" onClick={handleCreateLink}>
               Create Event

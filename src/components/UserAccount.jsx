@@ -81,7 +81,6 @@ function UserAccount() {
       const newMyList = filterRemoveEvent(myEvents, eventId);
       setAttendingEvents(newAttendingList);
       setMyEvents(newMyList);
-      console.log(res);
       setDeleteModalIndex(-1);
     } catch (e) {
       console.log(e);

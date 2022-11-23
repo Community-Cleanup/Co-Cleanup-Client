@@ -256,12 +256,7 @@ function EventDetails() {
 
         {/* Mapbox containers for map */}
         <Container h="400px" w="75%" br="12px" margin="36px 0">
-          <Container
-            h="100%"
-            w="100%"
-            position="absolute"
-            ref={mapContainer}
-          />
+          <Container h="100%" w="100%" position="absolute" ref={mapContainer} />
         </Container>
 
         {/* About section */}
@@ -276,7 +271,7 @@ function EventDetails() {
         </p>
         <h4>
           <Span fw="500" margin="6px 0 0" color={theme.colors.signLink}>
-            <Link to="/">Guidelines</Link>
+            <Link to="/guidelines">Guidelines</Link>
           </Span>
         </h4>
 
