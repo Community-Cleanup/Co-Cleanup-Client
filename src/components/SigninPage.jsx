@@ -259,7 +259,6 @@ function SigninPage() {
               w="400px"
               onBlur={(e) => validateOnBlur(e)}
               type="password"
-              // placeholder="Password"
               name="password"
               id="password"
               value={signInFormState.password}
