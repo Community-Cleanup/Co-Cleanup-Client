@@ -3,7 +3,7 @@
   "name": "Co Cleanup App",
   "icons": [
     {
-      "src": "%PUBLIC_URL%/images/logo/icon.svg",
+      "src": "./images/logo/icon.svg",
       "sizes": "32x32",
       "type": "image/svg+xml"
     }
