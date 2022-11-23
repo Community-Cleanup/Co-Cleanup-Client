@@ -1,23 +1,29 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
+// React JSX Components
 import PageTitle from "./PageTitle";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
+// styled components saved in the utilities folder apply styling to containers
+// styled components saved in the elements folder apply styling to individual elements like buttons etc.
+import { theme } from "./styled/theme/Theme";
 import { Banner } from "./styled/utility/Banner.styled";
 import { Container } from "./styled/utility/Container.styled";
 import { Width } from "./styled/utility/Width.styled";
-import { Button } from "./styled/elements/Button.styled";
 import { Flex } from "./styled/utility/Flex.styled";
 import { Grid } from "./styled/utility/Grid.styled";
 import { Span } from "./styled/utility/Span.styled";
+import { Button } from "./styled/elements/Button.styled";
 import { Image } from "./styled/elements/Image.styled";
 import { ImageBackground } from "./styled/elements/ImageBackground";
-import { theme } from "./styled/theme/Theme";
 
+// The landing page is displayed on the home route "/"
 function LandingPage() {
   const { authState } = useGlobalAuthState();
   const navigate = useNavigate();
+
+  // styled components are passed props to help fine tune different css properties
   return (
     <PageTitle title="Home">
       <NavBar />
@@ -47,6 +53,8 @@ function LandingPage() {
                 >
                   View Events
                 </Button>
+
+                {/* Ternary operator to only show sign up button if no user is logged in */}
                 {!authState.data && (
                   <Button
                     onClick={() => navigate("/sign-up")}
@@ -59,7 +67,9 @@ function LandingPage() {
                 )}
               </div>
             </Width>
-            <Width>
+
+            {/* Hero Illustration Section */}
+            <Width talign="center">
               <Image
                 h="300px"
                 br="10px"
@@ -68,6 +78,8 @@ function LandingPage() {
             </Width>
           </Flex>
         </Banner>
+
+        {/* Images section */}
         <Container w="100%" pad="0 2%" margin="0 auto">
           <Grid justifycontent="center">
             <ImageBackground url="./images/photos/rubbish-pickup.jpg" />

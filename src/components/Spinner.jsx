@@ -5,7 +5,6 @@
 import React from "react";
 import { ColorRing } from "react-loader-spinner";
 import { theme } from "./styled/theme/Theme";
-//import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function Spinner() {
   return (

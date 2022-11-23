@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { theme } from "../theme/Theme";
 
+// CardSm is used for small cards like the event cards on the event search page
 export const CardSm = styled.div`
   cursor: ${({ cursor }) => cursor || "default"};
   background-color: ${({ bg }) => bg || "white"};

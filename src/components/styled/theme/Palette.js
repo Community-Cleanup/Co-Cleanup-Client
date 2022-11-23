@@ -1,3 +1,7 @@
+// This Palette was created from the TailwindCSS color palette and other palettes collected over time
+// It is used to quickly choose colors and shades instead of creating or searching for colors which can be time consuming
+// Palette.css has been included as a reference
+
 export const Palette = {
   color: {
     slateTW0: "#f8fafc",

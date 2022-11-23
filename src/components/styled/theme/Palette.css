@@ -1,3 +1,8 @@
+/* This Palette was created from the TailwindCSS color palette and other palettes collected over time */
+/* It is used to quickly choose colors and shades instead of creating or searching for colors which can be time consuming */
+/* This CSS file is included in the project as a reference */
+/* This CSS file was converted into the Palette.js file to be used with Styled Components */
+
 :root {
   --tw-slate-0: #f8fafc;
   --tw-slate-1: #f1f5f9;

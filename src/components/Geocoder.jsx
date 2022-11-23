@@ -1,4 +1,3 @@
-// Libraries
 import React, { useEffect, useState, useRef } from "react";
 // CSS style sheets
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
@@ -54,6 +53,7 @@ function Geocoder({ setEventData }) {
   }, [input]);
 
   // Classnames are taken directly from the mapbox geocoder css stylesheet "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css"
+  // It was simpler to use pre-existing mapbox css styling then to re-write the css styling
   return (
     <div id="geocoder">
       <div className="mapboxgl-ctrl-geocoder mapboxgl-ctrl">
@@ -73,6 +73,12 @@ function Geocoder({ setEventData }) {
           value={input}
           onChange={handleChange}
         />
+
+        {/* the suggested address strings needed to be split into two lines */}
+        {/* for example... the suggestions string is like this "10 Queen Street, Brisbane City Queensland 4000, Australia" */}
+        {/* however it needs to be split so as to display the first part of the address in bold text on the first line of the suggestion which is displayed to the user */}
+        {/* the address was split on [,] and made into an array */}
+        {/* the first item is removed and the remainder is saved as cityCountry and displayed on the second line */}
         {suggestions?.length > 0 && (
           <div className="suggestions-wrapper">
             <ul className="suggestions">
