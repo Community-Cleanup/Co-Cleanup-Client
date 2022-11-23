@@ -90,7 +90,7 @@ function EventForm() {
           comments: eventData.comments,
         }
       );
-      console.log("Data Saved", res.status, res.data);
+      console.log("Data Saved");
       navigate("/" + res.data._id);
     } catch (e) {
       console.log(e);
@@ -102,6 +102,7 @@ function EventForm() {
   async function updateEvent(e) {
     e.preventDefault();
     try {
+      // eslint-disable-next-line
       const res = await axios.put(
         `${process.env.REACT_APP_SERVER_URL}/api/events/${event}`,
         {
@@ -111,7 +112,7 @@ function EventForm() {
           description: eventData.description,
         }
       );
-      console.log("Data Saved", res.status, res.data);
+      console.log("Data Saved");
       setEventData(initialEventData);
       navigate(`/${event}`);
     } catch (e) {

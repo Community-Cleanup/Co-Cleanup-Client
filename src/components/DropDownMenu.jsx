@@ -38,6 +38,7 @@ function DropDownMenu(props) {
   // As described above getBoudingRect() is run when the showDropDown state in the Navbar component is updated.
   useEffect(() => {
     getBoundingRect(linksRef, linksContainerRef);
+    // eslint-disable-next-line
   }, [props.showDropDownMenu]);
 
   // ternary operators are used to show either Sign In/Sign Up links or My Account/Sign Out depending on if authState has a current user

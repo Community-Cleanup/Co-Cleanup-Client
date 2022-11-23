@@ -14,6 +14,6 @@ export const Container = styled.div`
   overflow-y: ${({ overflow }) => overflow || "auto"};
 
   @media (max-width: 900px) {
-    width: 300px;
+    width: ${({ wmobile }) => wmobile || "300px"};
   }
 `;

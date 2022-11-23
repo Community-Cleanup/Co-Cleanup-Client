@@ -23,7 +23,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
 function EventsMap() {
   const navigate = useNavigate();
-  const { searchBar, setSearchBar } = useGlobalSearchContext();
+  const { searchBar } = useGlobalSearchContext();
   //The mapContainer useRef specifies that App should be drawn to the HTML page in the <div> with the attribute ref={mapContainer}.
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -120,14 +120,12 @@ function EventsMap() {
   // by Mapbox GL JS to plot points on the map
   // This data is then saved in state as eventsGeoJSON
   useEffect(() => {
-    console.log("events api:", eventsAPIData);
     if (eventsAPIData.length > 0) {
       let geoJSON = {
         type: "geojson",
         data: {
           type: "FeatureCollection",
           features: eventsAPIData.map((event) => {
-            // console.log(event);
             return {
               type: "Feature",
               geometry: {
@@ -151,8 +149,6 @@ function EventsMap() {
 
   // Once eventGeoJSON state is udpated the geoJSON data is added to the map
   useEffect(() => {
-    console.log("eventsGeoJSON:", eventsGeoJSON);
-
     function addSourceLayer() {
       // The eventsGeoJSON is added a source and given the name "points"
       try {
@@ -235,10 +231,10 @@ function EventsMap() {
 
       // when the event feature marker is clicked the user is navigated to the event details page
       map.current.on("click", "points", (e) => {
-        console.log(e.features[0].properties.title);
         navigate("/" + e.features[0].properties.id);
       });
     }
+    // eslint-disable-next-line
   }, [eventsGeoJSON]);
 
   // mapFilteredEvents is used to updated the sidebarListings state
@@ -300,9 +296,15 @@ function EventsMap() {
   return (
     <PageTitle title="Find Events">
       <NavBar />
-      <Container h="90vh" w="100%" bg={theme.colors.navbar}>
+      <Container h="90vh" w="100%" wmobile="100%" bg={theme.colors.navbar}>
         <FlexRow>
-          <Container h="90vh" w="50%" pad="16px" bg={theme.colors.navbar}>
+          <Container
+            h="90vh"
+            w="50%"
+            wmobile="50%"
+            pad="16px"
+            bg={theme.colors.navbar}
+          >
             <Grid>
               {/* sidbarListings is mapped over to display all of the filtered listings in the side bar */}
               {sidebarListings.length ? (
@@ -365,10 +367,11 @@ function EventsMap() {
           </Container>
 
           {/* Mapbox containers for map */}
-          <Container h="90vh" w="50%">
+          <Container h="90vh" w="50%" wmobile="50%">
             <Container
               h="100%"
               w="100%"
+              wmobile="100%"
               position="absolute"
               ref={mapContainer}
             />

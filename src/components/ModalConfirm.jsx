@@ -13,8 +13,16 @@ function ModalConfirm(props) {
   // styled components are passed props to help fine tune different css properties
   return (
     <Modal>
-      <Container w="500px" br="10px" pad="36px" margin="150px auto">
-        <Flex direction="column" w="min-content">
+      <Container
+        w="500px"
+        wmobile="min-content"
+        br="10px"
+        pad="36px"
+        margin="150px auto"
+        talign="center"
+        overflow="visible"
+      >
+        <Flex direction="column" w="max-content" margin="0 auto">
           <p>{props.message}</p>
           <p>Are you sure?</p>
           <Flex margin="16px 0 0">
