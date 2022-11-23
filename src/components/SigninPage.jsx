@@ -25,10 +25,13 @@ function SigninPage() {
   // useGlobalAuthState() contains the details of the current logged in user
   const { authState } = useGlobalAuthState();
 
-  // used to redirect user to the previous page is successfully signed in
+  // This is a custom hook used for navigation.
+  // If the user is successfully signed in, or was already sign in,
+  // try to redirect them back to the previous page (see ../utils/useBackSafe.js for comments and code source)
   const { goBackSafe } = useBackSafe();
 
-  // sign in form state including error messages
+  // Sign In form state including error messages for each input field, and submit errors, and
+  // to keep a boolean status of whether or not to show the loading spinner icon
   const [signInFormState, setSignInFormState] = useState({
     emailAddress: "",
     password: "",
@@ -49,7 +52,9 @@ function SigninPage() {
     // eslint-disable-next-line
   }, [authState.data]);
 
-  // If there is an error from the authState then the user will be logged out.
+  // If our '../auth/AuthObserver.js' auth observer/listener detects an error when the user tryies to sign in,
+  // as per the boolean value in authState.authObserverError state property, then force a logout of the user.
+  // This will likely occur if the user's account had been disabled by an administrator of Co Cleanup.
   useEffect(() => {
     if (authState.authObserverError) {
       Logout();
@@ -64,9 +69,9 @@ function SigninPage() {
     // eslint-disable-next-line
   }, [authState.authObserverError]);
 
-  // checks if any fields are empty
-  // is used with onBlur
-  // updates error messsage if input field is left empty
+  // Checks if any input fields are empty.
+  // This is triggered by the forms onBlur event, meaning when the user takes cursor focus out of the input field.
+  // Updates error messsage (using our static imported formErrorMessages object for consistency) if input field is left empty.
   function checkEmptyField(event) {
     if (!event.target.value) {
       setSignInFormState((prev) => {
@@ -85,7 +90,7 @@ function SigninPage() {
     }
   }
 
-  // checks for valid email syntax
+  // Checks for valid email syntax based off a regex pattern
   // and updates state with error message if email is not valid
   function checkValidEmailSyntax(event) {
     if (`${event.target.name}` === "emailAddress") {
@@ -109,7 +114,8 @@ function SigninPage() {
     }
   }
 
-  
+  // Like with function checkEmptyField, this checks for empty fields, but this displays
+  // a specific error message if the password field is empty
   function checkPasswordError(event) {
     if (`${event.target.name}` === "password") {
       if (!event.target.value) {
@@ -130,6 +136,9 @@ function SigninPage() {
     }
   }
 
+  // The following three functions are triggered onBlur (i.e. on field focus loss)
+  // for every field.
+  // The event object will keep track of the specific field's name and value
   function validateOnBlur(event) {
     checkEmptyField(event);
 
@@ -138,9 +147,13 @@ function SigninPage() {
     checkPasswordError(event);
   }
 
+  // This is called immediately after clicking the submit button to
+  // check if there's still any errors displayed from the above onBlur functions,
+  // and if so, prompt the user to fix all these errors before submitting again
   function checkAnyInvalidFields() {
     const { emailAddressError, passwordError } = signInFormState;
 
+    // Do an OR comparison with all input field values to see if there are any errors still in any of the input fields
     if (emailAddressError || passwordError) {
       setSignInFormState((prev) => {
         return {
@@ -160,9 +173,11 @@ function SigninPage() {
     }
   }
 
+  // Executed on submit button click
   async function handleFormSubmit(e) {
     e.preventDefault();
 
+    // Only begin processing the sign in and show the loading spinner icon if there are no client-side validation errors
     if (!checkAnyInvalidFields()) {
       setSignInFormState((prev) => {
         return {
@@ -171,8 +186,12 @@ function SigninPage() {
         };
       });
       try {
+        // Attempt the sign in with our SignIn handler in '../auth/SignIn.js'
         await SignIn(signInFormState.emailAddress, signInFormState.password);
       } catch (error) {
+        // The error response here will likely be from Firebase raising an error that the email address was not found,
+        // or the password is incorrect
+        // Also hide the loading spinner icon using state if there is any error so that the user can try again with form submit
         console.log(error);
         setSignInFormState((prev) => {
           return {
@@ -186,6 +205,7 @@ function SigninPage() {
     }
   }
 
+  // For input fields to be controlled components, we need to keep the input field values in state
   function handleChange(event) {
     setSignInFormState((prev) => {
       return {
@@ -195,11 +215,13 @@ function SigninPage() {
     });
   }
 
-  // styled components are passed props to help fine tune different css properties
+  // Styled components are passed props to help fine tune different CSS properties
   return (
     <PageTitle title="Sign In">
       <Container margin="120px auto">
         <Container talign="center">
+          {/* As there is no nav bar on the Sign In page, clicking the Co Cleanup logo will 
+          navigate the user back to the Landing Page */}
           <Logo
             src="./images/logo/logo-icon.svg"
             alt="Co Cleanup Logo"
@@ -213,6 +235,7 @@ function SigninPage() {
             </Navigation>
           </p>
         </Container>
+        {/* The actual Sign In form components */}
         <form onSubmit={handleFormSubmit}>
           <Fieldset>
             <FormLabel htmlFor="email">Email</FormLabel>
@@ -225,6 +248,7 @@ function SigninPage() {
               value={signInFormState.emailAddress}
               onChange={(e) => handleChange(e)}
             />
+            {/* If there is a email address validation error in state, display the error message here */}
             {signInFormState.emailAddressError && (
               <FormMessage>{signInFormState.emailAddressError}</FormMessage>
             )}
@@ -235,17 +259,18 @@ function SigninPage() {
               w="400px"
               onBlur={(e) => validateOnBlur(e)}
               type="password"
-              // placeholder="Password"
               name="password"
               id="password"
               value={signInFormState.password}
               onChange={(e) => handleChange(e)}
             />
+            {/* If there is a password validation error in state, display the error message here */}
             {signInFormState.passwordError && (
               <FormMessage>{signInFormState.passwordError}</FormMessage>
             )}
           </Fieldset>
           <Fieldset>
+            {/* Show the loading spinner on form submit if there are no other client-side validation errors */}
             {signInFormState.showLoadingSpinner ? (
               <LoadingSpinner />
             ) : (
@@ -259,6 +284,7 @@ function SigninPage() {
                 Sign In
               </Button>
             )}
+            {/* If there are any form submission errors in state, display the error message here */}
             {signInFormState.submitError && (
               <FormMessage>{signInFormState.submitError}</FormMessage>
             )}

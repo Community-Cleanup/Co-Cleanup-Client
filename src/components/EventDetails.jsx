@@ -1,4 +1,5 @@
-// Axios Interceptor to add the ID token to the 'createEvent' POST request header.
+// As function 'updateEvent' calls a protected API route, we need to use
+// Axios Interceptor to add the ID token to the 'updateEvent' POST request header.
 import axios from "../utils/AxiosInterceptor";
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";

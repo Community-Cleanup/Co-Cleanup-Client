@@ -77,7 +77,7 @@ async function createUserOnMongoDB(username, token) {
 // This function conducts the following in order (assuming each step is successful):
 // 1. Check that the user's chosen username is unique in MongoDB
 // 2. Create the new user's account on Firebase Auth (client) with the email address and password
-// 3.
+// 3. Create a user document on our MongoDB user model on our server app
 async function SignUp(username, emailAddress, password) {
   // Firstly we need to query MongoDB on our Server API app to confirm that the
   // user's chosen username is unique (i.e. hasn't already been taken by another user).
@@ -93,6 +93,8 @@ async function SignUp(username, emailAddress, password) {
   const token = await createUserOnFirebase(emailAddress, password);
 
   let response = null;
+  // Only if a successful token response is generated from Firebase then attempt to create the user on MongoDB via
+  // our server app
   if (token) {
     response = await createUserOnMongoDB(username, token);
   }

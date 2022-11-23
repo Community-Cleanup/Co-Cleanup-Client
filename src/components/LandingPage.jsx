@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGlobalAuthState } from "../utils/AuthContext";
 // React JSX Components
 import PageTitle from "./PageTitle";
@@ -57,11 +57,12 @@ function LandingPage() {
                 {/* Ternary operator to only show sign up button if no user is logged in */}
                 {!authState.data && (
                   <Button
+                    onClick={() => navigate("/sign-up")}
                     w="130px"
                     margin="32px 0 0"
                     bg={theme.colors.buttonTwo}
                   >
-                    <Link to="sign-up">Sign Up</Link>
+                    Sign Up
                   </Button>
                 )}
               </div>
