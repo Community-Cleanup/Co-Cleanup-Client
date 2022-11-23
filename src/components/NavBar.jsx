@@ -33,8 +33,6 @@ function NavBar() {
   // handleLogout() is called when the user clicks the logout button
   async function handleLogout(e) {
     e.preventDefault();
-    console.log("Logout button clicked, logging out");
-
     Logout();
     navigate("/");
     // Note that on logout, we don't need to set our React global auth state for 'authState.data' to null,

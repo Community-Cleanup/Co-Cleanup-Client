@@ -33,7 +33,6 @@ function Geocoder({ setEventData }) {
   // The place_name and coordinates are then used to update the state of the eventForm (parent component)
   // setEventData is passed down in props
   useEffect(() => {
-    console.log(savedAddress);
     if (savedAddress) {
       setEventData((prev) => {
         return {

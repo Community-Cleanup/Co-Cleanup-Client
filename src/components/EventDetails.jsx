@@ -97,11 +97,12 @@ function EventDetails() {
   // try/catch is used to catch any errors and log to the console
   async function updateEvent(detailsObject) {
     try {
+      // eslint-disable-next-line
       const res = await axios.put(
         `${process.env.REACT_APP_SERVER_URL}/api/events/${event}`,
         detailsObject
       );
-      console.log("Data Saved", res.status, res.data);
+      console.log("Data Saved");
     } catch (e) {
       console.log(e);
     }
