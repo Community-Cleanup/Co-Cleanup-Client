@@ -11,7 +11,7 @@ import { Span } from "./styled/utility/Span.styled";
 function AdminEventsItemCard(props) {
   return (
     <CardLg margin="10px" maxw="100%" bord="1px solid black">
-      <FlexRow align="flex-start" justify="space-between">
+      <Flex direction="column" align="flex-start" justify="space-between">
         <Flex direction="column" align="flex-end" margin="10px">
           {/* Display the event title from the "title" prop */}
           <Span fs="18px" fw="1000">
@@ -37,13 +37,13 @@ function AdminEventsItemCard(props) {
         </Flex>
 
         {/* To the right side of the card, display in a column... */}
-        <Flex direction="column" align="flex-end" margin="10px" w="200px">
+        <Flex direction="column" align="center" margin="10px" w="200px">
           {/* Display the components from the "./AdminDeleteEventForm.jsx" component passed in here from the "adminDeleteEventForm" prop */}
           {props.adminDeleteEventForm}
           {/* Display the components from the "./AdminShowComments.jsx" component passed in here from the "adminShowComments" prop */}
           {props.adminShowComments}
         </Flex>
-      </FlexRow>
+      </Flex>
     </CardLg>
   );
 }

@@ -47,7 +47,7 @@ function DropDownMenu(props) {
     <DropDown ref={linksContainerRef}>
       <Flex direction="column" ref={linksRef}>
         <DropDownBtn onClick={() => navigate("/")}>Home</DropDownBtn>
-        <DropDownBtn>About</DropDownBtn>
+        <DropDownBtn onClick={() => navigate("/about")}>About</DropDownBtn>
 
         <DropDownBtn onClick={props.handleCreateLink}>Create Event</DropDownBtn>
 

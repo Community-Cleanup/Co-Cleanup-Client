@@ -11,7 +11,7 @@ import { Span } from "./styled/utility/Span.styled";
 function AdminUsersItemCard(props) {
   return (
     <CardLg margin="10px" maxw="100%" bord="1px solid black">
-      <FlexRow align="flex-start" justify="space-between">
+      <FlexRow direction="column" align="flex-start" justify="space-between">
         <Flex direction="column" align="flex-end" margin="10px">
           {/* Display the selected user's username from the "username" prop */}
           <Span fs="18px" fw="1000">

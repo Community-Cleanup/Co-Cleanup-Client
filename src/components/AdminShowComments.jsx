@@ -55,15 +55,15 @@ function AdminShowComments({ foundEventUID, foundEventComments }) {
             foundEventComments.map((comment, index) => {
               return (
                 <>
-                  <CardSm maxw="100%" bord="1px solid black">
+                  <CardSm pad="2px 4px" maxw="100%" bord="1px solid black">
                     <Span fs="14px" fw="600">
                       {comment.username}
                     </Span>
                     <Span
-                      fs="12px"
+                      fs="10px"
                       fw="600"
                       tf="uppercase"
-                      color={theme.colors.dateText}
+                      // color={theme.colors.dateText}
                     >
                       {formatDate(comment.time)}
                     </Span>

@@ -176,11 +176,11 @@ function EventDetails() {
   return (
     <PageTitle title="Event Details">
       <NavBar />
-      <Container w="80%" margin="80px 10%">
-        <Flex justify="space-between" align="center">
+      <Container w="80%" wmobile="80%" margin="80px 10%">
+        <Flex justify="space-between" align="flex-end">
           {/* Event Title section */}
           <h1>
-            <Span fs="44px" margin="0 0 ">
+            <Span fs="44px" margin="0">
               {eventDetails.title}
             </Span>
           </h1>
@@ -189,7 +189,11 @@ function EventDetails() {
             {!authState.data ? (
               <div>
                 <Link to={`/sign-in`}>
-                  <Span fw="600" color={theme.colors.signLink}>
+                  <Span
+                    fw="600"
+                    margin="0 0 16px"
+                    color={theme.colors.signLink}
+                  >
                     Sign in
                   </Span>
                 </Link>{" "}
@@ -197,13 +201,13 @@ function EventDetails() {
               </div>
             ) : eventDetails.attendees &&
               !eventDetails.attendees.includes(authState.data._id) ? (
-              <Button margin="0" onClick={handleRegistration}>
+              <Button margin="0 0 16px" onClick={handleRegistration}>
                 Register
               </Button>
             ) : (
               <div>
                 <Button
-                  margin="0"
+                  margin="0 0 16px"
                   bg={theme.colors.buttonGray}
                   onClick={handleDeregister}
                 >

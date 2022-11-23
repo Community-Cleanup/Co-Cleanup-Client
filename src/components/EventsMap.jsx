@@ -338,7 +338,8 @@ function EventsMap() {
                             {event.properties.address}
                           </Span>
                           <Span fs="12px" margin="6px 0 0">
-                            {event.properties.attendees.length} attending
+                            {event.properties.attendees.split(",").length}{" "}
+                            attending
                           </Span>
                         </Flex>
                       </div>
