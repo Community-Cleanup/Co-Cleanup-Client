@@ -9,6 +9,8 @@ import EventForm from "./components/EventForm";
 import LoadingSpinner from "./components/LoadingSpinner";
 import UserAccount from "./components/UserAccount";
 import AdminPage from "./components/AdminPage";
+import AboutPolicy from "./components/AboutPolicy";
+import Guidelines from "./components/Guidelines";
 
 import { AuthContext } from "./utils/AuthContext";
 import AuthObserver from "./auth/AuthObserver";
@@ -18,6 +20,8 @@ import { SearchProvider } from "./utils/SearchContext";
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./components/styled/theme/Global";
 import { theme } from "./components/styled/theme/Theme";
+
+import { aboutPolicies } from "./data/aboutPolicies";
 
 function App() {
   // This global state is used by the authentication ('auth') system,
@@ -56,6 +60,27 @@ function App() {
                       <Route path="account/:user" element={<UserAccount />} />
                       <Route path="sign-up" element={<SignupPage />} />
                       <Route path="sign-in" element={<SigninPage />} />
+                      {/* the following routes all use the same AboutPolicy component */}
+                      {/* props passes the data which is imported from aboutPolicies.js */}
+                      <Route
+                        path="about"
+                        element={
+                          <AboutPolicy
+                            heading={aboutPolicies.about.heading}
+                            text={aboutPolicies.about.text}
+                          />
+                        }
+                      />
+                      <Route path="guidelines" element={<Guidelines />} />
+                      <Route
+                        path="privacy"
+                        element={
+                          <AboutPolicy
+                            heading={aboutPolicies.privacy.heading}
+                            text={aboutPolicies.privacy.text}
+                          />
+                        }
+                      />
                       {/* Rather than a 404 page not found, redirect unhandled paths back to the landing page */}
                       <Route path="*" element={<Navigate to="/" />} />
                     </Routes>

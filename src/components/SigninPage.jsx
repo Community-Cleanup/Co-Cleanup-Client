@@ -4,30 +4,31 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 import { useGlobalAuthState } from "../utils/AuthContext";
-
 import { formErrorMessages } from "../data/formErrorMessages";
+import useBackSafe from "../utils/useBackSafe";
 
 import LoadingSpinner from "./LoadingSpinner";
 import PageTitle from "./PageTitle";
+// styled components saved in the utilities folder apply styling to containers
+// styled components saved in the elements folder apply styling to individual elements like buttons etc.
+import { theme } from "./styled/theme/Theme";
 import { Container } from "./styled/utility/Container.styled";
-import { Margin } from "./styled/utility/Margin.styled";
-import { Flex } from "./styled/utility/Flex.styled";
+import { Fieldset } from "./styled/utility/Fieldset.styled";
 import { Logo } from "./styled/elements/Logo.styled";
 import { Navigation } from "./styled/elements/Navigation.styled";
-import { Fieldset } from "./styled/utility/Fieldset.styled";
 import { Input } from "./styled/elements/Input.styled";
 import { FormLabel } from "./styled/elements/FormLabel.styled";
 import { FormMessage } from "./styled/elements/FormMessage.styled";
 import { Button } from "./styled/elements/Button.styled";
-import { theme } from "./styled/theme/Theme";
-
-import useBackSafe from "../utils/useBackSafe";
 
 function SigninPage() {
+  // useGlobalAuthState() contains the details of the current logged in user
   const { authState } = useGlobalAuthState();
 
+  // used to redirect user to the previous page is successfully signed in
   const { goBackSafe } = useBackSafe();
 
+  // sign in form state including error messages
   const [signInFormState, setSignInFormState] = useState({
     emailAddress: "",
     password: "",
@@ -48,6 +49,7 @@ function SigninPage() {
     // eslint-disable-next-line
   }, [authState.data]);
 
+  // If there is an error from the authState then the user will be logged out.
   useEffect(() => {
     if (authState.authObserverError) {
       Logout();
@@ -62,6 +64,9 @@ function SigninPage() {
     // eslint-disable-next-line
   }, [authState.authObserverError]);
 
+  // checks if any fields are empty
+  // is used with onBlur
+  // updates error messsage if input field is left empty
   function checkEmptyField(event) {
     if (!event.target.value) {
       setSignInFormState((prev) => {
@@ -80,6 +85,8 @@ function SigninPage() {
     }
   }
 
+  // checks for valid email syntax
+  // and updates state with error message if email is not valid
   function checkValidEmailSyntax(event) {
     if (`${event.target.name}` === "emailAddress") {
       // Valid email address regex pattern sourced from: https://www.w3resource.com/javascript/form/email-validation.php
@@ -102,6 +109,7 @@ function SigninPage() {
     }
   }
 
+  
   function checkPasswordError(event) {
     if (`${event.target.name}` === "password") {
       if (!event.target.value) {
