@@ -16,7 +16,7 @@ const GlobalStyles = createGlobalStyle`
         margin: 12px 0 24px;
     }
     h2 {
-        margin: 10px 0 20px;
+        margin: 18px 0 20px;
     }
     h3 {
         margin: 8px 0 10px;

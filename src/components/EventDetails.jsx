@@ -276,7 +276,7 @@ function EventDetails() {
         </p>
         <h4>
           <Span fw="500" margin="6px 0 0" color={theme.colors.signLink}>
-            <Link to="/">Guidelines</Link>
+            <Link to="/guidelines">Guidelines</Link>
           </Span>
         </h4>
 
