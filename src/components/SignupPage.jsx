@@ -18,8 +18,11 @@ import { Button } from "./styled/elements/Button.styled";
 import { theme } from "./styled/theme/Theme";
 
 function SignupPage() {
+  // useGlobalAuthState() contains the details of the current logged in user
   const { authState } = useGlobalAuthState();
 
+  // Sign Up form state including error messages for each input field, and submit errors, and
+  // to keep a boolean status of whether or not to show the loading spinner icon
   const [signUpFormState, setSignUpFormState] = useState({
     username: "",
     emailAddress: "",
@@ -35,6 +38,7 @@ function SignupPage() {
 
   const navigate = useNavigate();
 
+  // For input fields to be controlled components, we need to keep the input field values in state
   function handleChange(event) {
     setSignUpFormState((prev) => {
       return {
@@ -44,6 +48,9 @@ function SignupPage() {
     });
   }
 
+  // Checks if any input fields are empty.
+  // This is triggered by the forms onBlur event, meaning when the user takes cursor focus out of the input field.
+  // Updates error messsage (using our static imported formErrorMessages object for consistency) if input field is left empty.
   function checkEmptyField(event) {
     if (!event.target.value) {
       setSignUpFormState((prev) => {
@@ -62,6 +69,8 @@ function SignupPage() {
     }
   }
 
+  // Checks for valid email syntax based off a regex pattern
+  // and updates state with error message if email is not valid
   function checkValidEmailSyntax(event) {
     if (`${event.target.name}` === "emailAddress") {
       // Valid email address regex pattern sourced from: https://www.w3resource.com/javascript/form/email-validation.php
@@ -84,6 +93,8 @@ function SignupPage() {
     }
   }
 
+  // Like with function checkEmptyField, this checks for empty fields, but this displays
+  // a specific error message if the password field is empty
   function checkPasswordError(event) {
     if (`${event.target.name}` === "password") {
       if (signUpFormState.password.length < 6) {
@@ -106,6 +117,8 @@ function SignupPage() {
     }
   }
 
+  // Checks if the values in the password confirmation field matches the password field exactly
+  // and if it doesn't display an error message
   function checkPasswordConfirmError(event) {
     if (`${event.target.name}` === "passwordConfirm") {
       if (event.target.value !== signUpFormState.password) {
@@ -126,6 +139,9 @@ function SignupPage() {
     }
   }
 
+  // The following four functions are triggered onBlur (i.e. on field focus loss)
+  // for every field.
+  // The event object will keep track of the specific field's name and value
   function validateOnBlur(event) {
     checkEmptyField(event);
 
@@ -136,13 +152,21 @@ function SignupPage() {
     checkPasswordConfirmError(event);
   }
 
+  // If the user is already signed in, they shouldn't be able to access this sign up page
+  // so navigate them back to the Landing Page automatically
   useEffect(() => {
+    // We can easily check if the user is already signed in by checking if our global auth state, data object holds the
+    // current user's details in state
     if (authState.data) {
       navigate("/");
     }
     // eslint-disable-next-line
   }, [authState.data]);
 
+  // If our '../auth/AuthObserver.js' auth observer/listener detects an error when the user tries to sign up,
+  // as per the boolean value in authState.authObserverError state property, then force a logout of the user.
+  // This likely won't ever occur because unlike with Sign In in './SigninPage.jsx', the Sign Up process will
+  // mean a brand new ID token and a new user's account certainly isn't disabled by default.
   useEffect(() => {
     if (authState.authObserverError) {
       Logout();
@@ -157,6 +181,9 @@ function SignupPage() {
     // eslint-disable-next-line
   }, [authState.authObserverError]);
 
+  // This is called immediately after clicking the submit button to
+  // check if there's still any errors displayed from the above onBlur functions,
+  // and if so, prompt the user to fix all these errors before submitting again
   function checkAnyInvalidFields() {
     const {
       usernameError,
@@ -165,6 +192,7 @@ function SignupPage() {
       passwordConfirmError,
     } = signUpFormState;
 
+    // Do an OR comparison with all input field values to see if there are any errors still in any of the input fields
     if (
       usernameError ||
       emailAddressError ||
@@ -189,9 +217,11 @@ function SignupPage() {
     }
   }
 
+  // Executed on submit button click
   async function handleFormSubmit(e) {
     e.preventDefault();
 
+    // Only begin processing the sign up and show the loading spinner icon if there are no client-side validation errors
     if (!checkAnyInvalidFields()) {
       setSignUpFormState((prev) => {
         return {
@@ -200,6 +230,7 @@ function SignupPage() {
         };
       });
 
+      // Attempt the sign up with our SignUp handler in '../auth/SignUp.js'
       let signUpResponse;
       try {
         signUpResponse = await SignUp(
@@ -208,6 +239,11 @@ function SignupPage() {
           signUpFormState.password
         );
       } catch (error) {
+        // The error response here will likely be either from:
+        // - Our server app responding that the chosen username has already been taken
+        // - Or, a response from Firebase that the chosen email address is already in use by another account
+        // - Or, a response from Firebase that the chosen password doesn't meet the Firebase minimum length requirements
+        // Also hide the loading spinner icon using state if there is any error so that the user can try again with form submit
         setSignUpFormState((prev) => {
           return {
             ...prev,
@@ -239,11 +275,13 @@ function SignupPage() {
     }
   }
 
-  // styled components are passed props to help fine tune different css properties
+  // Styled components are passed props to help fine tune different CSS properties
   return (
     <PageTitle title="Sign Up">
       <Container margin="120px auto">
         <Container talign="center">
+          {/* As there is no nav bar on the Sign Up page, clicking the Co Cleanup logo will 
+          navigate the user back to the Landing Page */}
           <Logo
             src="./images/logo/logo-icon.svg"
             alt="Co Cleanup Logo"
@@ -257,6 +295,7 @@ function SignupPage() {
             </Navigation>
           </p>
         </Container>
+        {/* The actual Sign Up form components */}
         <form onSubmit={handleFormSubmit}>
           <Fieldset>
             <FormLabel htmlFor="username">Username</FormLabel>
@@ -269,6 +308,7 @@ function SignupPage() {
               value={signUpFormState.username}
               onChange={(e) => handleChange(e)}
             />
+            {/* If there is a username validation error in state, display the error message here */}
             {signUpFormState.usernameError && (
               <FormMessage>{signUpFormState.usernameError}</FormMessage>
             )}
@@ -285,6 +325,7 @@ function SignupPage() {
               value={signUpFormState.emailAddress}
               onChange={(e) => handleChange(e)}
             />
+            {/* If there is an email address validation error in state, display the error message here */}
             {signUpFormState.emailAddressError && (
               <FormMessage>{signUpFormState.emailAddressError}</FormMessage>
             )}
@@ -300,6 +341,7 @@ function SignupPage() {
               value={signUpFormState.password}
               onChange={(e) => handleChange(e)}
             />
+            {/* If there is a password validation error in state, display the error message here */}
             {signUpFormState.passwordError && (
               <FormMessage>{signUpFormState.passwordError}</FormMessage>
             )}
@@ -315,11 +357,13 @@ function SignupPage() {
               value={signUpFormState.passwordConfirm}
               onChange={(e) => handleChange(e)}
             />
+            {/* If there is a password confirmation validation error in state, display the error message here */}
             {signUpFormState.passwordConfirmError && (
               <FormMessage>{signUpFormState.passwordConfirmError}</FormMessage>
             )}
           </Fieldset>
           <Fieldset>
+            {/* Show the loading spinner on form submit if there are no other client-side validation errors */}
             {signUpFormState.showLoadingSpinner ? (
               <LoadingSpinner />
             ) : (
@@ -333,6 +377,7 @@ function SignupPage() {
                 Sign Up
               </Button>
             )}
+            {/* If there are any form submission errors in state, display the error message here */}
             {signUpFormState.submitError && (
               <FormMessage>{signUpFormState.submitError}</FormMessage>
             )}

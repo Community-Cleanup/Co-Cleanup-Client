@@ -71,7 +71,7 @@ function SigninPage() {
 
   // Checks if any input fields are empty.
   // This is triggered by the forms onBlur event, meaning when the user takes cursor focus out of the input field.
-  // Updates error messsage (using our status formErrorMessages object for consistency) if input field is left empty.
+  // Updates error messsage (using our static imported formErrorMessages object for consistency) if input field is left empty.
   function checkEmptyField(event) {
     if (!event.target.value) {
       setSignInFormState((prev) => {
@@ -136,7 +136,7 @@ function SigninPage() {
     }
   }
 
-  // The following three functions are triggered onBlue (i.e. on field focus loss)
+  // The following three functions are triggered onBlur (i.e. on field focus loss)
   // for every field.
   // The event object will keep track of the specific field's name and value
   function validateOnBlur(event) {
@@ -153,7 +153,7 @@ function SigninPage() {
   function checkAnyInvalidFields() {
     const { emailAddressError, passwordError } = signInFormState;
 
-    // Do an OR comparison to see if there are any errors still in any of the input fields
+    // Do an OR comparison with all input field values to see if there are any errors still in any of the input fields
     if (emailAddressError || passwordError) {
       setSignInFormState((prev) => {
         return {
